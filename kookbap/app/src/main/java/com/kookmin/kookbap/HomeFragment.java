@@ -1,6 +1,5 @@
 package com.kookmin.kookbap;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,14 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +29,7 @@ public class HomeFragment extends Fragment {
 
     RecyclerView recyclerView;
     ArrayList<ReviewData> reviewData;
-    ArrayList<String> cafeteriaBooth;
+    ArrayList<String> cafeteriaBoothStudent;
     String todayDate;
     ReviewDataAdapter reviewDataAdapter;
 
@@ -45,18 +37,19 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        cafeteriaBooth = new ArrayList<>();
-        cafeteriaBooth.add("착한아침");
-        cafeteriaBooth.add("가마<br>중식");
-        cafeteriaBooth.add("누들송(면)<br>중식");
-        cafeteriaBooth.add("누들송<br>(카페테리아)<br>중식");
-        cafeteriaBooth.add("인터쉐프<br>중식");
-        cafeteriaBooth.add("데일리밥<br>중식");
-        cafeteriaBooth.add("가마<br>석식");
-        cafeteriaBooth.add("인터쉐프<br>석식");
-        cafeteriaBooth.add("데일리밥<br>석식");
-        cafeteriaBooth.add("차이웨이<br>상시");
-        cafeteriaBooth.add("차이웨이<br>특화");
+        cafeteriaBoothStudent = new ArrayList<>();
+
+        cafeteriaBoothStudent.add("착한아침");
+        cafeteriaBoothStudent.add("가마<br>중식");
+        cafeteriaBoothStudent.add("누들송(면)<br>중식");
+        cafeteriaBoothStudent.add("누들송<br>(카페테리아)<br>중식");
+        cafeteriaBoothStudent.add("인터쉐프<br>중식");
+        cafeteriaBoothStudent.add("데일리밥<br>중식");
+        cafeteriaBoothStudent.add("가마<br>석식");
+        cafeteriaBoothStudent.add("인터쉐프<br>석식");
+        cafeteriaBoothStudent.add("데일리밥<br>석식");
+        cafeteriaBoothStudent.add("차이웨이<br>상시");
+        cafeteriaBoothStudent.add("차이웨이<br>특화");
 
         todayDate = "2022-10-31";
 
@@ -88,7 +81,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("https://kmucoop.kookmin.ac.kr/menu/menujson.php?sdate=2022-10-31&edate=2022-10-31&today=2022-10-31");
+                    URL url = new URL("https://kmucoop.kookmin.ac.kr/menu/menujson.php?" +
+                            "sdate=" + todayDate + "&edate=" +todayDate + "&today=" + todayDate);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
                     connection.setDoInput(true);
@@ -111,27 +105,21 @@ public class HomeFragment extends Fragment {
                     JSONObject cafeteriaStudent = jsonObject.getJSONObject("학생식당(복지관 1층)");
                     JSONObject cafeteriaProfessor = jsonObject.getJSONObject("교직원식당(복지관 1층)");
 
-                    Log.e("한울식당", cafeteriaHanul.toString());
-                    Log.e("학생식당", cafeteriaStudent.toString());
-                    Log.e("교직원식당", cafeteriaProfessor.toString());
-
-                    for (int i=0; i<cafeteriaBooth.size(); i++) {
-//                        Log.e("booth", cafeteriaBooth.get(i));
-//                        Log.e("booth", cafeteriaStudent.getJSONObject("2022-10-31").getJSONObject(cafeteriaBooth.get(i)).getString("메뉴"));
-//                        Log.e("booth", cafeteriaStudent.getJSONObject("2022-10-31").getJSONObject(cafeteriaBooth.get(i)).getString("가격"));
-                        String menuName = cafeteriaStudent.getJSONObject("2022-10-31").getJSONObject(cafeteriaBooth.get(i)).getString("메뉴");
-                        String price = cafeteriaStudent.getJSONObject("2022-10-31").getJSONObject(cafeteriaBooth.get(i)).getString("가격");
-                        reviewData.add(new ReviewData(menuName, price, "delicious", R.drawable.ic_home, 3, 0));
+                    for (int i=0; i<cafeteriaBoothStudent.size(); i++) {
+                        String menus = cafeteriaStudent.getJSONObject(todayDate).getJSONObject(cafeteriaBoothStudent.get(i)).getString("메뉴");
+                        String price = cafeteriaStudent.getJSONObject(todayDate).getJSONObject(cafeteriaBoothStudent.get(i)).getString("가격");
+                        String[] array = menus.split("\r", 2);
+                        if (!(menus.equals(""))) {
+                            String mainMenu = array[0];
+                            String subMenu = array[1];
+                            subMenu = subMenu.replace("\n", " ");
+                            reviewData.add(new ReviewData(mainMenu, subMenu, price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+                        }
                     }
+
                     reviewDataAdapter = new ReviewDataAdapter(reviewData, getActivity().getApplicationContext());
                     Message msg = handler.obtainMessage();
                     handler.sendMessage(msg);
-//                    sick = sick.getJSONObject("2022-10-31");
-//                    sick = sick.getJSONObject("2코너<BR>NOODLE");
-//                    String menu = sick.getString("메뉴");
-//                    Log.e("zxc", jsonObject.toString());
-//                    Log.e("zxc", sick.toString());
-//                    Log.e("rty", menu);
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }

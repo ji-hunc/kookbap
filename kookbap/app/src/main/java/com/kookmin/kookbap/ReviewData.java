@@ -9,8 +9,9 @@ public class ReviewData {
     float stars;
     int heart;
 
-    public ReviewData(String menuName, String price, String reviewText, int image, float stars, int heart) {
+    public ReviewData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart) {
         this.menuName = menuName;
+        this.subMenuName = subMenuName;
         this.price = price;
         this.reviewText = reviewText;
         this.image = image;
