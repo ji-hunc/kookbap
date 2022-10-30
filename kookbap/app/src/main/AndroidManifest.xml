@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.kookmin.kookbap">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kookbap"
         tools:targetApi="31">
+        <activity
+            android:name=".WriteReview"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:label="WriteReview"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
