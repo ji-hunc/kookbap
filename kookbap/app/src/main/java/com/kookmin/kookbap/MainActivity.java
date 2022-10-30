@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     ReviewFragment reviewFragment = new ReviewFragment();
     RestaurantFragment restaurantFragment = new RestaurantFragment();
     SettingFragment settingFragment = new SettingFragment();
+    AddReviewFragment addReviewFragment = new AddReviewFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.review:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, reviewFragment).commit();
+                        return true;
+                    case R.id.add_review:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, addReviewFragment).commit();
                         return true;
                     case R.id.restaurant:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, restaurantFragment).commit();
