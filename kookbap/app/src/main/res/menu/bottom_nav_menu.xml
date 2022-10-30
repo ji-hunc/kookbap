@@ -10,6 +10,10 @@
         android:title="Reviews"
         android:icon="@drawable/ic_review"/>
     <item
+        android:id="@+id/add_review"
+        android:title="Write Rivew"
+        android:icon="@drawable/ic_add"/>
+    <item
         android:id="@+id/restaurant"
         android:title="Restaurants"
         android:icon="@drawable/ic_restaurant"/>
