@@ -39,7 +39,9 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.foodNameSide.setText(reviewData.get(position).getSubMenuName());
         holder.foodPrice.setText(reviewData.get(position).getPrice());
         holder.foodImage.setImageResource(reviewData.get(position).getImage());
-        holder.foodHeart.setImageResource(reviewData.get(position).getHeart());
+        // TODO
+        // 하트클릭 했을 때 채워지고, 비워지고 이미지 다르게 해야함
+//        holder.foodHeart.setImageResource(reviewData.get(position).getHeart());
         holder.foodRating.setRating(reviewData.get(position).getStars());
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
