@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
     public ReviewDataAdapter(ArrayList<ReviewData> reviewData, Context context) {
         this.reviewData = reviewData;
         this.context = context;
+        Log.e("size", Integer.toString(reviewData.size()));
     }
 
     @NonNull
@@ -54,7 +56,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                 intent.putExtra("image", reviewData.get(position).getImage());
                 intent.putExtra("heart", reviewData.get(position).getHeart());
                 intent.putExtra("rating", reviewData.get(position).getStars());
-                context.startActivity(intent);
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
     }

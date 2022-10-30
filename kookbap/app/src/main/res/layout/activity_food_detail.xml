@@ -38,6 +38,8 @@
                     android:layout_height="wrap_content"
                     android:text="메뉴 이름"/>
                 <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:id="@+id/foodDetailNameSide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,6 +55,8 @@
                     style="@style/Widget.AppCompat.RatingBar.Small"/>
             </LinearLayout>
             <LinearLayout
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_weight="3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
