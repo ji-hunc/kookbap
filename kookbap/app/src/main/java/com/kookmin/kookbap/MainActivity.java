@@ -67,40 +67,5 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("https://kmucoop.kookmin.ac.kr/menu/menujson.php?sdate=2022-10-31&edate=2022-10-31&today=2022-10-31");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.setDoInput(true);
-
-                    InputStream is = connection.getInputStream();
-                    StringBuilder sb = new StringBuilder();
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                    String result;
-                    while ((result = br.readLine()) != null) {
-                        sb.append(result += "\n");
-                        String line = br.readLine();
-                    }
-
-                    result = sb.toString();
-                    Log.e("qwe", result);
-
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject sick = jsonObject.getJSONObject("한울식당(법학관 지하1층)");
-                    sick = sick.getJSONObject("2022-10-31");
-                    sick = sick.getJSONObject("2코너<BR>NOODLE");
-                    String menu = sick.getString("메뉴");
-                    Log.e("zxc", jsonObject.toString());
-                    Log.e("zxc", sick.toString());
-                    Log.e("rty", menu);
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     }
 }
