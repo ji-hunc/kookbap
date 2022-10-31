@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
                     Iterator<String> iter = jsonObject.keys();
                     while (iter.hasNext()) {
                         String cafeteria = iter.next().toString();
-                        Log.e("cafeteria", cafeteria);
+//                        Log.e("cafeteria", cafeteria);
                         cafeteriaNames.add(cafeteria); // 식당 이름 8개 들어있음. 한울, 복지관 등
                     }
                     // cafeteriaNames : ["한울식당(법학관 지하1층)", "학생식당(복지관 1층)", "교직원식당(복지관 1층)", "청향 한식당(법학관 5층)", "청향 양식당(법학관 5층)", "생활관식당 일반식(생활관 A동 1층)", "생활관식당 정기식(생활관 A동 1층)", "K-Bob<sup>+</sup>"]
@@ -106,12 +106,12 @@ public class HomeFragment extends Fragment {
                             ArrayList<String> eachCorner = new ArrayList<>();
                             while (eachCornerIter.hasNext()) {
                                 String item = eachCornerIter.next().toString();
-                                Log.e("booth", item);
+//                                Log.e("booth", item);
                                 eachCafeteriaBoothNames[i].add(item);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("exception", "exception 식당 내부에 부스가 없음 exception");
+//                            Log.e("exception", "exception 식당 내부에 부스가 없음 exception");
                         }
                     }
 
@@ -123,8 +123,8 @@ public class HomeFragment extends Fragment {
                             menus = jsonObject.getJSONObject(cafeteriaNames.get(i)).getJSONObject(todayDate).getJSONObject(eachCafeteriaBoothNames[i].get(j)).getString("메뉴");
                             price = jsonObject.getJSONObject(cafeteriaNames.get(i)).getJSONObject(todayDate).getJSONObject(eachCafeteriaBoothNames[i].get(j)).getString("가격");
 
-                            Log.e("menu", menus);
-                            Log.e("price", price);
+//                            Log.e("menu", menus);
+//                            Log.e("price", price);
 
                             String mainMenu = "";
                             String subMenu = "";
@@ -143,11 +143,34 @@ public class HomeFragment extends Fragment {
                                 subMenu = "아직 작성된 리뷰가 없습니다.";
 
                                 reviewData.add(new ReviewData(mainMenu, subMenu, price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
-                            } else {
+                            }
+                            else {
+
+                                final String REGEX = "[0-9]+";
+                                if (menus.matches(REGEX)) {
+
+                                } else {
+//                                    Log.e("numbers", menus);
+                                    array = menus.split("\r\n");
+                                    String str = "";
+                                    for (String item : array) {
+                                        str += item + ",";
+                                    }
+                                    Log.e("split", str);
+                                    for (int k=0; k<array.length/2; k++) {
+                                        mainMenu = array[2*k];
+                                        price = array[2*k+1];
+                                        Log.e("menus", mainMenu);
+                                        Log.e("price", price);
+                                        reviewData.add(new ReviewData(mainMenu, subMenu, price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+                                    }
+                                }
                                 // TODO 이 경우도 하나씩 메뉴, 가격 분리해서 reviewData 에 add 해야함
                                 // 싹다 가격 항목은 ""으로 비어있는 예외. 메뉴 항목에 연달아서 몇개의 메뉴가 있음
                                 // "[중식]\r\n불닭치즈라이스\r\n￦4500\r\n[석식]\r\n더진국\r\n얼큰국밥\r\n￦5500"
+                                // "찹쌀탕수육 4000\t\t\t\t\t\t\r\n직화간짜장 4500\t\t\t\t\t\t\r\n직화짬뽕 5000\t\t\t\t\t\t\r\n짬짜면 6500"
                                 // "포모도로\r\n17,000원\r\n감바스알아히오 \r\n17,900원\r\n까르보나라\r\n18,900원\r\n해산물토마토파스타 23,000원\r\n뽈보오일파스타 \r\n26,000원\r\n랍스터비스크로제파스타\r\n35,000원"
+                                // "트러플베이컨풍기리조또\r\n19,000원"
                                 // "채끝스테이크\r\n35,000원\r\n안심스테이크\r\n42,000원\r\n콜키지\r\n(1인)5,000원"
                                 // "칼집삼겹도시락\r\n￦8,500\r\n\r\n항정살도시락\r\n￦9,500\r\n\r\n돈가스마요덮밥+국\r\n￦6,500\r\n\r\n핵불닭덮밥\r\n￦7,000\r\n\r\n육회비빔밥\r\n￦7,000\r\n\r\n참치비빔밥\r\n￦6,500\r\n\r\n흑돼지김치찌개\r\n￦6,500\r\n\r\n흑돼지참치김치찌개\r\n￦7,000\r\n\r\n흑돼지스팸김치찌개\r\n￦7,000"
                                 // "국민김밥\r\n￦3,100\r\n\r\n돈가스김밥\r\n￦4,500"
