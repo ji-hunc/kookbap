@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class HomeFragment extends Fragment {
 
@@ -33,23 +34,18 @@ public class HomeFragment extends Fragment {
     String todayDate;
     ReviewDataAdapter reviewDataAdapter;
 
+    ArrayList<String> cafeteriaNames;
+    ArrayList<String>[] cafeteriaMenuData;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        cafeteriaBoothStudent = new ArrayList<>();
-
-        cafeteriaBoothStudent.add("착한아침");
-        cafeteriaBoothStudent.add("가마<br>중식");
-        cafeteriaBoothStudent.add("누들송(면)<br>중식");
-        cafeteriaBoothStudent.add("누들송<br>(카페테리아)<br>중식");
-        cafeteriaBoothStudent.add("인터쉐프<br>중식");
-        cafeteriaBoothStudent.add("데일리밥<br>중식");
-        cafeteriaBoothStudent.add("가마<br>석식");
-        cafeteriaBoothStudent.add("인터쉐프<br>석식");
-        cafeteriaBoothStudent.add("데일리밥<br>석식");
-        cafeteriaBoothStudent.add("차이웨이<br>상시");
-        cafeteriaBoothStudent.add("차이웨이<br>특화");
+        cafeteriaNames = new ArrayList<>(8);
+        cafeteriaMenuData = new ArrayList[8];
+        for (int i=0; i<8; i++) {
+            cafeteriaMenuData[i] = new ArrayList<String>();
+        }
 
         todayDate = "2022-10-31";
 
@@ -58,15 +54,6 @@ public class HomeFragment extends Fragment {
         reviewData = new ArrayList<>();
 
         loadData();
-//        test
-//        reviewData.add(new ReviewData("chicken", "17,000", "delicious", R.drawable.ic_review, 4.5f, 0));
-//        reviewData.add(new ReviewData("hamburger", "7,000", "good", R.drawable.ic_home, 3.5f, 0));
-//        reviewData.add(new ReviewData("Ronaldo", "7,000", "good", R.drawable.ic_empty_heart, 2.5f, 0));
-//        reviewData.add(new ReviewData("Messi", "7,000", "good", R.drawable.ic_filled_heart, 1.5f, 0));
-//        reviewData.add(new ReviewData("hamburger", "7,000", "good", R.drawable.ic_home, 3.5f, 0));
-//        reviewData.add(new ReviewData("hamburger", "7,000", "good", R.drawable.ic_home, 3.5f, 0));
-//        reviewData.add(new ReviewData("hamburger", "7,000", "good", R.drawable.ic_home, 3.5f, 0));
-//        reviewData.add(new ReviewData("hamburger", "7,000", "good", R.drawable.ic_home, 3.5f, 0));
 
         return view;
     }
@@ -95,13 +82,50 @@ public class HomeFragment extends Fragment {
                         sb.append(result += "\n");
                         String line = br.readLine();
                     }
-
                     result = sb.toString();
-                    Log.e("qwe", result);
-
                     JSONObject jsonObject = new JSONObject(result);
 
-                    JSONObject cafeteriaHanul = jsonObject.getJSONObject("한울식당(법학관 지하1층)");
+                    Iterator<String> iter = jsonObject.keys();
+
+                    while (iter.hasNext()) {
+                        String cafeteria = iter.next().toString();
+                        Log.e("cafeteria", cafeteria);
+                        cafeteriaNames.add(cafeteria); // 식당 이름 8개 들어있음. 한울, 복지관 등
+                    }
+                    for (int i=0; i<cafeteriaNames.size(); i++) {
+                        JSONObject eachCafeteriaPerDate = jsonObject.getJSONObject(cafeteriaNames.get(i)).getJSONObject(todayDate); // 각각 식당 코너가 나옴
+                        Iterator<String> eachCornerIter = eachCafeteriaPerDate.keys(); // 각각 식당 코너 이름 keys
+//                        Log.e("keys", )
+                        ArrayList<String> eachCorner = new ArrayList<>();
+                        while (eachCornerIter.hasNext()) {
+                            String item = eachCornerIter.next().toString();
+                            Log.e("item", item);
+                            cafeteriaMenuData[i].add(item);
+                        }
+//                        cafeteriaMenuData[i] = eachCorner;
+                    }
+
+                    for (int i=0; i<cafeteriaMenuData.length; i++) {
+                        for (int j=0; j<cafeteriaMenuData[i].size(); j++) {
+                            Log.e("each", cafeteriaMenuData[i].get(j));
+                        }
+                    }
+
+
+
+
+
+
+                    JSONObject cafeteriaHanul = jsonObject.getJSONObject("한울식당(법학관 지하1층)").getJSONObject(todayDate);
+                    ArrayList<String> booths = new ArrayList<>();
+                    Iterator j = cafeteriaHanul.keys();
+                    while(j.hasNext())
+                    {
+                        String b = j.next().toString();
+                        booths.add(b); // 키 값 저장
+                        Log.e("key", b);
+                    }
+
                     JSONObject cafeteriaStudent = jsonObject.getJSONObject("학생식당(복지관 1층)");
                     JSONObject cafeteriaProfessor = jsonObject.getJSONObject("교직원식당(복지관 1층)");
 
