@@ -4,29 +4,38 @@ import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.Image;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,16 +44,30 @@ import java.io.IOException;
 
 public class SettingFragment extends Fragment {
     ImageView settingProfileImage;
-    TextView settingName;
-    int cameraPermission, galleryPermission;
+    TextView settingName, settingCollegeNumber;
+    LinearLayout settingMyReviews;
+    Switch settingNotice;
+    Button settingBtnNotice;
+    Boolean noticeOn = false;
+    int cameraPermission, galleryPermission, noticePermission;
     private static final int SINGLE_PERMISSION = 1004;
-    Bitmap bitmap;
+    Bitmap imageBitmap, noticeBitmap;
     Uri uri;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         settingProfileImage = (ImageView) view.findViewById(R.id.settingProfileImage);
         settingName = (TextView) view.findViewById(R.id.settingName);
+        settingCollegeNumber = (TextView) view.findViewById(R.id.settingCollegeNumber);
+        settingMyReviews = (LinearLayout) view.findViewById(R.id.settingMyReviews);
+        settingNotice = (Switch) view.findViewById(R.id.settingNotice);
+        settingBtnNotice = (Button) view.findViewById(R.id.settingBtnNotice);
+
+        // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 설정
+        settingProfileImage.setImageResource(R.drawable.ic_basic_profile);
+        settingName.setText("김민제");
+        settingCollegeNumber.setText("학번: 20191557");
+
 
         // 프로필 사진을 눌렀을 때 사진 변경
         settingProfileImage.setOnClickListener(new View.OnClickListener(){
@@ -53,6 +76,7 @@ public class SettingFragment extends Fragment {
                // 카메라 및 앨범 권한 확인
                cameraPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA);
                galleryPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
+               // 카메라와 앨범 중 원하는 방법을 고르기 위한 dialog 출력
                AlertDialog.Builder dlg = new AlertDialog.Builder(getContext());
                dlg.setTitle("프로필 사진 설정하기");
                final String[] selectProfileImages = new String[] {"카메라로 사진 찍기", "앨범에서 사진 가져오기"};
@@ -92,6 +116,55 @@ public class SettingFragment extends Fragment {
            }
         });
 
+        // 내가 쓴 리뷰를 눌렀을 때 화면 출력
+        settingMyReviews.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getActivity(), UserReviewsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 알림 설정
+        settingBtnNotice.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if (settingNotice.isChecked()){
+                    noticeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_basic_profile);
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+//                    PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
+                    notification.setContentTitle("테스트");
+                    notification.setContentText("테스트 알림입니다");
+                    notification.setSmallIcon(R.drawable.ic_basic_profile);
+                    notification.setDefaults(Notification.DEFAULT_SOUND); // 소리, 진동은 DEFAULT_VIBRATE
+                    notification.setAutoCancel(true); // 알림 터치 시 자동으로 사라짐
+//                    notification.setContentIntent(pendingIntent);
+
+                    // PendingIntent를 통해 알림 터치 시 MainActivity로 이동할 수 있는데, 아직 모르겠음.
+
+
+                    NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.notify(0, notification.build());
+                }
+
+                // 알림 발생시키는 다른 방식인데 SDK버전 확인 필요
+//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//                    NotificationChannel channel = new NotificationChannel("channel1", "hello", NotificationManager.IMPORTANCE_HIGH);
+//                    NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+//                    notificationManager.createNotificationChannel(channel);
+//                    NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
+//                    notification.setContentTitle("테스트");
+//                    notification.setContentText("테스트 알림입니다");
+//                    notification.setSmallIcon(R.drawable.ic_basic_profile);
+//                    notificationManager.notify(0, notification.build());
+//                }
+            }
+        });
+
+
         return view;
     }
 
@@ -120,8 +193,6 @@ public class SettingFragment extends Fragment {
         }
     }
 
-
-
     // 카메라 사진 찍기 구현
     ActivityResultLauncher<Intent> activityResultCamera = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -130,8 +201,8 @@ public class SettingFragment extends Fragment {
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null){
                         Bundle extras = result.getData().getExtras();
-                        bitmap = (Bitmap) extras.get("data");
-                        settingProfileImage.setImageBitmap(bitmap);
+                        imageBitmap = (Bitmap) extras.get("data");
+                        settingProfileImage.setImageBitmap(imageBitmap);
                     }
                 }
             }
@@ -145,8 +216,8 @@ public class SettingFragment extends Fragment {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null){
                         uri = result.getData().getData();
                         try{
-                            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), uri);
-                            settingProfileImage.setImageBitmap(bitmap);
+                            imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), uri);
+                            settingProfileImage.setImageBitmap(imageBitmap);
                         }
                         catch(FileNotFoundException e){
                             e.printStackTrace();
@@ -158,4 +229,5 @@ public class SettingFragment extends Fragment {
                 }
             }
     );
+
 }
