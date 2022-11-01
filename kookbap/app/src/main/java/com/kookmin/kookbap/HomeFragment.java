@@ -1,10 +1,12 @@
 package com.kookmin.kookbap;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.tabs.TabLayout;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +33,15 @@ import java.util.Iterator;
 
 public class HomeFragment extends Fragment {
 
+    JSONObject jsonObjectMain;
+
     RecyclerView recyclerView;
     ReviewDataAdapter reviewDataAdapter;
     ArrayList<ReviewData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
+
+    TabLayout tabLayout;
+    ViewPager2 viewPager2;
+    CafeteriaViewPagerAdapter cafeteriaViewPagerAdapter;
 
     String todayDate;
     ArrayList<String> cafeteriaNames; // 식당 이름 8개 리스트 ["한울식당(법학관 지하1층)", "학생식당(복지관 1층)" ... ]
@@ -39,6 +50,10 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager2 = view.findViewById(R.id.viewPager);
+
 
         todayDate = "2022-10-31"; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
 
@@ -65,6 +80,34 @@ public class HomeFragment extends Fragment {
         final Handler handler = new Handler(Looper.getMainLooper()) {
             public void handleMessage(Message msg) {
                 recyclerView.setAdapter(reviewDataAdapter);
+
+                cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(getActivity(), jsonObjectMain);
+                viewPager2.setAdapter(cafeteriaViewPagerAdapter);
+
+                tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager2.setCurrentItem(tab.getPosition());
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+
+                viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        super.onPageSelected(position);
+                        tabLayout.getTabAt(position).select();
+                    }
+                });
             }
         };
         new Thread() {
@@ -88,6 +131,7 @@ public class HomeFragment extends Fragment {
                     result = sb.toString();
                     // 위의 마법의 코드로 url 에 있는 Json 객체 result에 얻어오고 초기화
                     JSONObject jsonObject = new JSONObject(result);
+                    jsonObjectMain = new JSONObject(result);
 
                     // jsonObject 에 있는 최상위 Key 값(식당 이름)들 리턴
                     Iterator<String> iter = jsonObject.keys();
@@ -156,12 +200,12 @@ public class HomeFragment extends Fragment {
                                     for (String item : array) {
                                         str += item + ",";
                                     }
-                                    Log.e("split", str);
+//                                    Log.e("split", str);
                                     for (int k=0; k<array.length/2; k++) {
                                         mainMenu = array[2*k];
                                         price = array[2*k+1];
-                                        Log.e("menus", mainMenu);
-                                        Log.e("price", price);
+//                                        Log.e("menus", mainMenu);
+//                                        Log.e("price", price);
                                         reviewData.add(new ReviewData(mainMenu, subMenu, price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
                                     }
                                 }
