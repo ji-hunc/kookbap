@@ -13,17 +13,17 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HOME"/>
+            android:text="한울식당"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="NOTIFICATION"/>
+            android:text="학색식당"/>
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SETTING"/>
+            android:text="교직원식당"/>
 
     </com.google.android.material.tabs.TabLayout>
 
