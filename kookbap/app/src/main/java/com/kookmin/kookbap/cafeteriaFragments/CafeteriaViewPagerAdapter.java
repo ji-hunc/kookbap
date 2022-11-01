@@ -37,6 +37,14 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
                 return new CafeteriaStudent(jsonObject);
             case 2:
                 return new CafeteriaProfessor(jsonObject);
+            case 3:
+                return new CafeteriaKBob(jsonObject);
+            case 4:
+                return new CafeteriaChungHyangKorean(jsonObject);
+            case 5:
+                return new CafeteriaChungHyangWestern(jsonObject);
+            case 6:
+                return new CafeteriaDormitory(jsonObject);
             default:
                 return new CafeteriaHanul(jsonObject);
         }
@@ -44,6 +52,6 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 7;
     }
 }
