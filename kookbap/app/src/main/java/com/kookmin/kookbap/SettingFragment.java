@@ -133,35 +133,43 @@ public class SettingFragment extends Fragment {
                     noticeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_basic_profile);
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-//                    PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
 
-                    NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
-                    notification.setContentTitle("테스트");
-                    notification.setContentText("테스트 알림입니다");
-                    notification.setSmallIcon(R.drawable.ic_basic_profile);
-                    notification.setDefaults(Notification.DEFAULT_SOUND); // 소리, 진동은 DEFAULT_VIBRATE
-                    notification.setAutoCancel(true); // 알림 터치 시 자동으로 사라짐
-//                    notification.setContentIntent(pendingIntent);
+                    // 알림 발생시키는 다른 방식인데 SDK버전 확인 필요
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        NotificationChannel channel = new NotificationChannel("channel1", "hello", NotificationManager.IMPORTANCE_HIGH);
+                        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.createNotificationChannel(channel);
+                        NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
+                        notification.setContentTitle("테스트");
+                        notification.setContentText("테스트 알림입니다");
+                        notification.setDefaults(Notification.DEFAULT_SOUND);
+                        notification.setSmallIcon(R.drawable.ic_basic_profile);
 
-                    // PendingIntent를 통해 알림 터치 시 MainActivity로 이동할 수 있는데, 아직 모르겠음.
-
-
-                    NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.notify(0, notification.build());
+                        // PendingIntent를 통해 알림 터치 시 MainActivity로 이동할 수 있는데, 아직 모르겠음.
+//                        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                        notification.setContentIntent(pendingIntent);
+                        notificationManager.notify(0, notification.build());
+                    }
                 }
-
-                // 알림 발생시키는 다른 방식인데 SDK버전 확인 필요
-//                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//                    NotificationChannel channel = new NotificationChannel("channel1", "hello", NotificationManager.IMPORTANCE_HIGH);
-//                    NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-//                    notificationManager.createNotificationChannel(channel);
+            }
+//
+//                    알림 발생시키는 다른 방식(7.0 이상에서는 작동 안됨)
 //                    NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
 //                    notification.setContentTitle("테스트");
 //                    notification.setContentText("테스트 알림입니다");
 //                    notification.setSmallIcon(R.drawable.ic_basic_profile);
+//                    notification.setDefaults(Notification.DEFAULT_SOUND); // 소리, 진동은 DEFAULT_VIBRATE
+//                    notification.setAutoCancel(true); // 알림 터치 시 자동으로 사라짐
+//                    notification.setContentIntent(pendingIntent);
+//                    PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                    PendingIntent를 통해 알림 터치 시 MainActivity로 이동할 수 있는데, 아직 모르겠음.
+
+
+//                    NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 //                    notificationManager.notify(0, notification.build());
-//                }
-            }
+
+
         });
 
 
