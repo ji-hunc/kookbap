@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -22,6 +23,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -56,12 +58,12 @@ public class SettingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
-        settingProfileImage = (ImageView) view.findViewById(R.id.settingProfileImage);
-        settingName = (TextView) view.findViewById(R.id.settingName);
-        settingCollegeNumber = (TextView) view.findViewById(R.id.settingCollegeNumber);
-        settingMyReviews = (LinearLayout) view.findViewById(R.id.settingMyReviews);
-        settingNotice = (Switch) view.findViewById(R.id.settingNotice);
-        settingBtnNotice = (Button) view.findViewById(R.id.settingBtnNotice);
+        settingProfileImage = view.findViewById(R.id.settingProfileImage);
+        settingName = view.findViewById(R.id.settingName);
+        settingCollegeNumber = view.findViewById(R.id.settingCollegeNumber);
+        settingMyReviews = view.findViewById(R.id.settingMyReviews);
+        settingNotice = view.findViewById(R.id.settingNotice);
+        settingBtnNotice = view.findViewById(R.id.settingBtnNotice);
 
         // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 설정
         settingProfileImage.setImageResource(R.drawable.ic_basic_profile);
@@ -127,6 +129,7 @@ public class SettingFragment extends Fragment {
 
         // 알림 설정
         settingBtnNotice.setOnClickListener(new View.OnClickListener(){
+            @RequiresApi(api = Build.VERSION_CODES.S)
             @Override
             public void onClick(View view){
                 if (settingNotice.isChecked()){
@@ -147,8 +150,9 @@ public class SettingFragment extends Fragment {
                         notification.setSmallIcon(R.drawable.ic_basic_profile);
 
                         // PendingIntent를 통해 알림 터치 시 MainActivity로 이동할 수 있는데, 아직 모르겠음.
-//                        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                        notification.setContentIntent(pendingIntent);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+                        notification.setContentIntent(pendingIntent);
+                        notification.setAutoCancel(true);
                         notificationManager.notify(0, notification.build());
                     }
                 }
