@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
     ViewPager2 viewPager2;
     CafeteriaViewPagerAdapter cafeteriaViewPagerAdapter;
 
-    String todayDate;
+    String date;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,8 +43,7 @@ public class HomeFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager2 = view.findViewById(R.id.viewPager);
 
-
-        todayDate = "2022-10-31"; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
+        date = "2022-10-13"; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
 
         loadData(); // 스레드 함수 호출
 
@@ -55,7 +54,7 @@ public class HomeFragment extends Fragment {
         final Handler handler = new Handler(Looper.getMainLooper()) {
             public void handleMessage(Message msg) {
 
-                cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(getActivity(), jsonObjectMain);
+                cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObjectMain, date);
                 viewPager2.setAdapter(cafeteriaViewPagerAdapter);
 
                 tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -89,7 +88,7 @@ public class HomeFragment extends Fragment {
             public void run() {
                 try {
                     URL url = new URL("https://kmucoop.kookmin.ac.kr/menu/menujson.php?" +
-                            "sdate=" + todayDate + "&edate=" +todayDate + "&today=" + todayDate);
+                            "sdate=" + date + "&edate=" + date + "&today=" + date);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
                     connection.setDoInput(true);
