@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -31,10 +32,13 @@ public class FoodDetail extends AppCompatActivity {
         foodDetailNameSide.setText(getIntent().getStringExtra(("foodNameSide")));
         foodDetailPrice.setText(getIntent().getStringExtra(("price")));
         foodDetailImage.setImageResource(getIntent().getIntExtra("image", 0));
-        // TODO
-        // 하트 빈거 찬거 구별하기
-//        foodDetailHeart.setImageResource(getIntent().getIntExtra("heart", 0));
         foodDetailRating.setRating(getIntent().getFloatExtra("rating", 0));
 
+        foodDetailHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                foodDetailHeart.setSelected(!foodDetailHeart.isSelected());
+            }
+        });
     }
 }
