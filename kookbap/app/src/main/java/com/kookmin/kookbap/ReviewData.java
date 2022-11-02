@@ -19,6 +19,9 @@ public class ReviewData {
         this.heart = heart;
     }
 
+    public ReviewData(String a, String subMenuName, int i, String delicious, int ic_setting, float stars, int heart) {
+    }
+
     public String getMenuName() {
         return menuName;
     }
