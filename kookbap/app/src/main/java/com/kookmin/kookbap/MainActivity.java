@@ -2,23 +2,38 @@ package com.kookmin.kookbap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
-    //20180891
     BottomNavigationView bottomNavigationView;
+    RecyclerView recyclerView;
 
     HomeFragment homeFragment = new HomeFragment();
     ReviewFragment reviewFragment = new ReviewFragment();
     RestaurantFragment restaurantFragment = new RestaurantFragment();
     SettingFragment settingFragment = new SettingFragment();
-    AddReviewFragment addReviewFragment = new AddReviewFragment();
+
+    ArrayList<ReviewData> reviewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -40,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, reviewFragment).commit();
                         return true;
                     case R.id.add_review:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, addReviewFragment).commit();
+                        Intent intent = new Intent(getApplicationContext(), WriteReview.class);
+                        startActivity(intent);
                         return true;
                     case R.id.restaurant:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, restaurantFragment).commit();

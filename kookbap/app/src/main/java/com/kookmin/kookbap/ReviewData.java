@@ -2,14 +2,16 @@ package com.kookmin.kookbap;
 
 public class ReviewData {
     String menuName;
+    String subMenuName;
     String price;
     String reviewText;
     int image;
     float stars;
     int heart;
 
-    public ReviewData(String menuName, String price, String reviewText, int image, float stars, int heart) {
+    public ReviewData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart) {
         this.menuName = menuName;
+        this.subMenuName = subMenuName;
         this.price = price;
         this.reviewText = reviewText;
         this.image = image;
@@ -63,5 +65,13 @@ public class ReviewData {
 
     public void setHeart(int heart) {
         this.heart = heart;
+    }
+
+    public String getSubMenuName() {
+        return subMenuName;
+    }
+
+    public void setSubMenuName(String subMenuName) {
+        this.subMenuName = subMenuName;
     }
 }
