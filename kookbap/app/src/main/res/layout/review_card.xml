@@ -16,7 +16,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <ImageView
                 android:id="@+id/foodImage"
@@ -41,22 +42,15 @@
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:scrollbars="none">
-
                     <TextView
                         android:id="@+id/foodNameSide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
                         android:text="반찬 이름 나열"
                         android:textSize="13sp" />
-                </HorizontalScrollView>
 
                 <RatingBar
                     android:id="@+id/foodRatingBar"
@@ -79,6 +73,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:textSize="17sp"
                     android:id="@+id/foodPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -86,6 +81,7 @@
                     android:text="4,000" />
 
                 <ImageView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/foodHeart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

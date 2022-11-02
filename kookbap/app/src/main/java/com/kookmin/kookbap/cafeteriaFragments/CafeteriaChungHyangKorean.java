@@ -24,38 +24,39 @@ import java.util.Iterator;
 public class CafeteriaChungHyangKorean extends Fragment {
     ArrayList<ReviewData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
     ReviewDataAdapter reviewDataAdapter;
-    private JSONObject jsonObject;
-    private RecyclerView recyclerView;
+    private final JSONObject jsonObject;
+    String date;
 
-    public CafeteriaChungHyangKorean(JSONObject jsonObject) {
+    public CafeteriaChungHyangKorean(JSONObject jsonObject, String date) {
         this.jsonObject = jsonObject;
+        this.date = date;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cafeteria_hanul, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerViewHanul);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHanul);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         reviewData = new ArrayList<>();
-        reviewDataAdapter = new ReviewDataAdapter(reviewData, getActivity().getApplicationContext());
-        Log.e("json3", jsonObject.toString());
-
+        reviewDataAdapter = new ReviewDataAdapter(reviewData, requireActivity().getApplicationContext());
         ArrayList<String> boothNames = new ArrayList<>();
+
         try {
-            JSONObject jsonObject2 = jsonObject.getJSONObject("청향 한식당(법학관 5층)").getJSONObject("2022-10-31");
-            Log.e("json1", jsonObject2.toString());
-            Iterator<String> iter = jsonObject2.keys();
+            JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("청향 한식당(법학관 5층)").getJSONObject(date);
+            Iterator<String> iter = jsonObjectBoothNames.keys();
+
             while (iter.hasNext()) {
                 String boothName = iter.next().toString();
                 boothNames.add(boothName);
             }
 
             for (int i=0; i<boothNames.size(); i++) {
-                String menu = jsonObject2.getJSONObject(boothNames.get(i)).getString("메뉴");
-                String price = jsonObject2.getJSONObject(boothNames.get(i)).getString("가격");
-                Log.e("menu", menu);
-                Log.e("price", price);
+                String menu = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("메뉴");
+                String price = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("가격");
+                price = price.replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+//                Log.e("menu", menu);
+//                Log.e("price", price);
 
                 String[] array = menu.split("\r\n");
                 if (!((menu.equals("")) && (price.equals("")))) {
@@ -66,9 +67,8 @@ public class CafeteriaChungHyangKorean extends Fragment {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("json2", jsonObject.toString());
+//            Log.e("json2", jsonObject.toString());
         }
-
         recyclerView.setAdapter(reviewDataAdapter);
 
         return view;

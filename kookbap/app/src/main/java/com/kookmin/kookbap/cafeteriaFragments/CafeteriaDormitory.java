@@ -24,26 +24,26 @@ import java.util.Iterator;
 public class CafeteriaDormitory extends Fragment {
     ArrayList<ReviewData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
     ReviewDataAdapter reviewDataAdapter;
-    private JSONObject jsonObject;
-    private RecyclerView recyclerView;
+    private final JSONObject jsonObject;
+    String date;
 
-    public CafeteriaDormitory(JSONObject jsonObject) {
+    public CafeteriaDormitory(JSONObject jsonObject, String date) {
         this.jsonObject = jsonObject;
+        this.date = date;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cafeteria_hanul, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerViewHanul);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHanul);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         reviewData = new ArrayList<>();
-        reviewDataAdapter = new ReviewDataAdapter(reviewData, getActivity().getApplicationContext());
-        Log.e("json3", jsonObject.toString());
-
+        reviewDataAdapter = new ReviewDataAdapter(reviewData, requireActivity().getApplicationContext());
         ArrayList<String> boothNames = new ArrayList<>();
+
         try {
-            JSONObject jsonObject2 = jsonObject.getJSONObject("생활관식당 정기식(생활관 A동 1층)").getJSONObject("2022-10-31");
+            JSONObject jsonObject2 = jsonObject.getJSONObject("생활관식당 정기식(생활관 A동 1층)").getJSONObject(date);
             Log.e("json1", jsonObject2.toString());
             Iterator<String> iter = jsonObject2.keys();
             while (iter.hasNext()) {
@@ -54,11 +54,11 @@ public class CafeteriaDormitory extends Fragment {
             for (int i=0; i<boothNames.size(); i++) {
                 String menu = jsonObject2.getJSONObject(boothNames.get(i)).getString("메뉴");
                 String price = jsonObject2.getJSONObject(boothNames.get(i)).getString("가격");
-                Log.e("menu", menu);
-                Log.e("price", price);
+//                Log.e("menu", menu);
+//                Log.e("price", price);
 
                 String[] array = menu.split("\r\n");
-                if (!((menu.equals("")) && (price.equals("")))) {
+                if (!menu.equals("") && !price.equals("")) {
                     menu = array[0];
                     reviewData.add(new ReviewData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
 
@@ -68,9 +68,8 @@ public class CafeteriaDormitory extends Fragment {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("json2", jsonObject.toString());
+//            Log.e("json2", jsonObject.toString());
         }
-
         recyclerView.setAdapter(reviewDataAdapter);
 
         return view;

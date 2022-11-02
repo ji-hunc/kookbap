@@ -24,7 +24,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
     public ReviewDataAdapter(ArrayList<ReviewData> reviewData, Context context) {
         this.reviewData = reviewData;
         this.context = context;
-        Log.e("size", Integer.toString(reviewData.size()));
+//        Log.e("size", Integer.toString(reviewData.size()));
     }
 
     @NonNull
