@@ -25,7 +25,6 @@
 
             <LinearLayout
                 android:layout_weight="6"
-                android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -39,7 +38,7 @@
                     android:text="메뉴 이름"/>
 
                 <TextView
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:id="@+id/foodDetailNameSide"
                     android:layout_width="wrap_content"
@@ -65,6 +64,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:textSize="17sp"
                     android:layout_gravity="center"
                     android:id="@+id/foodDetailPrice"
                     android:layout_width="wrap_content"
@@ -72,11 +72,12 @@
                     android:text="4,000"/>
 
                 <ImageView
+                    android:layout_marginTop="10dp"
                     android:layout_gravity="center"
                     android:id="@+id/foodDetailHeart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_empty_heart"/>
+                    android:src="@drawable/heart_selector"/>
 
             </LinearLayout>
         </LinearLayout>
