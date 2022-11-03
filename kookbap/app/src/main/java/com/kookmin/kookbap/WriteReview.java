@@ -2,14 +2,11 @@ package com.kookmin.kookbap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ public class WriteReview extends AppCompatActivity {
 
     String tag;
 
-    ArrayList<ReviewData> mReviewData;
+    ArrayList<MenuData> mReviewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +81,8 @@ public class WriteReview extends AppCompatActivity {
 
     }
     public void Save_Data(){
-        mReviewData = new ArrayList<ReviewData>();
-        mReviewData.add(new ReviewData(mReview.getText().toString(),"",mPrice.getText().toString(),tag,0,0,0));
+        mReviewData = new ArrayList<MenuData>();
+        mReviewData.add(new MenuData(mReview.getText().toString(),"",mPrice.getText().toString(),tag,0,0,0));
         return;
     }
 }
