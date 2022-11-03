@@ -6,87 +6,87 @@
     android:id="@+id/cardLayout">
 
     <androidx.cardview.widget.CardView
-        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="#FFFFFF"
+        app:cardBackgroundColor="#FFFFFF"
         app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <ImageView
-                android:padding="15dp"
                 android:id="@+id/foodImage"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/ic_launcher_foreground"/>
+                android:padding="15dp"
+                android:src="@drawable/ic_launcher_foreground" />
 
             <LinearLayout
-                android:layout_weight="6"
-                android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_gravity="left"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
                     android:id="@+id/foodName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="메뉴 이름"/>
-
-                <HorizontalScrollView
-                    android:scrollbars="none"
                     android:layout_gravity="left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:text="메뉴 이름"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                     <TextView
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_gravity="left"
                         android:id="@+id/foodNameSide"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="13sp"
-                        android:text="반찬 이름 나열"/>
-                </HorizontalScrollView>
+                        android:layout_gravity="left"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="반찬 이름 나열"
+                        android:textSize="13sp" />
 
                 <RatingBar
-                    android:layout_gravity="left"
-                    android:rating="2.5"
                     android:id="@+id/foodRatingBar"
-                    android:numStars="5"
-                    android:stepSize="0.5"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.AppCompat.RatingBar.Small"/>
+                    android:layout_gravity="left"
+                    android:numStars="5"
+                    android:rating="2.5"
+                    android:stepSize="0.5"
+                    android:theme="@style/RatingBar" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_weight="3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_gravity="center"
+                    android:textSize="17sp"
                     android:id="@+id/foodPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4,000"/>
+                    android:layout_gravity="center"
+                    android:text="4,000" />
 
                 <ImageView
-                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
                     android:id="@+id/foodHeart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_empty_heart"/>
+                    android:layout_gravity="center"
+                    android:src="@drawable/heart_selector" />
 
             </LinearLayout>
         </LinearLayout>

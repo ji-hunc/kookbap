@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
     public ReviewDataAdapter(ArrayList<ReviewData> reviewData, Context context) {
         this.reviewData = reviewData;
         this.context = context;
-        Log.e("size", Integer.toString(reviewData.size()));
+//        Log.e("size", Integer.toString(reviewData.size()));
     }
 
     @NonNull
@@ -41,9 +42,6 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.foodNameSide.setText(reviewData.get(position).getSubMenuName());
         holder.foodPrice.setText(reviewData.get(position).getPrice());
         holder.foodImage.setImageResource(reviewData.get(position).getImage());
-        // TODO
-        // 하트클릭 했을 때 채워지고, 비워지고 이미지 다르게 해야함
-//        holder.foodHeart.setImageResource(reviewData.get(position).getHeart());
         holder.foodRating.setRating(reviewData.get(position).getStars());
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +55,15 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                 intent.putExtra("heart", reviewData.get(position).getHeart());
                 intent.putExtra("rating", reviewData.get(position).getStars());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+        // 하트 클릭시 하트 채우고 비우기
+        holder.foodHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
+
             }
         });
     }

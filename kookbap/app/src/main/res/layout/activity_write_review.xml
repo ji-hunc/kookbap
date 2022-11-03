@@ -1,17 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".WriteReview">
 
-    <TextView
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="WriteReview Page"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:layout_marginTop="30dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:id="@+id/myMenu_info"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            >
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/myMenu"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:hint="매뉴명"
+                android:textSize="40dp" />
+
+            <TextView
+                android:id="@+id/myPrice"
+                android:layout_width="150dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@id/myMenu"
+                android:hint="가격"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/myFood"
+                android:layout_width="260dp"
+                android:layout_height="200dp"
+                android:layout_below="@id/myMenu"
+                android:src="@drawable/ic_add" />
+
+            <RatingBar
+                android:id="@+id/myRating"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@id/myFood"
+                android:numStars="5"
+                android:stepSize="0.5" />
+
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:text="내용"
+                android:textSize="40dp"
+                android:layout_weight="1"/>
+            <EditText
+                android:id="@+id/myReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:maxLines="3"
+                android:minLines="3"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:text="태그"
+            />
+        <EditText
+            android:id="@+id/addTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="테그"/>
+        <LinearLayout
+            android:id="@+id/myTag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/korean_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#한식"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+            <Button
+                android:id="@+id/chinese_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#중식"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+            <Button
+                android:id="@+id/japanese_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#일식"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+            <Button
+                android:id="@+id/very_spicy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#아주 매움"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/save_Review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저장"
+            />
+    </LinearLayout>
+</ScrollView>
