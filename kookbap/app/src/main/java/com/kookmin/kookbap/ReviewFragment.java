@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -27,11 +26,11 @@ public class ReviewFragment extends Fragment {
     ArrayList<BestReviewerData> bestReviewerData;
     RecyclerView firstReviewRecycler;
     RecyclerView startRankRecycler;
-    ArrayList<ReviewData> starRankReviewData;
+    ArrayList<MenuData> starRankReviewData;
     RecyclerView lotOfReviewRecycler;
-    ArrayList<ReviewData> lotOfReviewData;
+    ArrayList<MenuData> lotOfReviewData;
 
-    ReviewDataAdapter reviewDataAdapter;
+    MenuDataAdapter reviewDataAdapter;
     BestReviewerDataAdapter bestReviewerDataAdapter;
 
     @Override
@@ -76,7 +75,7 @@ public class ReviewFragment extends Fragment {
         for( int i =0; i<5; i++){
             String name = i +"등";
             int rank = i;
-            starRankReviewData.add(new ReviewData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
             bestReviewerData.add(new BestReviewerData( rank,"uzznknown",(10-i)*100));
         }
 
@@ -84,7 +83,7 @@ public class ReviewFragment extends Fragment {
         bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
         bestReviewerDataAdapter.setBestReviewerData(bestReviewerData);
 
-        reviewDataAdapter = new ReviewDataAdapter(starRankReviewData, getActivity().getApplicationContext());
+        reviewDataAdapter = new MenuDataAdapter(starRankReviewData, getActivity().getApplicationContext());
 
         firstReviewRecycler.setAdapter(reviewDataAdapter);
         startRankRecycler.setAdapter(reviewDataAdapter);

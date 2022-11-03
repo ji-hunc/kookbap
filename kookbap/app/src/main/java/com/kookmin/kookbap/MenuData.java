@@ -1,6 +1,6 @@
 package com.kookmin.kookbap;
 
-public class ReviewData {
+public class MenuData {
     String menuName;
     String subMenuName;
     String price;
@@ -9,7 +9,7 @@ public class ReviewData {
     float stars;
     int heart;
 
-    public ReviewData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart) {
+    public MenuData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart) {
         this.menuName = menuName;
         this.subMenuName = subMenuName;
         this.price = price;
@@ -19,7 +19,7 @@ public class ReviewData {
         this.heart = heart;
     }
 
-    public ReviewData(String a, String subMenuName, int i, String delicious, int ic_setting, float stars, int heart) {
+    public MenuData(String a, String subMenuName, int i, String delicious, int ic_setting, float stars, int heart) {
     }
 
     public String getMenuName() {

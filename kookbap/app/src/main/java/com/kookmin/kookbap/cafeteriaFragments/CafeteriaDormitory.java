@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kookmin.kookbap.R;
-import com.kookmin.kookbap.ReviewData;
-import com.kookmin.kookbap.ReviewDataAdapter;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CafeteriaDormitory extends Fragment {
-    ArrayList<ReviewData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
-    ReviewDataAdapter reviewDataAdapter;
+    ArrayList<MenuData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
+    MenuDataAdapter reviewDataAdapter;
     private final JSONObject jsonObject;
     String date;
 
@@ -39,7 +39,7 @@ public class CafeteriaDormitory extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHanul);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         reviewData = new ArrayList<>();
-        reviewDataAdapter = new ReviewDataAdapter(reviewData, requireActivity().getApplicationContext());
+        reviewDataAdapter = new MenuDataAdapter(reviewData, requireActivity().getApplicationContext());
         ArrayList<String> boothNames = new ArrayList<>();
 
         try {
@@ -60,7 +60,7 @@ public class CafeteriaDormitory extends Fragment {
                 String[] array = menu.split("\r\n");
                 if (!menu.equals("") && !price.equals("")) {
                     menu = array[0];
-                    reviewData.add(new ReviewData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+                    reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
 
 
                 }
