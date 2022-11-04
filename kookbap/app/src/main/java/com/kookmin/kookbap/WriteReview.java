@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +19,7 @@ public class WriteReview extends AppCompatActivity {
 
     Button mKorfood,mChinfood,mJapfood,mVeryspicy,mSave_btn;
 
-    String tag;
+    String tag = "";
 
     ArrayList<MenuData> mReviewData;
 
@@ -39,9 +40,11 @@ public class WriteReview extends AppCompatActivity {
         mVeryspicy = (Button) findViewById(R.id.very_spicy);
         mSave_btn = (Button) findViewById(R.id.save_Review);
 
-        String myreview = mReview.getText().toString();
+        //String myreview = mReview.getText().toString();
 
         mAddTag = (EditText) findViewById(R.id.addTag);
+
+        mMenu.setText(getIntent().getStringExtra("menuName"));
 
         mKorfood.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +77,13 @@ public class WriteReview extends AppCompatActivity {
         mSave_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Save_Data();
+                //@TODO : 이걸 나중에 서버단에서 해야함
+                //Save_Data();
+
+                //디버깅용
+                Intent intent = new Intent(getApplicationContext(),FoodDetail.class);
+
+                startActivity(intent);
                 finish();
             }
         });
