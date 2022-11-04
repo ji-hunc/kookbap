@@ -1,5 +1,6 @@
 package com.kookmin.kookbap;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
@@ -25,32 +29,66 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Date;
+import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
 
     JSONObject jsonObjectMain;
 
+    TextView dateTextView;
+    ImageView calendarButton;
     TabLayout tabLayout;
     ViewPager2 viewPager2;
     CafeteriaViewPagerAdapter cafeteriaViewPagerAdapter;
 
-    String date;
+    String date, nowYear, nowMonth, nowDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // 날짜 변수에 오늘 날짜 초기화 및 날짜텍스트뷰에 날짜 초기화
+        dateTextView = view.findViewById(R.id.dateTextView);
+        Calendar calendar = Calendar.getInstance();
+        nowYear = Integer.toString(calendar.get(Calendar.YEAR));
+        nowMonth = Integer.toString(calendar.get(Calendar.MONTH)+1);
+        nowDate = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+        nowMonth = nowMonth.length() < 2 ? "0" + Integer.parseInt(nowMonth)+1 : nowMonth;
+        nowDate = nowDate.length() < 2 ? "0" + Integer.parseInt(nowDate) : nowDate;
+        dateTextView.setText(nowYear +"-"+ nowMonth +"-"+ nowDate);
+
+
+        calendarButton = view.findViewById(R.id.calendarButton);
+        calendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
+                        nowYear = Integer.toString(yy);
+                        nowMonth = mm+1 < 10 ? "0" + (mm+1) : "" + (mm+1);
+                        nowDate = dd < 10 ? "0" + dd : "" + dd;
+                        date = nowYear + "-" + nowMonth + "-" + nowDate;
+                        dateTextView.setText(date);
+                        loadData(nowYear + "-" + nowMonth + "-" + nowDate); // 스레드 함수 호출
+                    }
+                }, Integer.parseInt(nowYear), Integer.parseInt(nowMonth)-1, Integer.parseInt(nowDate));
+                datePickerDialog.show();
+            }
+        });
+
         tabLayout = view.findViewById(R.id.tabLayout);
         viewPager2 = view.findViewById(R.id.viewPager);
 
-        date = "2022-10-13"; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
-
-        loadData(); // 스레드 함수 호출
+        date = nowYear + "-" + nowMonth + "-" + nowDate; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
+        loadData(date); // 스레드 함수 호출
 
         return view;
     }
 
-    public void loadData() {
+    public void loadData(String date) {
         final Handler handler = new Handler(Looper.getMainLooper()) {
             public void handleMessage(Message msg) {
 
