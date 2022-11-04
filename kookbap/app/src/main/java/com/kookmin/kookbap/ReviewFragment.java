@@ -75,7 +75,7 @@ public class ReviewFragment extends Fragment {
         for( int i =0; i<5; i++){
             String name = i +"등";
             int rank = i;
-            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.test_bread_picture, (float) (Math.random()*5), 0));
             bestReviewerData.add(new BestReviewerData( rank,"uzznknown",(10-i)*100));
         }
 
