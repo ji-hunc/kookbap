@@ -16,6 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class FoodDetail extends AppCompatActivity {
@@ -23,7 +25,7 @@ public class FoodDetail extends AppCompatActivity {
     TextView foodDetailName, foodDetailNameSide, foodDetailPrice;
     ImageView foodDetailImage, foodDetailHeart;
     RatingBar foodDetailRating;
-    Button addReviewButton;
+    FloatingActionButton addReviewButton;
     Spinner reviewSortSpinner;
 
     RecyclerView reviewRecyclerView;
