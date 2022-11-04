@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -26,14 +27,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
-    RecyclerView recyclerView;
 
     HomeFragment homeFragment = new HomeFragment();
     ReviewFragment reviewFragment = new ReviewFragment();
     RestaurantFragment restaurantFragment = new RestaurantFragment();
     SettingFragment settingFragment = new SettingFragment();
-
-    ArrayList<ReviewData> reviewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,24 +46,29 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                        changeFragment(homeFragment);
                         return true;
                     case R.id.review:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, reviewFragment).commit();
+                        changeFragment(reviewFragment);
                         return true;
                     case R.id.add_review:
                         Intent intent = new Intent(getApplicationContext(), WriteReview.class);
                         startActivity(intent);
                         return true;
                     case R.id.restaurant:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, restaurantFragment).commit();
+                        changeFragment(restaurantFragment);
                         return true;
                     case R.id.setting:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, settingFragment).commit();
+                        changeFragment(settingFragment);
                         return true;
                 }
                 return false;
             }
         });
     }
+    // 프래그먼트 변경 메서드. mainActivity.Container 에서 사용가능. 다른 container에서 사용하고 싶으면 오버로딩하면됨.
+    public void changeFragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+    }
+
 }

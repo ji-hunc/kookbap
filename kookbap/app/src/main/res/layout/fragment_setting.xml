@@ -14,35 +14,32 @@
 
         <ImageView
             android:id="@+id/settingProfileImage"
-            android:onClick="profileImageClicked"
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_basic_profile"/>
+            android:layout_height="100dp"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/settingName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="김민제"
                 android:textSize="25dp"/>
 
             <TextView
+                android:id="@+id/settingCollegeNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:text="학번: 20191557"
                 android:textSize="25dp"/>
 
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/settingMyReviews"
-        android:onClick="myReviewsClicked"
         android:background="@drawable/borderline_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,11 +74,16 @@
             android:layout_weight="1"/>
 
         <Switch
+            android:id="@+id/settingNotice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-
     </LinearLayout>
+    <Button
+        android:id="@+id/settingBtnNotice"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="알림 띄우기(테스트)"/>
 
 
 

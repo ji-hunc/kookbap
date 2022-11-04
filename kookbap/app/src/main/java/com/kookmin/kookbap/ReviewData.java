@@ -1,77 +1,99 @@
 package com.kookmin.kookbap;
 
+import java.util.ArrayList;
+
 public class ReviewData {
-    String menuName;
-    String subMenuName;
-    String price;
-    String reviewText;
-    int image;
-    float stars;
-    int heart;
+    String reviewContext;
+    String reviewMenu;
+    String reviewRestaurant;
+    String reviewReviewerName;
+    ArrayList<String> reviewComments;
+    ArrayList<String> reviewTags;
+    int reviewImage;
+    float reviewStars;
+    int reviewLikes;
 
-    public ReviewData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart) {
-        this.menuName = menuName;
-        this.subMenuName = subMenuName;
-        this.price = price;
-        this.reviewText = reviewText;
-        this.image = image;
-        this.stars = stars;
-        this.heart = heart;
+    public ReviewData(String reviewContext, String reviewMenu, String reviewRestaurant, String reviewReviewerName, ArrayList<String> reviewComments, ArrayList<String> reviewTags, int reviewImage, float reviewStars, int reviewLikes) {
+        this.reviewContext = reviewContext;
+        this.reviewMenu = reviewMenu;
+        this.reviewRestaurant = reviewRestaurant;
+        this.reviewReviewerName = reviewReviewerName;
+        this.reviewComments = reviewComments;
+        this.reviewTags = reviewTags;
+        this.reviewImage = reviewImage;
+        this.reviewStars = reviewStars;
+        this.reviewLikes = reviewLikes;
     }
 
-    public String getMenuName() {
-        return menuName;
+    public String getReviewReviewerName() {
+        return reviewReviewerName;
     }
 
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
+    public void setReviewReviewerName(String reviewReviewerName) {
+        this.reviewReviewerName = reviewReviewerName;
     }
 
-    public String getPrice() {
-        return price;
+    public String getReviewContext() {
+        return reviewContext;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setReviewContext(String reviewContext) {
+        this.reviewContext = reviewContext;
     }
 
-    public String getReviewText() {
-        return reviewText;
+    public String getReviewMenu() {
+        return reviewMenu;
     }
 
-    public void setReviewText(String reviewText) {
-        this.reviewText = reviewText;
+    public void setReviewMenu(String reviewMenu) {
+        this.reviewMenu = reviewMenu;
     }
 
-    public int getImage() {
-        return image;
+    public String getReviewRestaurant() {
+        return reviewRestaurant;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setReviewRestaurant(String reviewRestaurant) {
+        this.reviewRestaurant = reviewRestaurant;
     }
 
-    public float getStars() {
-        return stars;
+    public ArrayList<String> getReviewComments() {
+        return reviewComments;
     }
 
-    public void setStars(float stars) {
-        this.stars = stars;
+    public void setReviewComments(ArrayList<String> reviewComments) {
+        this.reviewComments = reviewComments;
     }
 
-    public int getHeart() {
-        return heart;
+    public ArrayList<String> getReviewTags() {
+        return reviewTags;
     }
 
-    public void setHeart(int heart) {
-        this.heart = heart;
+    public void setReviewTags(ArrayList<String> reviewTags) {
+        this.reviewTags = reviewTags;
     }
 
-    public String getSubMenuName() {
-        return subMenuName;
+    public int getReviewImage() {
+        return reviewImage;
     }
 
-    public void setSubMenuName(String subMenuName) {
-        this.subMenuName = subMenuName;
+    public void setReviewImage(int reviewImage) {
+        this.reviewImage = reviewImage;
+    }
+
+    public float getReviewStars() {
+        return reviewStars;
+    }
+
+    public void setReviewStars(float reviewStars) {
+        this.reviewStars = reviewStars;
+    }
+
+    public int getReviewLikes() {
+        return reviewLikes;
+    }
+
+    public void setReviewLikes(int reviewLikes) {
+        this.reviewLikes = reviewLikes;
     }
 }
