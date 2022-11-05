@@ -4,8 +4,8 @@
     package="com.kookmin.kookbap">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kookbap"
         tools:targetApi="31">
+        <activity
+            android:name=".ReviewTabActivity"
+            android:exported="false" />
         <activity
             android:name=".FoodDetail"
             android:exported="false" />
@@ -34,7 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserReviewsActivity"/>
+        <activity android:name=".UserReviewsActivity" />
     </application>
 
 </manifest>
