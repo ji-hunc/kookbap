@@ -6,14 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kookmin.kookbap.R;
-import com.kookmin.kookbap.ReviewData;
-import com.kookmin.kookbap.ReviewDataAdapter;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CafeteriaProfessor extends Fragment {
-    ArrayList<ReviewData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
-    ReviewDataAdapter reviewDataAdapter;
+    ArrayList<MenuData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
+    MenuDataAdapter reviewDataAdapter;
     private final JSONObject jsonObject;
     String date;
 
@@ -39,7 +38,7 @@ public class CafeteriaProfessor extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHanul);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         reviewData = new ArrayList<>();
-        reviewDataAdapter = new ReviewDataAdapter(reviewData, getActivity().getApplicationContext());
+        reviewDataAdapter = new MenuDataAdapter(reviewData, getActivity().getApplicationContext());
         ArrayList<String> boothNames = new ArrayList<>(); // 식당의 각각 부스 이름이 들어갈 리스트
 
         try {
@@ -62,7 +61,7 @@ public class CafeteriaProfessor extends Fragment {
                 if (!(menu.equals("") || price.equals(""))) {
                     // 전부 일반적인 경우로 처리 됨
                     menu = array[0];
-                    reviewData.add(new ReviewData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+                    reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
                 }
 
             }

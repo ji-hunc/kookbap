@@ -2,8 +2,6 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,43 +15,43 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.ReviewDataViewHolder> {
+public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDataViewHolder> {
 
-    ArrayList<ReviewData> reviewData;
+    ArrayList<MenuData> MenuDataArray;
     Context context;
 
-    public ReviewDataAdapter(ArrayList<ReviewData> reviewData, Context context) {
-        this.reviewData = reviewData;
+    public MenuDataAdapter(ArrayList<MenuData> MenuDataArray, Context context) {
+        this.MenuDataArray = MenuDataArray;
         this.context = context;
-//        Log.e("size", Integer.toString(reviewData.size()));
+//        Log.e("size", Integer.toString(MenuDataArray.size()));
     }
 
     @NonNull
     @Override
-    public ReviewDataAdapter.ReviewDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MenuDataAdapter.MenuDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.review_card, parent, false);
-        return new ReviewDataViewHolder(view);
+        View view = inflater.inflate(R.layout.menu_card, parent, false);
+        return new MenuDataViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReviewDataAdapter.ReviewDataViewHolder holder, final int position) {
-        holder.foodName.setText(reviewData.get(position).getMenuName());
-        holder.foodNameSide.setText(reviewData.get(position).getSubMenuName());
-        holder.foodPrice.setText(reviewData.get(position).getPrice());
-        holder.foodImage.setImageResource(reviewData.get(position).getImage());
-        holder.foodRating.setRating(reviewData.get(position).getStars());
+    public void onBindViewHolder(@NonNull MenuDataAdapter.MenuDataViewHolder holder, final int position) {
+        holder.foodName.setText(MenuDataArray.get(position).getMenuName());
+        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenuName());
+        holder.foodPrice.setText(MenuDataArray.get(position).getPrice());
+        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
+        holder.foodRating.setRating(MenuDataArray.get(position).getStars());
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, FoodDetail.class);
-                intent.putExtra("foodName", reviewData.get(position).getMenuName());
-                intent.putExtra("foodNameSide", reviewData.get(position).getSubMenuName());
-                intent.putExtra("price", reviewData.get(position).getPrice());
-                intent.putExtra("image", reviewData.get(position).getImage());
-                intent.putExtra("heart", reviewData.get(position).getHeart());
-                intent.putExtra("rating", reviewData.get(position).getStars());
+                intent.putExtra("foodName", MenuDataArray.get(position).getMenuName());
+                intent.putExtra("foodNameSide", MenuDataArray.get(position).getSubMenuName());
+                intent.putExtra("price", MenuDataArray.get(position).getPrice());
+                intent.putExtra("image", MenuDataArray.get(position).getImage());
+                intent.putExtra("heart", MenuDataArray.get(position).getHeart());
+                intent.putExtra("rating", MenuDataArray.get(position).getStars());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -70,17 +68,17 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
 
     @Override
     public int getItemCount() {
-        return reviewData.size();
+        return MenuDataArray.size();
     }
 
-    public class ReviewDataViewHolder extends RecyclerView.ViewHolder {
+    public static class MenuDataViewHolder extends RecyclerView.ViewHolder {
 
         TextView foodName, foodNameSide, foodPrice;
         ImageView foodImage, foodHeart;
         RatingBar foodRating;
         LinearLayout cardLayout;
 
-        public ReviewDataViewHolder(@NonNull View itemView) {
+        public MenuDataViewHolder(@NonNull View itemView) {
             super(itemView);
             foodName = itemView.findViewById(R.id.foodName);
             foodNameSide = itemView.findViewById(R.id.foodNameSide);

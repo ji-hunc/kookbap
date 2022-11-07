@@ -60,8 +60,6 @@ public class WriteReview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
 
-        tag = "";
-
         mDate_Text = (TextView) findViewById(R.id.write_review_dateText);
 
         mFood = (ImageView) findViewById(R.id.myFood);
