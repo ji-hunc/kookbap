@@ -42,9 +42,9 @@ public class WriteReview extends AppCompatActivity {
 
     Button mKorfood,mChinfood,mJapfood,mVeryspicy,mSave_btn,mDate_btn;
 
-    String tag;
+    String tag = "";
 
-    ArrayList<ReviewData> mReviewData;
+    ArrayList<MenuData> mReviewData;
 
     String[] items = {"메뉴1","메뉴2","메뉴3"};
 
@@ -75,7 +75,7 @@ public class WriteReview extends AppCompatActivity {
         mSave_btn = (Button) findViewById(R.id.save_Review);
         mDate_btn = (Button) findViewById(R.id.write_review_datebtn);
 
-        String myreview = mReview.getText().toString();
+        //String myreview = mReview.getText().toString();
 
         mAddTag = (EditText) findViewById(R.id.addTag);
 
@@ -188,12 +188,13 @@ public class WriteReview extends AppCompatActivity {
         mSave_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-            }
-        });
+                //@TODO : 이걸 나중에 서버단에서 해야함
+                //Save_Data();
 
-    }
+                //디버깅용
+                Intent intent = new Intent(getApplicationContext(),FoodDetail.class);
 
+                startActivity(intent);
 
     // 권한 요청 이후 권한 결과
     @Override
