@@ -6,14 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kookmin.kookbap.R;
-import com.kookmin.kookbap.ReviewData;
-import com.kookmin.kookbap.ReviewDataAdapter;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CafeteriaStudent extends Fragment {
-    ArrayList<ReviewData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
-    ReviewDataAdapter reviewDataAdapter;
+    ArrayList<MenuData> reviewData;  // recyclerView 에 넘겨줄 ReviewData 객체를 가지고 있는 리스트
+    MenuDataAdapter reviewDataAdapter;
     private final JSONObject jsonObject;
     String date;
 
@@ -39,7 +38,7 @@ public class CafeteriaStudent extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHanul);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         reviewData = new ArrayList<>();
-        reviewDataAdapter = new ReviewDataAdapter(reviewData, requireActivity().getApplicationContext());
+        reviewDataAdapter = new MenuDataAdapter(reviewData, requireActivity().getApplicationContext());
         ArrayList<String> boothNames = new ArrayList<>(); // 식당의 각각 부스 이름이 들어갈 리스트
 
         try {
@@ -68,7 +67,7 @@ public class CafeteriaStudent extends Fragment {
                             String[] arr = array[j].split(" ");
                             menu = arr[0];
                             price = arr[1].replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");;
-                            reviewData.add(new ReviewData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+                            reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
                         }
                     }
 
@@ -85,7 +84,7 @@ public class CafeteriaStudent extends Fragment {
                             // "메뉴": "[오믈렛☆시리즈]\r\n포크볼★오므라이스\r\n후르츠샐러드\r\n오이&할라피뇨피클\r\n", "가격": "4500"
                             menu = array[1];
                         }
-                        reviewData.add(new ReviewData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+                        reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
                     }
                 }
             }
