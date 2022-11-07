@@ -40,12 +40,24 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class SettingFragment extends Fragment {
     ImageView settingProfileImage;
-    TextView settingName, settingCollegeNumber;
+    TextView settingName, settingCollegeNumber, nodeTest;
     LinearLayout settingMyReviews;
     Switch settingNotice;
     Button settingBtnNotice;
@@ -149,12 +161,16 @@ public class SettingFragment extends Fragment {
                         notification.setSmallIcon(R.drawable.ic_basic_profile);
 
                         PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+
                         notification.setContentIntent(pendingIntent);
                         notification.setAutoCancel(true);
+
                         notificationManager.notify(0, notification.build());
                     }
                 }
             }
+
+
 //
 //                    알림 발생시키는 다른 방식(7.0 이상에서는 작동 안됨)
 //                    NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
@@ -173,7 +189,6 @@ public class SettingFragment extends Fragment {
 
 
         });
-
 
         return view;
     }
