@@ -33,7 +33,6 @@ import com.kookmin.kookbap.cafeteriaFragments.DatePickerFragment;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class WriteReview extends AppCompatActivity {
     TextView mDate_Text;
@@ -44,7 +43,6 @@ public class WriteReview extends AppCompatActivity {
 
     String tag;
 
-    ArrayList<ReviewData> mReviewData;
 
     String[] items = {"메뉴1","메뉴2","메뉴3"};
 
