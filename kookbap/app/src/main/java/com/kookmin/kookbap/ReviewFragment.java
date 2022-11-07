@@ -94,17 +94,34 @@ public class ReviewFragment extends Fragment {
 
         // 데이터 형식 정하면 바꿀 곳, test를 위해 임시작업.
         bestReviewerRecycler = view.findViewById(R.id.bestReviewerRecycler);
-        bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+            @Override
+            public boolean canScrollVertically(){
+                return false;
+            }
+        });
 
         firstReviewRecycler = view.findViewById(R.id.firstReviewRecycler);
-        firstReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
+        firstReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+            @Override
+            public boolean canScrollVertically(){
+                return false;
+            }
+        });
         startRankRecycler = view.findViewById(R.id.starRankRecycler);
-        startRankRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
+        startRankRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+            @Override
+            public boolean canScrollVertically(){
+                return false;
+            }
+        });
         lotOfReviewRecycler = view.findViewById(R.id.countRankRecycler);
-        lotOfReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
+        lotOfReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+            @Override
+            public boolean canScrollVertically(){
+                return false;
+            }
+        });
 
 
         bestReviewerData = new ArrayList<>();
