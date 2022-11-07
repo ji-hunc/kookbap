@@ -9,14 +9,19 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import android.widget.Spinner;
 import android.widget.Switch;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +49,7 @@ public class WriteReview extends AppCompatActivity {
 
     String tag;
 
-    ArrayList<ReviewData> mReviewData;
+    ArrayList<MenuData> mReviewData;
 
     String[] items = {"메뉴1","메뉴2","메뉴3"};
 
@@ -264,7 +269,12 @@ public class WriteReview extends AppCompatActivity {
         String year_string = Integer.toString(year);
         String dateMessage = (month_string + "/" + day_string + "/" + year_string);
 
-        mDate_Text.setText("Date: "+dateMessage);
+        mDate_Text.setText("Date: "+dateMessage);}
+
+    public void Save_Data(){
+        mReviewData = new ArrayList<MenuData>();
+        mReviewData.add(new MenuData(mReview.getText().toString(),"",mPrice.getText().toString(),tag,0,0,0));
+        return;
     }
 
 }
