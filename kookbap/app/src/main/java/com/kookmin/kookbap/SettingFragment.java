@@ -34,7 +34,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -161,7 +160,6 @@ public class SettingFragment extends Fragment {
                         notification.setDefaults(Notification.DEFAULT_SOUND);
                         notification.setSmallIcon(R.drawable.ic_basic_profile);
 
-                        // PendingIntent를 통해 알림 터치 시 MainActivity로 이동할 수 있는데, 아직 모르겠음.
                         PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
 
                         notification.setContentIntent(pendingIntent);
