@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -35,12 +36,10 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+
 
 public class WriteReview extends AppCompatActivity {
     TextView mDate_Text;
@@ -51,7 +50,8 @@ public class WriteReview extends AppCompatActivity {
 
     String tag = "";
 
-    ArrayList<MenuData> reviewData;
+    String[] items = {"메뉴1","메뉴2","메뉴3"};
+
 
     JSONObject jsonObjectWriteReview;
 
@@ -65,8 +65,6 @@ public class WriteReview extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
-
-        tag = "";
 
         mDate_Text = (TextView) findViewById(R.id.write_review_dateText);
 
@@ -95,11 +93,9 @@ public class WriteReview extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(),"datePicker");
+                newFragment.show(getSupportFragmentManager(), "datePicker");
             }
         });
-
-
 
 
         Spinner spinner = findViewById(R.id.write_review_toDayMenu);
@@ -129,39 +125,52 @@ public class WriteReview extends AppCompatActivity {
         });
 
 
+
         //사진 등록
-        mFood.setOnClickListener(new View.OnClickListener(){
+
+        mFood.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 // 카메라 및 앨범 권한 확인
                 cameraPermission = ContextCompat.checkSelfPermission(WriteReview.this, Manifest.permission.CAMERA);
                 galleryPermission = ContextCompat.checkSelfPermission(WriteReview.this, Manifest.permission.READ_EXTERNAL_STORAGE);
                 // 카메라와 앨범 중 원하는 방법을 고르기 위한 dialog 출력
                 AlertDialog.Builder dlg = new AlertDialog.Builder(WriteReview.this);
                 dlg.setTitle("프로필 사진 설정하기");
-                final String[] selectProfileImages = new String[] {"카메라로 사진 찍기", "앨범에서 사진 가져오기"};
-                dlg.setItems(selectProfileImages, new DialogInterface.OnClickListener(){
+                final String[] selectProfileImages = new String[]{"카메라로 사진 찍기", "앨범에서 사진 가져오기"};
+                dlg.setItems(selectProfileImages, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which){
+                    public void onClick(DialogInterface dialog, int which) {
                         // 카메라로 사진 찍기
-                        if (which == 0){
+                        if (which == 0) {
                             // 카메라 권한이 있다면 카메라 실행
-                            if (cameraPermission == PackageManager.PERMISSION_GRANTED){
+                            if (cameraPermission == PackageManager.PERMISSION_GRANTED) {
                                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 activityResultCamera.launch(cameraIntent);
+                            }
+                            // 카메라 접근 권한이 없을 때 요청
+                            else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, SINGLE_PERMISSION);
+                                }
                             }
 
                         }
                         // 앨범에서 사진 가져오기
-                        else if (which == 1){
+                        else if (which == 1) {
                             // 파일 접근 권한이 있다면 앨범 실행
-                            if (galleryPermission == PackageManager.PERMISSION_GRANTED){
+                            if (galleryPermission == PackageManager.PERMISSION_GRANTED) {
                                 Intent galleryIntent = new Intent(Intent.ACTION_PICK);
                                 galleryIntent.setType("image/*");
                                 activityResultGallery.launch(galleryIntent);
                             }
                             // 파일 접근 권한이 없다면 권한 요청
-
+                            else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, SINGLE_PERMISSION);
+                                }
+                            }
                         }
                     }
                 });
