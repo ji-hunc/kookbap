@@ -29,11 +29,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.kookmin.kookbap.cafeteriaFragments.DatePickerFragment;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class WriteReview extends AppCompatActivity {
     TextView mDate_Text;
@@ -44,17 +51,16 @@ public class WriteReview extends AppCompatActivity {
 
     String tag = "";
 
-    ArrayList<MenuData> mReviewData;
+    ArrayList<MenuData> reviewData;
 
-    String[] items = {"메뉴1","메뉴2","메뉴3"};
-
+    JSONObject jsonObjectWriteReview;
 
     int cameraPermission, galleryPermission;
     private static final int SINGLE_PERMISSION = 1004;
     Switch settingNotice;
     Bitmap imageBitmap, noticeBitmap;
     Uri uri;
-
+    String[] items = {"aaa","bbb","ccc"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +85,12 @@ public class WriteReview extends AppCompatActivity {
 
         mAddTag = (EditText) findViewById(R.id.addTag);
 
+        //지훈님과 날짜 표시 방식 통일
+        Calendar calendar = Calendar.getInstance();
+        printDateresult(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
+
+
+
         mDate_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,10 +105,12 @@ public class WriteReview extends AppCompatActivity {
         Spinner spinner = findViewById(R.id.write_review_toDayMenu);
 
 
+
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_spinner_dropdown_item,
-                items);
+                android.R.layout.simple_spinner_dropdown_item,items
+                );
 
         spinner.setAdapter(adapter);
         spinner.setSelection(0);
@@ -115,7 +129,7 @@ public class WriteReview extends AppCompatActivity {
         });
 
 
-
+        //사진 등록
         mFood.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -156,7 +170,7 @@ public class WriteReview extends AppCompatActivity {
             }
         });
 
-
+        //테그 등록
         mKorfood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -261,13 +275,13 @@ public class WriteReview extends AppCompatActivity {
             }
     );
 
-    public void processDatePickerResult(int year, int month, int day){
-        String month_string = Integer.toString(month+1);
-        String day_string = Integer.toString(day);
-        String year_string = Integer.toString(year);
-        String dateMessage = (month_string + "/" + day_string + "/" + year_string);
-
-        mDate_Text.setText("Date: "+dateMessage);
+    //날짜 출력
+    public void printDateresult(int year, int month, int date){
+        String today_Year = Integer.toString(year);
+        String today_Month = Integer.toString(month).length() < 2 ? "0" + month+1 : Integer.toString(month);
+        String today_Date = Integer.toString(date).length() < 2 ? "0" + date : Integer.toString(date);
+        String day = today_Year +"-"+today_Month + "-" + today_Date;
+        mDate_Text.setText(day);
     }
 
 }
