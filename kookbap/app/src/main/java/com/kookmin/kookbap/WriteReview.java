@@ -181,7 +181,13 @@ public class WriteReview extends AppCompatActivity {
         mSave_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                //@TODO : 이걸 나중에 서버단에서 해야함
+                //Save_Data();
+
+                //디버깅용
+                Intent intent = new Intent(getApplicationContext(), FoodDetail.class);
+
+                startActivity(intent);
             }
         });
     }
