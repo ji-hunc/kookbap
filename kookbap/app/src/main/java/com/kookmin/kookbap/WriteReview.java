@@ -60,7 +60,7 @@ public class WriteReview extends AppCompatActivity {
     Switch settingNotice;
     Bitmap imageBitmap, noticeBitmap;
     Uri uri;
-    String[] items = {"aaa","bbb","ccc"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
