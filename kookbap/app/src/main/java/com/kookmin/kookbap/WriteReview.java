@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -129,6 +130,12 @@ public class WriteReview extends AppCompatActivity {
                                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 activityResultCamera.launch(cameraIntent);
                             }
+                            // 카메라 접근 권한이 없을 때 요청
+                            else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, SINGLE_PERMISSION);
+                                }
+                            }
 
                         }
                         // 앨범에서 사진 가져오기
@@ -140,7 +147,11 @@ public class WriteReview extends AppCompatActivity {
                                 activityResultGallery.launch(galleryIntent);
                             }
                             // 파일 접근 권한이 없다면 권한 요청
-
+                            else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, SINGLE_PERMISSION);
+                                }
+                            }
                         }
                     }
                 });
