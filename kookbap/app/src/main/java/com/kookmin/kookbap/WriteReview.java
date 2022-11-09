@@ -192,10 +192,12 @@ public class WriteReview extends AppCompatActivity {
                 //Save_Data();
 
                 //디버깅용
-                Intent intent = new Intent(getApplicationContext(),FoodDetail.class);
+                Intent intent = new Intent(getApplicationContext(), FoodDetail.class);
 
                 startActivity(intent);
-
+            }
+        });
+    }
     // 권한 요청 이후 권한 결과
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
