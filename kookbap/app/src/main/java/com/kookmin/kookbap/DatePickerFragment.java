@@ -14,10 +14,6 @@ import com.kookmin.kookbap.WriteReview;
 
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
 public class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener{
 
@@ -35,6 +31,6 @@ public class DatePickerFragment extends DialogFragment
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         WriteReview activity = (WriteReview)getActivity();
-        activity.printDateresult(year,month,day);
+        activity.printDateResult(year,month,day);
     }
 }
