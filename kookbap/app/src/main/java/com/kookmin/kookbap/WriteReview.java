@@ -216,9 +216,7 @@ public class WriteReview extends AppCompatActivity {
                 //Save_Data();
 
                 //디버깅용
-                Intent intent = new Intent(getApplicationContext(), FoodDetail.class);
-
-                startActivity(intent);
+                finish();
             }
         });
     }
