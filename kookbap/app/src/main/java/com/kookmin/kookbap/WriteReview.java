@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -85,7 +86,7 @@ public class WriteReview extends AppCompatActivity {
 
         //지훈님과 날짜 표시 방식 통일
         Calendar calendar = Calendar.getInstance();
-        printDateresult(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH));
+        printDateResult(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
 
 
 
@@ -285,9 +286,12 @@ public class WriteReview extends AppCompatActivity {
     );
 
     //날짜 출력
-    public void printDateresult(int year, int month, int date){
+    public void printDateResult(int year, int month, int date){
         String today_Year = Integer.toString(year);
-        String today_Month = Integer.toString(month).length() < 2 ? "0" + month+1 : Integer.toString(month);
+        // TODO 월 -1이라서 고쳐야함
+        String today_Month = month+1 < 10 ? "0" + (month+1) : "" + (month+1);
+        Log.e("month", today_Month);
+//        String today_Month = Integer.toString(month).length() < 2 ? "0" + month+1 : Integer.toString(month);
         String today_Date = Integer.toString(date).length() < 2 ? "0" + date : Integer.toString(date);
         String day = today_Year +"-"+today_Month + "-" + today_Date;
         mDate_Text.setText(day);
