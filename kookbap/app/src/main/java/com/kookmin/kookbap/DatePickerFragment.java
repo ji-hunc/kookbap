@@ -1,4 +1,4 @@
-package com.kookmin.kookbap.cafeteriaFragments;
+package com.kookmin.kookbap;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -8,20 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 
-import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.WriteReview;
 
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
 public class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener{
 
@@ -39,6 +31,6 @@ public class DatePickerFragment extends DialogFragment
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
         WriteReview activity = (WriteReview)getActivity();
-        activity.processDatePickerResult(year,month,day);
+        activity.printDateResult(year,month,day);
     }
 }
