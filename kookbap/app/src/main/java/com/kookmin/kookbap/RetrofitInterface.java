@@ -27,9 +27,12 @@ public interface RetrofitInterface {
 //            @Field("note") String note
 //    );
 
+
+    // index 페이지 들어갔을 때. http://kookbap.run.goorm.io/
     @GET("/")
     Call<JSONObject> getIndex();
 
+    // menu 페이지 들어갔을 때. http://kookbap.run.goorm.io/menu
     @GET("/menu")
     Call<Object> getMenuData();
 }

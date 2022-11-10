@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 
 import org.json.JSONException;
@@ -56,13 +55,17 @@ public class HomeFragment extends Fragment {
         nowDate = nowDate.length() < 2 ? "0" + Integer.parseInt(nowDate) : nowDate;
         dateTextView.setText(nowYear + "-" + nowMonth + "-" + nowDate);
 
+        date = nowYear + "-" + nowMonth + "-" + nowDate; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
+
 
         calendarButton = view.findViewById(R.id.calendarButton);
+        // 달력아이콘 클릭했을 때
         calendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
                 DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
+                    // 날자를 선택했을 때
                     @Override
                     public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
                         nowYear = Integer.toString(yy);
@@ -70,16 +73,15 @@ public class HomeFragment extends Fragment {
                         nowDate = dd < 10 ? "0" + dd : "" + dd;
                         date = nowYear + "-" + nowMonth + "-" + nowDate;
                         dateTextView.setText(date);
-                        // 날짜 변경시 그 날짜에 해당하는 JsonObject 가져와야함
 
+                        // 날짜를 선택하고 확인을 누르면, 어댑터가 그 날짜에 해당하는 것들로 다시 뿌려줌
                         cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
                         viewPager2.setAdapter(cafeteriaViewPagerAdapter);
                     }
-                }, Integer.parseInt(nowYear), Integer.parseInt(nowMonth) - 1, Integer.parseInt(nowDate));
+                }, Integer.parseInt(nowYear), Integer.parseInt(nowMonth) - 1, Integer.parseInt(nowDate)); // 처음 DatePicker가 켜졌을 때 최초로 선택되어 있는 날짜
                 datePickerDialog.show();
             }
         });
-        date = nowYear + "-" + nowMonth + "-" + nowDate; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
 
 
         // Retrofit 으로 서버와 통신히여 menu 데이터를 받아오는 부분
@@ -110,6 +112,7 @@ public class HomeFragment extends Fragment {
         });
 
 
+        // 각각의 탭을 선택했을 때 이벤트. 사실상 선택했을 때만 일어나도 무방하다고 생각
         tabLayout = view.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
