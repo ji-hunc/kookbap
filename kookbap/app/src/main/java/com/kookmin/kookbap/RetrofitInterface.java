@@ -2,14 +2,10 @@ package com.kookmin.kookbap;
 
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 public interface RetrofitInterface {
 
@@ -29,10 +25,17 @@ public interface RetrofitInterface {
 
 
     // index 페이지 들어갔을 때. http://kookbap.run.goorm.io/
+    // http://10.0.2.2:3000/";
     @GET("/")
     Call<JSONObject> getIndex();
 
     // menu 페이지 들어갔을 때. http://kookbap.run.goorm.io/menu
+    // http://10.0.2.2:3000/menu";
     @GET("/menu")
     Call<Object> getMenuData();
+
+    // review 페이지 들어갔을 때. http://kookbap.run.goorm.io/review
+    // http://10.0.2.2:3000/review";
+    @GET("/review") // 주소를 /review/:menu_name 으로 쿼리 넣어서
+    Call<ArrayList<ReviewData>> getReviewData();
 }
