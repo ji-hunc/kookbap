@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,6 +41,10 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class WriteReview extends AppCompatActivity {
@@ -215,7 +220,48 @@ public class WriteReview extends AppCompatActivity {
                 //@TODO : 이걸 나중에 서버단에서 해야함
                 //Save_Data();
 
-                //디버깅용
+                String menuName = mReview.getText().toString();
+                String description = mAddTag.getText().toString();
+
+                Call<Result> call = RetrofitClient.getApiService().saveReview(menuName, description);
+                call.enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                        // 서버에서 응답을 받아옴
+                        if (response.isSuccessful() && response.body() != null) {
+                            Boolean success = response.body().getSuccess();
+                            String message = response.body().getMessage();
+                            // 입력성공시 서버에서 메시지를 받아와서 토스트로 출력
+                            if (success) {
+                                Log.e("LOGLOG", "success1");
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                                Log.e("서버에서 받아온내용", message);
+                            } else {
+                                Log.e("LOGLOG", "success2");
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            }
+                            // 응답을 받아오지 못했을경우
+                        } else {
+                            assert response.body() != null;
+                            Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("LOGLOG", "success3");
+
+                        }
+
+                    }
+                    // 통신실패시
+                    @Override
+                    public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("LOGLOG", "success4");
+
+                    }
+                });
+
+
+
                 finish();
             }
         });

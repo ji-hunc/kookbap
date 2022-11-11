@@ -5,7 +5,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 public interface RetrofitInterface {
 
@@ -38,4 +41,18 @@ public interface RetrofitInterface {
     // http://10.0.2.2:3000/review";
     @GET("/review") // 주소를 /review/:menu_name 으로 쿼리 넣어서
     Call<ArrayList<ReviewData>> getReviewData();
+
+    // 메뉴이름으로 post 요청 보낼 때
+//    @FormUrlEncoded
+//    @POST("/review/{menu_name}")
+//    Call<Result> saveReview(@Field("menuName") String title,
+//               @Field("note") String note);
+
+    // post 요청 테스트
+    @FormUrlEncoded
+    @POST("/review/post")
+    Call<Result> saveReview(
+        @Field("menuName") String title,
+        @Field("note") String note
+    );
 }

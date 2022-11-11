@@ -30,4 +30,17 @@ router.get('/', function(request, response) {
     })
 });
 
+router.post('/post', function(request, response) {
+    console.log("Enter!!!");
+    // console.log(request);
+    console.log(request.body);
+
+    response.json(
+        {
+        "success": true,
+        "message": "GOOD"
+        }
+    )
+})
+
 module.exports = router;
