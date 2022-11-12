@@ -34,9 +34,9 @@ public class UserReviewsActivity extends AppCompatActivity {
 
     // 서버에서 유저의 데이터 받아오는 것 구현해야 함.
     public void loadUserReviewsData(){
-        userReviewsData.add(new MenuData("chicken", "subChicken", "17,000", "delicious", R.drawable.ic_review, 4.5f, 0));
-        userReviewsData.add(new MenuData("hamburger", "subHamburger", "7,000", "good", R.drawable.ic_home, 3.5f, 0));
-        userReviewsData.add(new MenuData("suntofu", "subsuntofu", "6,000", "good", R.drawable.ic_home, 3.5f, 0));
+        userReviewsData.add(new MenuData("chicken", "subChicken", "17,000", "delicious", R.drawable.test_bread_picture, 4.5f, 0));
+        userReviewsData.add(new MenuData("hamburger", "subHamburger", "7,000", "good", R.drawable.test_bread_picture, 3.5f, 0));
+        userReviewsData.add(new MenuData("suntofu", "subsuntofu", "6,000", "good", R.drawable.test_bread_picture, 3.5f, 0));
 
         userReviewsDataAdapter.notifyDataSetChanged();
     }
