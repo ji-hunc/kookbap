@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -45,12 +46,13 @@ import java.util.Calendar;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Field;
 
 
 public class WriteReview extends AppCompatActivity {
     TextView mDate_Text;
     ImageView mFood;
-    EditText mReview, mAddTag;
+    EditText mReview, mAddTag, editTextMenuName;
 
     Button mKorfood,mChinfood,mJapfood,mVeryspicy,mSave_btn,mDate_btn;
 
@@ -58,6 +60,7 @@ public class WriteReview extends AppCompatActivity {
 
     String[] items = {"메뉴1","메뉴2","메뉴3"};
 
+    RatingBar ratingBar;
 
     JSONObject jsonObjectWriteReview;
 
@@ -88,6 +91,8 @@ public class WriteReview extends AppCompatActivity {
         //String myreview = mReview.getText().toString();
 
         mAddTag = (EditText) findViewById(R.id.addTag);
+        editTextMenuName = findViewById(R.id.editTextMenuName);
+        ratingBar = findViewById(R.id.myRating);
 
         //지훈님과 날짜 표시 방식 통일
         Calendar calendar = Calendar.getInstance();
@@ -220,10 +225,24 @@ public class WriteReview extends AppCompatActivity {
                 //@TODO : 이걸 나중에 서버단에서 해야함
                 //Save_Data();
 
-                String menuName = mReview.getText().toString();
-                String description = mAddTag.getText().toString();
+                String menuName = editTextMenuName.getText().toString();
+                String description = mReview.getText().toString();
+                float star = ratingBar.getRating();
 
-                Call<Result> call = RetrofitClient.getApiService().saveReview(menuName, description);
+//                @Field("reviewUserId") String reviewUserId,
+//                @Field("menuName") String menuName,
+//                @Field("writeDate") String writeDate,
+//                @Field("star") float star,
+//                @Field("reviewLike") int reviewLike,
+//                @Field("description") String description,
+//                @Field("image") String image
+
+                Call<Result> call = RetrofitClient.getApiService().saveReview(
+                        // TODO reviewUserId("jihun"), 메뉴이름("edit Text로 쓰게 되있음 현재"), date("2022-11-13 00:01:02"), image(file), 식당이름("한울식당") 상수가 아니라 어디선가 변수로 가져와야함
+                        // reviewUserId 는 유저관리가 되고나서 가져올 수 있음
+                        // 식당이름, 메뉴이름은 이 페이지가 날짜, 식당 별로 메뉴이름을 고를 수 있을 때 가져올 수 있음
+                        "jihun", menuName, "2022-11-13 00:01:02", star, 0, description, "ImageFile", "한울식당"
+                );
                 call.enqueue(new Callback<Result>() {
                     @Override
                     public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {

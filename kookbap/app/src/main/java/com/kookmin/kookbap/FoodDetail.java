@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -69,8 +70,12 @@ public class FoodDetail extends AppCompatActivity {
         reviewRecyclerView.setAdapter(reviewDataAdapter);
 
 
+        // 리퀘스트 파라미터에 넣을 메뉴 이름 스트링 정의
+        String menuName = getIntent().getStringExtra("foodName");
+        // 서버에 메뉴 이름에 해당하는 리뷰 요청
+        // 메뉴에 해당하는 리뷰들을 ArrayList 형식으로 가져옴. 각각의 리뷰객체들이 들어있음
         Call<ArrayList<ReviewData>> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
-        call = RetrofitClient.getApiService().getReviewData();
+        call = RetrofitClient.getApiService().getReviewData(menuName);
         call.enqueue(new Callback<ArrayList<ReviewData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -89,7 +94,7 @@ public class FoodDetail extends AppCompatActivity {
             }
         });
 
-
+        // 리뷰 페이지 최상단 정보 내용 초기화 부분
         foodDetailName.setText(getIntent().getStringExtra(("foodName")));
         foodDetailNameSide.setText(getIntent().getStringExtra(("foodNameSide")));
         foodDetailPrice.setText(getIntent().getStringExtra(("price")));
