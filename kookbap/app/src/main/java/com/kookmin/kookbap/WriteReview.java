@@ -1,98 +1,337 @@
 package com.kookmin.kookbap;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Field;
+
 
 public class WriteReview extends AppCompatActivity {
-    TextView mMenu , mPrice ;
-    ImageView mFood;
-    EditText mReview, mAddTag;
+    TextView dateTextView;
+    ImageView foodImage, calendarImageButton;
+    EditText editTextReview, editTextMenuName;
+    Button postButton;
+    RatingBar ratingBar;
 
-    Button mKorfood,mChinfood,mJapfood,mVeryspicy,mSave_btn;
+    int cameraPermission, galleryPermission;
+    Bitmap imageBitmap, noticeBitmap;
+    Uri uri;
 
-    String tag = "";
+    boolean isFilledImage;
 
-    ArrayList<MenuData> mReviewData;
+    String[] items = {"메뉴1","메뉴2","메뉴3"};
+    private static final int SINGLE_PERMISSION = 1004;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
 
-        mMenu = (TextView) findViewById(R.id.myMenu);
-        mPrice = (TextView) findViewById(R.id.myPrice);
-        mFood = (ImageView) findViewById(R.id.myFood);
+        isFilledImage = false;
 
-        mReview = (EditText) findViewById(R.id.myReview);
+        dateTextView = findViewById(R.id.write_review_dateText);
+        foodImage = findViewById(R.id.myFood);
+        editTextReview = findViewById(R.id.myReview);
+        postButton = findViewById(R.id.save_Review);
+        calendarImageButton = findViewById(R.id.write_review_datebtn);
+        editTextMenuName = findViewById(R.id.editTextMenuName);
+        ratingBar = findViewById(R.id.myRating);
 
-        mKorfood = (Button) findViewById(R.id.korean_food);
-        mChinfood = (Button) findViewById(R.id.chinese_food);
-        mJapfood = (Button) findViewById(R.id.japanese_food);
-        mVeryspicy = (Button) findViewById(R.id.very_spicy);
-        mSave_btn = (Button) findViewById(R.id.save_Review);
+        //지훈님과 날짜 표시 방식 통일
+        Calendar calendar = Calendar.getInstance();
+        printDateResult(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
 
-        //String myreview = mReview.getText().toString();
-
-        mAddTag = (EditText) findViewById(R.id.addTag);
-
-        mMenu.setText(getIntent().getStringExtra("menuName"));
-
-        mKorfood.setOnClickListener(new View.OnClickListener() {
+        // 달력 그림 눌렀을 때 달력 다이얼로그 띄우기
+        calendarImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tag = tag + "#한식";
-                mAddTag.setText(tag);
-            }
-        });
-        mChinfood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tag = tag + "#중식";
-                mAddTag.setText(tag);
-            }
-        });
-        mJapfood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tag = tag + "#일식";
-                mAddTag.setText(tag);
-            }
-        });
-        mVeryspicy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tag = tag + "#아주매움";
-                mAddTag.setText(tag);
-            }
-        });
-        mSave_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //@TODO : 이걸 나중에 서버단에서 해야함
-                //Save_Data();
-
-                //디버깅용
-                Intent intent = new Intent(getApplicationContext(),FoodDetail.class);
-
-                startActivity(intent);
-                finish();
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getSupportFragmentManager(), "datePicker");
             }
         });
 
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,items);
+        Spinner spinner = findViewById(R.id.write_review_toDayMenu);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(0);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        //사진 등록
+        foodImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 카메라 및 앨범 권한 확인
+                cameraPermission = ContextCompat.checkSelfPermission(WriteReview.this, Manifest.permission.CAMERA);
+                galleryPermission = ContextCompat.checkSelfPermission(WriteReview.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                // 카메라와 앨범 중 원하는 방법을 고르기 위한 dialog 출력
+                AlertDialog.Builder dlg = new AlertDialog.Builder(WriteReview.this);
+                dlg.setTitle("프로필 사진 설정하기");
+                final String[] selectProfileImages = new String[]{"카메라로 사진 찍기", "앨범에서 사진 가져오기"};
+                dlg.setItems(selectProfileImages, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 카메라로 사진 찍기
+                        if (which == 0) {
+                            // 카메라 권한이 있다면 카메라 실행
+                            if (cameraPermission == PackageManager.PERMISSION_GRANTED) {
+                                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                activityResultCamera.launch(cameraIntent);
+                            }
+                            // 카메라 접근 권한이 없을 때 요청
+                            else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.CAMERA}, SINGLE_PERMISSION);
+                                }
+                            }
+                        }
+                        // 앨범에서 사진 가져오기
+                        else if (which == 1) {
+                            // 파일 접근 권한이 있다면 앨범 실행
+                            if (galleryPermission == PackageManager.PERMISSION_GRANTED) {
+                                Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+                                galleryIntent.setType("image/*");
+                                activityResultGallery.launch(galleryIntent);
+                            }
+                            // 파일 접근 권한이 없다면 권한 요청
+                            else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, SINGLE_PERMISSION);
+                                }
+                            }
+                        }
+                    }
+                });
+                AlertDialog dialog = dlg.create();
+                dialog.show();
+            }
+        });
+
+
+        // 저장 버튼 눌렀을 때 서버 DB에 저장 요청
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!(editTextMenuName.getText().toString().equals("") || editTextReview.getText().toString().equals("") || !isFilledImage)) {
+                    // 채우지 않은 항목이 있거나, 이미지가 없을 경우
+                    String menuNameTemp = editTextMenuName.getText().toString();
+                    String descriptionTemp = editTextReview.getText().toString();
+                    float starTemp = ratingBar.getRating();
+
+                    File newFile = new File(getApplicationContext().getFilesDir(), "test.png");
+                    FileOutputStream fileOutputStream = null;
+                    try {
+                        fileOutputStream = new FileOutputStream(newFile);
+                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), newFile);
+                    MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
+
+
+                    RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
+                    RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTemp);
+                    RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
+                    RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(starTemp));
+                    RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
+                    RequestBody description = RequestBody.create(MultipartBody.FORM, descriptionTemp);
+                    RequestBody restaurantName = RequestBody.create(MultipartBody.FORM, "한울식당");
+
+                    HashMap<String, RequestBody> map = new HashMap<>();
+                    map.put("reviewUserId", reviewUserId);
+                    map.put("menuName", menuName);
+                    map.put("writeDate", writeDate);
+                    map.put("star", star);
+                    map.put("reviewLike", reviewLike);
+                    map.put("description", description);
+                    map.put("restaurantName", restaurantName);
+
+                    // TODO 유저 아이디("jihun" 아직 상수), 식당 이름("한울식당" 아직 상수), 메뉴 이름("edit Text로 쓰게 되있음 현재"), date(날짜는 서버시간으로 할 것임)
+                    Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
+                    call.enqueue(new Callback<Result>() {
+                        @Override
+                        public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                            // 서버에서 응답을 받아옴
+                            if (response.isSuccessful() && response.body() != null) {
+                                Boolean success = response.body().getSuccess();
+                                String message = response.body().getMessage();
+                                // 입력성공시 서버에서 메시지를 받아와서 테스트용으로 토스트로 출력
+                                // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
+                                if (success) {
+                                    Log.e("LOGLOG", "success1");
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                                    Log.e("서버에서 받아온내용", message);
+                                } else {
+                                    Log.e("LOGLOG", "success2");
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                }
+                                // 응답을 받아오지 못했을경우
+                            } else {
+                                assert response.body() != null;
+                                Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.e("LOGLOG", "success3");
+                            }
+                        }
+                        // 통신실패시
+                        @Override
+                        public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+                            Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("LOGLOG", "success4");
+
+                        }
+                    });
+
+                    finish();
+                } else {
+                    Toast.makeText(WriteReview.this, "내용을 채우거나 이미지를 등록하십시오", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
-    public void Save_Data(){
-        mReviewData = new ArrayList<MenuData>();
-        mReviewData.add(new MenuData(mReview.getText().toString(),"",mPrice.getText().toString(),tag,0,0,0));
-        return;
+
+    // 권한 요청 이후 권한 결과
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case SINGLE_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 카메라
+                    if (permissions[0].equals("android.permission.CAMERA")) {
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        activityResultCamera.launch(cameraIntent);
+                    }
+                    // 갤러리
+                    else if (permissions[0].equals("android.permission.READ_EXTERNAL_STORAGE")) {
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+                        galleryIntent.setType("image/*");
+                        activityResultGallery.launch(galleryIntent);
+                    }
+                }
+                // 권한 요청 필요 토스트 출력
+                else {
+                    Toast.makeText(this.getApplicationContext(), "권한이 필요합니다", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
+
+    // 카메라 사진 찍기 구현
+    ActivityResultLauncher<Intent> activityResultCamera = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                        Bundle extras = result.getData().getExtras();
+                        imageBitmap = (Bitmap) extras.get("data");
+                        foodImage.setImageBitmap(imageBitmap);
+                        isFilledImage = true;
+                    }
+                }
+            }
+    );
+
+    // 앨범에서 사진 가져오기 구현
+    ActivityResultLauncher<Intent> activityResultGallery = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null){
+                        uri = result.getData().getData();
+                        try{
+                            imageBitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), uri);
+                            foodImage.setImageBitmap(imageBitmap);
+                            isFilledImage = true;
+                        }
+                        catch(FileNotFoundException e){
+                            e.printStackTrace();
+                        }
+                        catch(IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+    );
+
+    //날짜 출력
+    public void printDateResult(int year, int month, int date){
+        String today_Year = Integer.toString(year);
+        // TODO 월 -1이라서 고쳐야함
+        String today_Month = month+1 < 10 ? "0" + (month+1) : "" + (month+1);
+        String today_Date = Integer.toString(date).length() < 2 ? "0" + date : Integer.toString(date);
+        String day = today_Year +"-"+today_Month + "-" + today_Date;
+        dateTextView.setText(day);
     }
 }
-//....

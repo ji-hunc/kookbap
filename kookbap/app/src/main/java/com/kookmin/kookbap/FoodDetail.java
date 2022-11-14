@@ -1,24 +1,28 @@
 package com.kookmin.kookbap;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FoodDetail extends AppCompatActivity {
 
@@ -30,8 +34,6 @@ public class FoodDetail extends AppCompatActivity {
 
     RecyclerView reviewRecyclerView;
     ReviewDataAdapter reviewDataAdapter;
-    //임시
-    ArrayList<ReviewData> currentReviewData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,25 +57,45 @@ public class FoodDetail extends AppCompatActivity {
             }
         });
 
-        reviewSortSpinner = (Spinner) findViewById(R.id.reviewSortSpinner);
+        reviewSortSpinner = findViewById(R.id.reviewSortSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.reviewSpinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         reviewSortSpinner.setAdapter(adapter);
 
-        //디버깅
-        currentReviewData = new ArrayList<ReviewData>();
-        for(int i =0;i<5;i++){
-            currentReviewData.add(new ReviewData("너무 맛있어요!",foodDetailName.getText().toString(),"학생식당","조현민",new ArrayList<String>(),new ArrayList<String>(),R.drawable.test_bread_picture,4.5f,i));
-        }
-        reviewRecyclerView = (RecyclerView) findViewById(R.id.reviewRecyclerView);
-//        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+
+
+        reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        reviewDataAdapter = new ReviewDataAdapter(currentReviewData);
+//        reviewDataAdapter = new ReviewDataAdapter(currentReviewData);
         reviewRecyclerView.setAdapter(reviewDataAdapter);
 
 
+        // 리퀘스트 파라미터에 넣을 메뉴 이름 스트링 정의
+        String menuName = getIntent().getStringExtra("foodName");
+        // 서버에 메뉴 이름에 해당하는 리뷰 요청
+        // 메뉴에 해당하는 리뷰들을 ArrayList 형식으로 가져옴. 각각의 리뷰객체들이 들어있음
+        Call<ArrayList<ReviewData>> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
+        call = RetrofitClient.getApiService().getReviewData(menuName);
+        call.enqueue(new Callback<ArrayList<ReviewData>>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                    ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
+                    reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList);
+                    reviewRecyclerView.setAdapter(reviewDataAdapter);
 
-        foodDetailName.setText(getIntent().getStringExtra("foodName"));
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
+
+        // 리뷰 페이지 최상단 정보 내용 초기화 부분
+        foodDetailName.setText(getIntent().getStringExtra(("foodName")));
         foodDetailNameSide.setText(getIntent().getStringExtra(("foodNameSide")));
         foodDetailPrice.setText(getIntent().getStringExtra(("price")));
         //foodDetailImage.setImageResource(getIntent().getIntExtra("image", 0));
