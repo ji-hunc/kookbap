@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,21 +32,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Field;
 
 
 public class WriteReview extends AppCompatActivity {
     TextView mDate_Text;
     ImageView mFood;
-    EditText mReview, mAddTag;
+    EditText mReview, mAddTag, editTextMenuName;
 
     Button mKorfood,mChinfood,mJapfood,mVeryspicy,mSave_btn,mDate_btn;
 
@@ -53,6 +67,7 @@ public class WriteReview extends AppCompatActivity {
 
     String[] items = {"메뉴1","메뉴2","메뉴3"};
 
+    RatingBar ratingBar;
 
     JSONObject jsonObjectWriteReview;
 
@@ -83,6 +98,8 @@ public class WriteReview extends AppCompatActivity {
         //String myreview = mReview.getText().toString();
 
         mAddTag = (EditText) findViewById(R.id.addTag);
+        editTextMenuName = findViewById(R.id.editTextMenuName);
+        ratingBar = findViewById(R.id.myRating);
 
         //지훈님과 날짜 표시 방식 통일
         Calendar calendar = Calendar.getInstance();
@@ -215,7 +232,98 @@ public class WriteReview extends AppCompatActivity {
                 //@TODO : 이걸 나중에 서버단에서 해야함
                 //Save_Data();
 
-                //디버깅용
+                String menuNameTemp = editTextMenuName.getText().toString();
+                String descriptionTemp = mReview.getText().toString();
+                float starTemp = ratingBar.getRating();
+
+//                @Field("reviewUserId") String reviewUserId,
+//                @Field("menuName") String menuName,
+//                @Field("writeDate") String writeDate,
+//                @Field("star") float star,
+//                @Field("reviewLike") int reviewLike,
+//                @Field("description") String description,
+//                @Field("image") String image
+
+                File newFile = new File(getApplicationContext().getFilesDir(), "qwe.png");
+                FileOutputStream fileOutputStream = null;
+                try {
+                    fileOutputStream = new FileOutputStream(newFile);
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File imageFile = newFile;
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("image", "qweqwe.png", requestFile);
+
+
+                RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
+                RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTemp);
+                RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
+                RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(starTemp));
+                RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
+                RequestBody description = RequestBody.create(MultipartBody.FORM, descriptionTemp);
+
+                HashMap<String, RequestBody> map = new HashMap<>();
+                map.put("reviewUserId", reviewUserId);
+                map.put("menuName", menuName);
+                map.put("writeDate", writeDate);
+                map.put("star", star);
+                map.put("reviewLike", reviewLike);
+                map.put("description", description);
+
+
+                Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
+//                Call<Result> call = RetrofitClient.getApiService().saveReview(
+//                        // TODO reviewUserId("jihun"), 메뉴이름("edit Text로 쓰게 되있음 현재"), date("2022-11-13 00:01:02"), image(file), 식당이름("한울식당") 상수가 아니라 어디선가 변수로 가져와야함
+//                        // reviewUserId 는 유저관리가 되고나서 가져올 수 있음
+//                        // 식당이름, 메뉴이름은 이 페이지가 날짜, 식당 별로 메뉴이름을 고를 수 있을 때 가져올 수 있음
+//                        "jihun", menuNameTemp, (new Date()).toString(), starTemp, 0, descriptionTemp, "ImageFile", "한울식당"
+//                );
+                call.enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                        // 서버에서 응답을 받아옴
+                        if (response.isSuccessful() && response.body() != null) {
+                            Boolean success = response.body().getSuccess();
+                            String message = response.body().getMessage();
+                            // 입력성공시 서버에서 메시지를 받아와서 토스트로 출력
+                            if (success) {
+                                Log.e("LOGLOG", "success1");
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+                                Log.e("서버에서 받아온내용", message);
+                            } else {
+                                Log.e("LOGLOG", "success2");
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            }
+                            // 응답을 받아오지 못했을경우
+                        } else {
+                            assert response.body() != null;
+                            Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.e("LOGLOG", "success3");
+
+                        }
+
+                    }
+                    // 통신실패시
+                    @Override
+                    public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("LOGLOG", "success4");
+
+                    }
+                });
+
+
+
                 finish();
             }
         });

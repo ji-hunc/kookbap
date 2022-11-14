@@ -1,12 +1,10 @@
 package com.kookmin.kookbap;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -16,12 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.ReviewDataViewHolder>{
-    ArrayList<ReviewData> ReviewDataArray;
+    ArrayList<ReviewData> reviewDataArray;
     Context context;
 
     public ReviewDataAdapter(ArrayList<ReviewData> reviewDataArray) {
-        ReviewDataArray = reviewDataArray;
-        //this.context = context;
+        this.reviewDataArray = reviewDataArray;
     }
 
     @NonNull
@@ -34,11 +31,12 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
 
     @Override
     public void onBindViewHolder(@NonNull ReviewDataAdapter.ReviewDataViewHolder holder, int position) {
-        holder.reviewContext.setText(ReviewDataArray.get(position).getReviewContext());
-        holder.reviewTags.setText(ReviewDataArray.get(position).getReviewTags().toString());
-        holder.reviewImage.setImageResource(ReviewDataArray.get(position).getReviewImage());
-        holder.reviewReviewerName.setText(ReviewDataArray.get(position).getReviewReviewerName());
-        holder.reviewRating.setRating(ReviewDataArray.get(position).getReviewStars());
+        holder.reviewContext.setText(reviewDataArray.get(position).getDescription());
+        holder.reviewTags.setText(reviewDataArray.get(position).getDescription());
+        // TODO image는 임시로 heart
+        holder.reviewImage.setImageResource(R.drawable.ic_filled_heart);
+        holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
+        holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
 
 
 
@@ -53,7 +51,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
 
     @Override
     public int getItemCount() {
-        return ReviewDataArray.size();
+        return reviewDataArray.size();
     }
 
     public class ReviewDataViewHolder extends RecyclerView.ViewHolder {

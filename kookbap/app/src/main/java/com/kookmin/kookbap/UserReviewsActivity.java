@@ -40,7 +40,9 @@ public class UserReviewsActivity extends AppCompatActivity {
         exReviewComment.add("맛있겠다"); exReviewComment.add("와");
         exTag.add("빵"); exTag.add("부드러워요");
 
-        userReviewsData.add(new ReviewData("맛있어요", "빵", "복지관", "kevinmj12", exReviewComment, exTag, R.drawable.test_bread_picture, 4, 2));
+        // TODO 2022-11-12 리뷰데이터 테스트를 위해 유저가 작성한 리뷰데이터는 일단 없앰
+//        userReviewsData.add(new ReviewData2("맛있어요", "빵", "복지관", "kevinmj12", exReviewComment, exTag, R.drawable.test_bread_picture, 4, 2));
+        userReviewsData.add(new ReviewData());
 
         userReviewsDataAdapter.notifyDataSetChanged();
     }
