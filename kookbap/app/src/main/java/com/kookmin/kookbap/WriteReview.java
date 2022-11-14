@@ -269,6 +269,7 @@ public class WriteReview extends AppCompatActivity {
                 RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(starTemp));
                 RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
                 RequestBody description = RequestBody.create(MultipartBody.FORM, descriptionTemp);
+                RequestBody restaurantName = RequestBody.create(MultipartBody.FORM, "한울식당");
 
                 HashMap<String, RequestBody> map = new HashMap<>();
                 map.put("reviewUserId", reviewUserId);
@@ -277,6 +278,7 @@ public class WriteReview extends AppCompatActivity {
                 map.put("star", star);
                 map.put("reviewLike", reviewLike);
                 map.put("description", description);
+                map.put("restaurantName", restaurantName);
 
 
                 Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);

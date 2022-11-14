@@ -31,7 +31,8 @@ router.get('/:menuName', function(request, response) {
 
 
 router.get('/', function(request, response) {
-      response.send(`<img src="/images/qq_jihun_2022-11-14 03:29:02.png" style="width:300px; display:block; margin:10px;">`);
+    response.send("GOOD");
+    //   response.send(`<img src="/images/qq_jihun_2022-11-14 03:29:02.png" style="width:300px; display:block; margin:10px;">`);
 });
 
 
