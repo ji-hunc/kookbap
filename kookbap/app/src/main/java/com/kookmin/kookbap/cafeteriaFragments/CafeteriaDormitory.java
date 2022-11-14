@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.MenuData;
@@ -51,21 +52,25 @@ public class CafeteriaDormitory extends Fragment {
                 boothNames.add(boothName);
             }
 
-            for (int i=0; i<boothNames.size(); i++) {
-                String menu = jsonObject2.getJSONObject(boothNames.get(i)).getString("메뉴");
-                String price = jsonObject2.getJSONObject(boothNames.get(i)).getString("가격");
+            try {
+                for (int i=0; i<boothNames.size(); i++) {
+                    String menu = jsonObject2.getJSONObject(boothNames.get(i)).getString("메뉴");
+                    String price = jsonObject2.getJSONObject(boothNames.get(i)).getString("가격");
 //                Log.e("menu", menu);
 //                Log.e("price", price);
 
-                String[] array = menu.split("\r\n");
-                if (!menu.equals("") && !price.equals("")) {
-                    menu = array[0];
-                    reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
-
+                    String[] array = menu.split("\r\n");
+                    if (!menu.equals("") && !price.equals("")) {
+                        menu = array[0];
+                        reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+                    }
 
                 }
-
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity().getApplicationContext(), "메뉴 데이터 처리 중 어딘가에서 인덱스 에러가 났습니다. 로그를 확인하세요", Toast.LENGTH_SHORT).show();
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
 //            Log.e("json2", jsonObject.toString());

@@ -1,99 +1,79 @@
 package com.kookmin.kookbap;
 
-import java.util.ArrayList;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class ReviewData {
-    String reviewContext;
-    String reviewMenu;
-    String reviewRestaurant;
-    String reviewReviewerName;
-    ArrayList<String> reviewComments;
-    ArrayList<String> reviewTags;
-    int reviewImage;
-    float reviewStars;
-    int reviewLikes;
 
-    public ReviewData(String reviewContext, String reviewMenu, String reviewRestaurant, String reviewReviewerName, ArrayList<String> reviewComments, ArrayList<String> reviewTags, int reviewImage, float reviewStars, int reviewLikes) {
-        this.reviewContext = reviewContext;
-        this.reviewMenu = reviewMenu;
-        this.reviewRestaurant = reviewRestaurant;
-        this.reviewReviewerName = reviewReviewerName;
-        this.reviewComments = reviewComments;
-        this.reviewTags = reviewTags;
-        this.reviewImage = reviewImage;
-        this.reviewStars = reviewStars;
-        this.reviewLikes = reviewLikes;
+    @SerializedName("review_number")
+    @Expose
+    private String review_number;
+
+    @SerializedName("review_user_id")
+    @Expose
+    private String review_user_id;
+
+    @SerializedName("review_menu_id_reviewd")
+    @Expose
+    private int review_menu_id_reviewd;
+
+    @SerializedName("menu_name")
+    @Expose
+    private String menu_name;
+
+    @SerializedName("write_date")
+    @Expose
+    private Object write_date;
+
+    @SerializedName("star")
+    @Expose
+    private float star;
+
+    @SerializedName("review_like")
+    @Expose
+    private int review_like;
+
+    @SerializedName("description")
+    @Expose
+    private String description;
+
+    @SerializedName("image")
+    @Expose
+    private String image;
+
+    public String getReview_number() {
+        return review_number;
     }
 
-    public String getReviewReviewerName() {
-        return reviewReviewerName;
+    public String getReview_user_id() {
+        return review_user_id;
     }
 
-    public void setReviewReviewerName(String reviewReviewerName) {
-        this.reviewReviewerName = reviewReviewerName;
+    public int getReview_menu_id_reviewd() {
+        return review_menu_id_reviewd;
     }
 
-    public String getReviewContext() {
-        return reviewContext;
+    public String getMenu_name() {
+        return menu_name;
     }
 
-    public void setReviewContext(String reviewContext) {
-        this.reviewContext = reviewContext;
+    public Object getWrite_date() {
+        return write_date;
     }
 
-    public String getReviewMenu() {
-        return reviewMenu;
+    public float getStar() {
+        return star;
     }
 
-    public void setReviewMenu(String reviewMenu) {
-        this.reviewMenu = reviewMenu;
+    public int getReview_like() {
+        return review_like;
     }
 
-    public String getReviewRestaurant() {
-        return reviewRestaurant;
+    public String getDescription() {
+        return description;
     }
 
-    public void setReviewRestaurant(String reviewRestaurant) {
-        this.reviewRestaurant = reviewRestaurant;
-    }
-
-    public ArrayList<String> getReviewComments() {
-        return reviewComments;
-    }
-
-    public void setReviewComments(ArrayList<String> reviewComments) {
-        this.reviewComments = reviewComments;
-    }
-
-    public ArrayList<String> getReviewTags() {
-        return reviewTags;
-    }
-
-    public void setReviewTags(ArrayList<String> reviewTags) {
-        this.reviewTags = reviewTags;
-    }
-
-    public int getReviewImage() {
-        return reviewImage;
-    }
-
-    public void setReviewImage(int reviewImage) {
-        this.reviewImage = reviewImage;
-    }
-
-    public float getReviewStars() {
-        return reviewStars;
-    }
-
-    public void setReviewStars(float reviewStars) {
-        this.reviewStars = reviewStars;
-    }
-
-    public int getReviewLikes() {
-        return reviewLikes;
-    }
-
-    public void setReviewLikes(int reviewLikes) {
-        this.reviewLikes = reviewLikes;
+    public String getImage() {
+        return image;
     }
 }
