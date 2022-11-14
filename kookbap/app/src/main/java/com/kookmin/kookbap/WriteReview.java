@@ -244,46 +244,48 @@ public class WriteReview extends AppCompatActivity {
 //                @Field("description") String description,
 //                @Field("image") String image
 
-//                File newFile = new File(getApplicationContext().getFilesDir(), "qwe.png");
-//                FileOutputStream fileOutputStream = null;
-//                try {
-//                    fileOutputStream = new FileOutputStream(newFile);
-//                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    fileOutputStream.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                File imageFile = newFile;
-//                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
-//                MultipartBody.Part body = MultipartBody.Part.createFormData("image", "qweqwe.png", requestFile);
-//
-//
-//                RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
-//                RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTemp);
-//                RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
-//                RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(starTemp));
-//                RequestBody description = RequestBody.create(MultipartBody.FORM, descriptionTemp);
-//
-//                HashMap<String, RequestBody> map = new HashMap<>();
-//                map.put("reviewUserId", reviewUserId);
-//                map.put("menuName", menuName);
-//                map.put("writeDate", writeDate);
-//                map.put("star", star);
-//                map.put("description", description);
+                File newFile = new File(getApplicationContext().getFilesDir(), "qwe.png");
+                FileOutputStream fileOutputStream = null;
+                try {
+                    fileOutputStream = new FileOutputStream(newFile);
+                    imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File imageFile = newFile;
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("image", "qweqwe.png", requestFile);
 
 
-//                Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
-                Call<Result> call = RetrofitClient.getApiService().saveReview(
-                        // TODO reviewUserId("jihun"), 메뉴이름("edit Text로 쓰게 되있음 현재"), date("2022-11-13 00:01:02"), image(file), 식당이름("한울식당") 상수가 아니라 어디선가 변수로 가져와야함
-                        // reviewUserId 는 유저관리가 되고나서 가져올 수 있음
-                        // 식당이름, 메뉴이름은 이 페이지가 날짜, 식당 별로 메뉴이름을 고를 수 있을 때 가져올 수 있음
-                        "jihun", menuNameTemp, (new Date()).toString(), starTemp, 0, descriptionTemp, "ImageFile", "한울식당"
-                );
+                RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
+                RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTemp);
+                RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
+                RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(starTemp));
+                RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
+                RequestBody description = RequestBody.create(MultipartBody.FORM, descriptionTemp);
+
+                HashMap<String, RequestBody> map = new HashMap<>();
+                map.put("reviewUserId", reviewUserId);
+                map.put("menuName", menuName);
+                map.put("writeDate", writeDate);
+                map.put("star", star);
+                map.put("reviewLike", reviewLike);
+                map.put("description", description);
+
+
+                Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
+//                Call<Result> call = RetrofitClient.getApiService().saveReview(
+//                        // TODO reviewUserId("jihun"), 메뉴이름("edit Text로 쓰게 되있음 현재"), date("2022-11-13 00:01:02"), image(file), 식당이름("한울식당") 상수가 아니라 어디선가 변수로 가져와야함
+//                        // reviewUserId 는 유저관리가 되고나서 가져올 수 있음
+//                        // 식당이름, 메뉴이름은 이 페이지가 날짜, 식당 별로 메뉴이름을 고를 수 있을 때 가져올 수 있음
+//                        "jihun", menuNameTemp, (new Date()).toString(), starTemp, 0, descriptionTemp, "ImageFile", "한울식당"
+//                );
                 call.enqueue(new Callback<Result>() {
                     @Override
                     public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
