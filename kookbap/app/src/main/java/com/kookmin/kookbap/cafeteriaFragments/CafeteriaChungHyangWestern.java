@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.MenuData;
@@ -51,36 +52,42 @@ public class CafeteriaChungHyangWestern extends Fragment {
                 boothNames.add(boothName);
             }
 
-            for (int i=0; i<boothNames.size(); i++) {
-                String menu = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("메뉴");
-                String price = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("가격");
-                price = price.replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+            try {
+                for (int i=0; i<boothNames.size(); i++) {
+                    String menu = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("메뉴");
+                    String price = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("가격");
+                    price = price.replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
 //                Log.e("menu", menu);
 //                Log.e("price", price);
 
-                String[] array = menu.split("\r\n");
-                if (!((menu.equals("")) && (price.equals("")))) {
-                    for (int j=0; j<array.length/2; j++) {
-                        menu = array[2*j];
-                        price = array[2*j+1].replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");;
-                        if (j == 3) {
-                            // 남들은 이런데           뽈보오일파스타 \r\n26,000원
-                            // 너만 사탄들려서 \r\n없니  해산물토마토파스타 23,000원
-                            String[] arr = menu.split(" ");
-                            menu = arr[0];
-                            price = arr[1].replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");;
-                        }
-                        if (j >= 4) {
-                            menu = array[2*j-1];
-                            price = array[2*j].replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");;
+                    String[] array = menu.split("\r\n");
+                    if (!((menu.equals("")) && (price.equals("")))) {
+                        for (int j=0; j<array.length/2; j++) {
+                            menu = array[2*j];
+                            price = array[2*j+1].replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");;
+                            if (j == 3) {
+                                // 남들은 이런데           뽈보오일파스타 \r\n26,000원
+                                // 너만 사탄들려서 \r\n없니  해산물토마토파스타 23,000원
+                                String[] arr = menu.split(" ");
+                                menu = arr[0];
+                                price = arr[1].replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");;
+                            }
+                            if (j >= 4) {
+                                menu = array[2*j-1];
+                                price = array[2*j].replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");;
+                            }
+
+                            reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
                         }
 
-                        reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
                     }
 
                 }
-
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity().getApplicationContext(), "메뉴 데이터 처리 중 어딘가에서 인덱스 에러가 났습니다. 로그를 확인하세요", Toast.LENGTH_SHORT).show();
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("json2", jsonObject.toString());

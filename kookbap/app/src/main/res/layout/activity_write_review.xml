@@ -10,51 +10,51 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-        <RelativeLayout
+        android:orientation="vertical">
+
+        <LinearLayout
             android:id="@+id/myMenu_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:orientation="horizontal"
+            android:gravity="center">
+
             <TextView
                 android:id="@+id/write_review_dateText"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                />
-            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"/>
+            <ImageView
                 android:id="@+id/write_review_datebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_toRightOf="@id/write_review_dateText"
                 android:text="날짜 선택"
-                />
-
+                android:src="@drawable/ic_calendar"/>
             <Spinner
                 android:id="@+id/write_review_toDayMenu"
-                android:layout_width="150dp"
-                android:layout_height="50dp"
-                android:layout_toRightOf="@id/write_review_datebtn" />
-
-
-            <ImageView
-                android:id="@+id/myFood"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/write_review_datebtn"
-                android:src="@drawable/ic_add" />
-
-            <RatingBar
-                android:id="@+id/myRating"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_below="@id/myFood"
-                android:numStars="5"
-                android:stepSize="0.5" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"/>
+        </LinearLayout>
 
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:id="@+id/myFood"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_add" />
+        <RatingBar
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/myRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5" />
 
-        </RelativeLayout>
         <LinearLayout
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -62,19 +62,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:text="메뉴이름 테스트용"
-                android:textSize="40dp"
-                android:layout_weight="1"/>
+                android:textSize="30sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="절대로 사용자가 메뉴이름 직접 쓰게해선 안 됌 상단의 스피너로 골라야함"
+                android:textSize="13sp"/>
             <EditText
+                android:background="@color/lightGrey"
                 android:id="@+id/editTextMenuName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:text="내용"
-                android:textSize="40dp"
-                android:layout_weight="1"/>
+                android:textSize="30sp"/>
             <EditText
+                android:background="@color/lightGrey"
                 android:id="@+id/myReview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,55 +88,13 @@
                 android:maxLines="3"
                 android:minLines="3" />
         </LinearLayout>
-        <TextView
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:text="태그"
-            />
-        <EditText
-            android:id="@+id/addTag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="테그"/>
-        <LinearLayout
-            android:id="@+id/myTag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/korean_food"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#한식"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-            <Button
-                android:id="@+id/chinese_food"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#중식"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-            <Button
-                android:id="@+id/japanese_food"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#일식"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-            <Button
-                android:id="@+id/very_spicy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="#아주 매움"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"/>
-        </LinearLayout>
+
         <Button
+            android:layout_marginRight="20dp"
+            android:layout_gravity="right"
             android:id="@+id/save_Review"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="저장"
-            />
+            android:text="저장" />
     </LinearLayout>
 </ScrollView>

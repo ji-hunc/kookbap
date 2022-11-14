@@ -15,7 +15,7 @@
         <LinearLayout
             android:padding="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -72,11 +72,7 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal|top"
                 app:srcCompat="@drawable/ic_review" />
-            <TextView
-                android:id="@+id/reviewTag"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="태그 표시"/>
+
             <TextView
                 android:id="@+id/reviewContextTextView"
                 android:layout_width="match_parent"

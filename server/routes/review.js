@@ -68,7 +68,7 @@ router.post('/post', parser, function(request, response) {
             // 이미지 이름 변경하는 부분
             request.files.image.name = `${request.body.menuName}_${request.body.reviewUserId}_${new Date().toISOString().slice(0, 19).replace('T', ' ')}.png`;
             const { image } = request.files;
-            image.mv(__dirname + '/../images/' + image.name);
+            image.mv(__dirname + '/../public/images/' + image.name);
             var imageUrl = request.files.image.name;
 
             // DB에 INSERT

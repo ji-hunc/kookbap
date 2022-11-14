@@ -9,6 +9,7 @@ var indexRouter = require('./routes/index.js');
 var menuRouter = require('./routes/menu.js');
 var reviewRouter = require('./routes/review.js');
 
+app.use(express.static('public'));
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));

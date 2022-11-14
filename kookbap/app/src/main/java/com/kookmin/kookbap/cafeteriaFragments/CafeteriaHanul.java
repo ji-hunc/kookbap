@@ -115,7 +115,7 @@ public class CafeteriaHanul extends Fragment {
                 }
             } catch (IndexOutOfBoundsException e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity().getApplicationContext(), "다룰 데이터 어딘가에서 인덱스 에러가 났습니다. 로그를 확인하세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), "메뉴 데이터 처리 중 어딘가에서 인덱스 에러가 났습니다. 로그를 확인하세요", Toast.LENGTH_SHORT).show();
             }
 
         } catch (JSONException e) {
