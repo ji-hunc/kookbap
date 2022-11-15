@@ -85,17 +85,6 @@ public class HomeFragment extends Fragment {
                         // 날짜를 선택하고 확인을 누르면, 어댑터가 그 날짜에 해당하는 것들로 다시 뿌려줌
                         cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
                         viewPager2.setAdapter(cafeteriaViewPagerAdapter);
-
-
-                        // 리뷰 작성페이지를 위해 한 번도 생성된 페이지가 업도록, 말도 안되는 초기화...
-                        // TODO 로직 바꿔야만 함...
-                        CafeteriaHanul cafeteriaHanul = new CafeteriaHanul(jsonObject, date);
-                        CafeteriaStudent CafeteriaStudent = new CafeteriaStudent(jsonObject, date);
-                        CafeteriaProfessor CafeteriaProfessor = new CafeteriaProfessor(jsonObject, date);
-                        CafeteriaKBob CafeteriaKBob = new CafeteriaKBob(jsonObject, date);
-                        CafeteriaChungHyangKorean CafeteriaChungHyangKorean = new CafeteriaChungHyangKorean(jsonObject, date);
-                        CafeteriaChungHyangWestern CafeteriaChungHyangWestern = new CafeteriaChungHyangWestern(jsonObject, date);
-                        CafeteriaDormitory CafeteriaDormitory = new CafeteriaDormitory(jsonObject, date);
                     }
                 }, Integer.parseInt(nowYear), Integer.parseInt(nowMonth) - 1, Integer.parseInt(nowDate)); // 처음 DatePicker가 켜졌을 때 최초로 선택되어 있는 날짜
                 datePickerDialog.show();

@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -36,6 +38,7 @@ import com.google.gson.Gson;
 import com.kookmin.kookbap.cafeteriaFragments.CafeteriaHanul;
 import com.kookmin.kookbap.cafeteriaFragments.CafeteriaStudent;
 import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
+import com.kookmin.kookbap.cafeteriaFragments.MenuDataParser;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -72,13 +75,15 @@ public class WriteReview extends AppCompatActivity {
     int cameraPermission, galleryPermission;
     Bitmap imageBitmap, noticeBitmap;
     Uri uri;
+    String chosenDate;
 
     boolean isFilledImage;
     JSONObject jsonObject;
-    String[] cafeteriaNamesOriginal = {"한울식당(법학관 지하1층)", "학생식당(복지관 1층)", "교직원식당(복지관 1층)",  "K-Bob<sup>+</sup>", "청향 한식당(법학관 5층)", "청향 양식당(법학관 5층)", "생활관식당 정기식(생활관 A동 1층)"};
-    String[] cafeteriaNames = {"한울식당", "학생식당", "교직원식당", "K-Bob", "청향 한식당", "청향 양식당", "생활관식당"};
+    String[] cafeteriaNames = {"식당", "한울식당", "학생식당", "교직원식당", "K-Bob", "청향 한식당", "청향 양식당", "생활관식당"};
+    String[] menus;
 
-    ArrayList<ArrayList<String>> menus;
+
+    MenuDataParser menuDataParser;
     private static final int SINGLE_PERMISSION = 1004;
 
     @Override
@@ -94,8 +99,7 @@ public class WriteReview extends AppCompatActivity {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
                     try {
                         jsonObject = new JSONObject(new Gson().toJson(response.body()));
-
-                        Log.e("output FROM writereview", jsonObject.toString());
+                        menuDataParser = new MenuDataParser(jsonObject, chosenDate);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -132,9 +136,32 @@ public class WriteReview extends AppCompatActivity {
                 newFragment.show(getSupportFragmentManager(), "datePicker");
             }
         });
+        // TODO 날짜 선택시 이벤트가 있는 아래 함수로 바꿔야함
+//        calendarButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Calendar calendar = Calendar.getInstance();
+//                DatePickerDialog datePickerDialog = new DatePickerDialog(view.getContext(), new DatePickerDialog.OnDateSetListener() {
+//                    // 날자를 선택했을 때
+//                    @Override
+//                    public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
+//                        nowYear = Integer.toString(yy);
+//                        nowMonth = mm + 1 < 10 ? "0" + (mm + 1) : "" + (mm + 1);
+//                        nowDate = dd < 10 ? "0" + dd : "" + dd;
+//                        date = nowYear + "-" + nowMonth + "-" + nowDate;
+//                        dateTextView.setText(date);
+//
+//                        // 날짜를 선택하고 확인을 누르면, 어댑터가 그 날짜에 해당하는 것들로 다시 뿌려줌
+//                        cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
+//                        viewPager2.setAdapter(cafeteriaViewPagerAdapter);
+//                    }
+//                }, Integer.parseInt(nowYear), Integer.parseInt(nowMonth) - 1, Integer.parseInt(nowDate)); // 처음 DatePicker가 켜졌을 때 최초로 선택되어 있는 날짜
+//                datePickerDialog.show();
+//            }
+//        });
 
 
-        ArrayAdapter<String> adapterMenu = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new String[] {"1"});
+        ArrayAdapter<String> adapterMenu = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new String[] {"메뉴"});
         Spinner menuSpinner = findViewById(R.id.menuSpinner);
         menuSpinner.setAdapter(adapterMenu);
         menuSpinner.setSelection(0);
@@ -157,34 +184,82 @@ public class WriteReview extends AppCompatActivity {
         cafeteriaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                switch (cafeteriaSpinner.getSelectedItem().toString()) {
-//                    case "한울식당":
-//                        ArrayList<String> menuArrayList = new ArrayList<>((CafeteriaHanul.getHanulMenus()));
-//                        String[] menuArray = new String[menuArrayList.size()];
-//                        int size=0;
-//                        for(String temp : menuArrayList) {
-//                            menuArray[size++] = temp;
-//                        }
-//                        ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menuArray);
-//                        menuSpinner.setAdapter(menuAdapter);
-//                        break;
-//                    case "학생식당":
-//                        ArrayList<String> menuArrayList2 = new ArrayList<>((CafeteriaStudent.getStudentMenus()));
-//                        String[] menuArray2 = new String[menuArrayList2.size()];
-//                        int size2=0;
-//                        for(String temp : menuArrayList2) {
-//                            menuArray2[size2++] = temp;
-//                        }
-//                        ArrayAdapter<String> menuAdapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menuArray2);
-//                        menuSpinner.setAdapter(menuAdapter2);
-//                        break;
-////                    case "교직원식당":
-////                    case "K-Bob":
-////                    case "청향 한식당":
-////                    case "청향 양식당":
-////                    case "생활관식당":
-//
-//                }
+                menus = null;
+//                menuSpinner.setAdapter(null);
+                if ("한울식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getHanulMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    for (int q=0; q<menus.length; q++) {
+                        Log.e("qwe", menus[q]);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("학생식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getStudentMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("교직원식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getProfessorMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("K-Bob".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getKBobMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("청향 한식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getChungHyangKoreanMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("청향 양식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getChungHyangWesternMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("생활관식당".equals(cafeteriaSpinner.getSelectedItem().toString())){
+                    ArrayList<String> menuArrayList = menuDataParser.getDormitoryMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                }
             }
 
             @Override
@@ -407,7 +482,7 @@ public class WriteReview extends AppCompatActivity {
         // TODO 월 -1이라서 고쳐야함
         String today_Month = month+1 < 10 ? "0" + (month+1) : "" + (month+1);
         String today_Date = Integer.toString(date).length() < 2 ? "0" + date : Integer.toString(date);
-        String day = today_Year +"-"+today_Month + "-" + today_Date;
-        dateTextView.setText(day);
+        chosenDate = today_Year +"-"+today_Month + "-" + today_Date;
+        dateTextView.setText(chosenDate);
     }
 }
