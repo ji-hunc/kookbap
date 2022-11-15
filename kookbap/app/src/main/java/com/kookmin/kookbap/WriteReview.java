@@ -32,6 +32,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.gson.Gson;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaHanul;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaStudent;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +47,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,14 +74,41 @@ public class WriteReview extends AppCompatActivity {
     Uri uri;
 
     boolean isFilledImage;
+    JSONObject jsonObject;
+    String[] cafeteriaNamesOriginal = {"한울식당(법학관 지하1층)", "학생식당(복지관 1층)", "교직원식당(복지관 1층)",  "K-Bob<sup>+</sup>", "청향 한식당(법학관 5층)", "청향 양식당(법학관 5층)", "생활관식당 정기식(생활관 A동 1층)"};
+    String[] cafeteriaNames = {"한울식당", "학생식당", "교직원식당", "K-Bob", "청향 한식당", "청향 양식당", "생활관식당"};
 
-    String[] items = {"메뉴1","메뉴2","메뉴3","메뉴4","메뉴5"};
+    ArrayList<ArrayList<String>> menus;
     private static final int SINGLE_PERMISSION = 1004;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
+
+        Call<Object> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
+        call = RetrofitClient.getApiService().getMenuData();
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                    try {
+                        jsonObject = new JSONObject(new Gson().toJson(response.body()));
+
+                        Log.e("output FROM writereview", jsonObject.toString());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
 
         isFilledImage = false;
 
@@ -101,14 +134,57 @@ public class WriteReview extends AppCompatActivity {
         });
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        Spinner spinner = findViewById(R.id.write_review_toDayMenu);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(0);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ArrayAdapter<String> adapterMenu = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new String[] {"1"});
+        Spinner menuSpinner = findViewById(R.id.menuSpinner);
+        menuSpinner.setAdapter(adapterMenu);
+        menuSpinner.setSelection(0);
+        menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ArrayAdapter<String> adapterCafeteria = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, cafeteriaNames);
+        Spinner cafeteriaSpinner = findViewById(R.id.cafeteriaSpinner);
+        cafeteriaSpinner.setAdapter(adapterCafeteria);
+        cafeteriaSpinner.setSelection(0);
+        cafeteriaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                switch (cafeteriaSpinner.getSelectedItem().toString()) {
+//                    case "한울식당":
+//                        ArrayList<String> menuArrayList = new ArrayList<>((CafeteriaHanul.getHanulMenus()));
+//                        String[] menuArray = new String[menuArrayList.size()];
+//                        int size=0;
+//                        for(String temp : menuArrayList) {
+//                            menuArray[size++] = temp;
+//                        }
+//                        ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menuArray);
+//                        menuSpinner.setAdapter(menuAdapter);
+//                        break;
+//                    case "학생식당":
+//                        ArrayList<String> menuArrayList2 = new ArrayList<>((CafeteriaStudent.getStudentMenus()));
+//                        String[] menuArray2 = new String[menuArrayList2.size()];
+//                        int size2=0;
+//                        for(String temp : menuArrayList2) {
+//                            menuArray2[size2++] = temp;
+//                        }
+//                        ArrayAdapter<String> menuAdapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menuArray2);
+//                        menuSpinner.setAdapter(menuAdapter2);
+//                        break;
+////                    case "교직원식당":
+////                    case "K-Bob":
+////                    case "청향 한식당":
+////                    case "청향 양식당":
+////                    case "생활관식당":
+//
+//                }
             }
 
             @Override
