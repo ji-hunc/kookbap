@@ -22,6 +22,7 @@ import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -97,6 +98,10 @@ public class HomeFragment extends Fragment {
                         // menu 띄워주는 adapter에 받아온 jsonObject을 넘김
                         cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
                         viewPager2.setAdapter(cafeteriaViewPagerAdapter);
+
+                        // Json 날짜별로, 식당별로, 메뉴별로 2차원 HashMap 구성
+//                        HashMap<String, HashMap<>> menuHashMap;
+                        Log.e("output", jsonObject.toString());
 
                     } catch (JSONException e) {
                         e.printStackTrace();

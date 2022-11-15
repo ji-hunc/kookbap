@@ -69,7 +69,7 @@ public class WriteReview extends AppCompatActivity {
 
     boolean isFilledImage;
 
-    String[] items = {"메뉴1","메뉴2","메뉴3"};
+    String[] items = {"메뉴1","메뉴2","메뉴3","메뉴4","메뉴5"};
     private static final int SINGLE_PERMISSION = 1004;
 
     @Override
@@ -101,7 +101,7 @@ public class WriteReview extends AppCompatActivity {
         });
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
         Spinner spinner = findViewById(R.id.write_review_toDayMenu);
         spinner.setAdapter(adapter);
         spinner.setSelection(0);
