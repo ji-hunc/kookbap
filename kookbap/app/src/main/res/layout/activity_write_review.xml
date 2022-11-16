@@ -62,21 +62,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="메뉴이름 테스트용"
-                android:textSize="30sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="절대로 사용자가 메뉴이름 직접 쓰게해선 안 됌 상단의 스피너로 골라야함"
-                android:textSize="13sp"/>
-            <EditText
-                android:background="@color/lightGrey"
-                android:id="@+id/editTextMenuName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <TextView
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
@@ -88,8 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:maxLines="3"
-                android:minLines="3" />
+                android:maxLines="5"
+                android:minLines="5" />
         </LinearLayout>
 
         <Button

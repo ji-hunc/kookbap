@@ -16,27 +16,23 @@ import java.util.Iterator;
 public class MenuDataParser {
     JSONObject jsonObject;
     String date;
-    ArrayList<String> menus;
-    ArrayList<String> prices;
-    ArrayList<String> boothNames;
-    ArrayList<String> result;
 
 
-    public void joinArrayList() {
-        result.addAll(menus);
-        result.addAll(prices);
-    }
+//    public void joinArrayList() {
+//        result.addAll(menus);
+//        result.addAll(prices);
+//    }
 
     public MenuDataParser(JSONObject jsonObject, String date) {
         this.jsonObject = jsonObject;
         this.date = date;
-        this.menus = new ArrayList<>();
-        this.prices = new ArrayList<>();
-        this.boothNames = new ArrayList<>(); // 식당의 각각 부스 이름이 들어갈 리스트
-        this.result = new ArrayList<>(); // 결과 리스트
     }
 
     public ArrayList<String> getHanulMenuData() {
+        ArrayList<String> menus = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> boothNames = new ArrayList<>();
         try {
             JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("한울식당(법학관 지하1층)").getJSONObject(date);
             Iterator<String> iter = jsonObjectBoothNames.keys();
@@ -118,12 +114,17 @@ public class MenuDataParser {
         }
 
         // 하나의 리스트로 반환하기 위해 조인
-        joinArrayList();
+        result.addAll(menus);
+        result.addAll(prices);
 
         return result;
     }
 
     public ArrayList<String> getStudentMenuData() {
+        ArrayList<String> menus = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> boothNames = new ArrayList<>();
         try {
             JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("학생식당(복지관 1층)").getJSONObject(date);
             Iterator<String> iter = jsonObjectBoothNames.keys();
@@ -180,12 +181,17 @@ public class MenuDataParser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        joinArrayList();
+        result.addAll(menus);
+        result.addAll(prices);
 
         return result;
     }
 
     public ArrayList<String> getProfessorMenuData() {
+        ArrayList<String> menus = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> boothNames = new ArrayList<>();
         try {
             JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("교직원식당(복지관 1층)").getJSONObject(date);
             Iterator<String> iter = jsonObjectBoothNames.keys();
@@ -218,12 +224,17 @@ public class MenuDataParser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        joinArrayList();
+        result.addAll(menus);
+        result.addAll(prices);
 
         return result;
     }
 
     public ArrayList<String> getKBobMenuData() {
+        ArrayList<String> menus = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> boothNames = new ArrayList<>();
         try {
             JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("K-Bob<sup>+</sup>").getJSONObject(date);
             Iterator<String> iter = jsonObjectBoothNames.keys();
@@ -260,12 +271,17 @@ public class MenuDataParser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        joinArrayList();
+        result.addAll(menus);
+        result.addAll(prices);
 
         return result;
     }
 
     public ArrayList<String> getChungHyangKoreanMenuData() {
+        ArrayList<String> menus = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> boothNames = new ArrayList<>();
         try {
             JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("청향 한식당(법학관 5층)").getJSONObject(date);
             Iterator<String> iter = jsonObjectBoothNames.keys();
@@ -297,12 +313,17 @@ public class MenuDataParser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        joinArrayList();
+        result.addAll(menus);
+        result.addAll(prices);
 
         return result;
     }
 
     public ArrayList<String> getChungHyangWesternMenuData() {
+        ArrayList<String> menus = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> boothNames = new ArrayList<>();
         try {
             JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("청향 양식당(법학관 5층)").getJSONObject(date);
             Log.e("json1", jsonObjectBoothNames.toString());
@@ -350,12 +371,17 @@ public class MenuDataParser {
             e.printStackTrace();
             Log.e("json2", jsonObject.toString());
         }
-        joinArrayList();
+        result.addAll(menus);
+        result.addAll(prices);
 
         return result;
     }
 
     public ArrayList<String> getDormitoryMenuData() {
+        ArrayList<String> menus = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> boothNames = new ArrayList<>();
         try {
             JSONObject jsonObject2 = jsonObject.getJSONObject("생활관식당 정기식(생활관 A동 1층)").getJSONObject(date);
             Log.e("json1", jsonObject2.toString());
@@ -386,7 +412,8 @@ public class MenuDataParser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        joinArrayList();
+        result.addAll(menus);
+        result.addAll(prices);
 
         return result;
     }
