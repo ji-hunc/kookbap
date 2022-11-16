@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -40,6 +41,8 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         String url = "https://kookbap.run.goorm.io/images/" + reviewDataArray.get(position).getImage();
         holder.webView.loadUrl(url);
         holder.webView.setFocusable(false);
+        holder.webView.getSettings().setUseWideViewPort(true);
+        holder.webView.getSettings().setLoadWithOverviewMode(true);
         Log.e("url", reviewDataArray.get(position).getImage());
         holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
