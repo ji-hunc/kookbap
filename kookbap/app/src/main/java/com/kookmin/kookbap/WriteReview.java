@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -32,6 +34,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.gson.Gson;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaHanul;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaStudent;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
+import com.kookmin.kookbap.cafeteriaFragments.MenuDataParser;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +50,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,23 +68,64 @@ import retrofit2.http.Field;
 public class WriteReview extends AppCompatActivity {
     TextView dateTextView;
     ImageView foodImage, calendarImageButton;
-    EditText editTextReview, editTextMenuName;
+    EditText editTextReview;
     Button postButton;
     RatingBar ratingBar;
 
     int cameraPermission, galleryPermission;
     Bitmap imageBitmap, noticeBitmap;
     Uri uri;
+    String chosenDate;
+    String date, nowYear, nowMonth, nowDate;
+
 
     boolean isFilledImage;
+    JSONObject jsonObject;
+    String[] cafeteriaNames = {"식당", "한울식당", "학생식당", "교직원식당", "K-Bob", "청향 한식당", "청향 양식당", "생활관식당"};
+    String[] menus;
+    ArrayList<ArrayList<String>> menuArrayListsss = new ArrayList<>();
 
-    String[] items = {"메뉴1","메뉴2","메뉴3"};
+    Spinner menuSpinner, cafeteriaSpinner;
+
+
+    MenuDataParser menuDataParser;
     private static final int SINGLE_PERMISSION = 1004;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
+
+        menuSpinner = findViewById(R.id.menuSpinner);
+        cafeteriaSpinner = findViewById(R.id.cafeteriaSpinner);
+
+        Calendar calendar = Calendar.getInstance();
+        nowYear = Integer.toString(calendar.get(Calendar.YEAR));
+        nowMonth = Integer.toString(calendar.get(Calendar.MONTH) + 1);
+        nowDate = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+        date = nowYear + "-" + nowMonth + "-" + nowDate; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
+
+        Call<Object> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
+        call = RetrofitClient.getApiService().getMenuData();
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                    try {
+                        jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                        menuDataParser = new MenuDataParser(jsonObject, chosenDate);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
 
         isFilledImage = false;
 
@@ -84,31 +134,141 @@ public class WriteReview extends AppCompatActivity {
         editTextReview = findViewById(R.id.myReview);
         postButton = findViewById(R.id.save_Review);
         calendarImageButton = findViewById(R.id.write_review_datebtn);
-        editTextMenuName = findViewById(R.id.editTextMenuName);
         ratingBar = findViewById(R.id.myRating);
 
         //지훈님과 날짜 표시 방식 통일
-        Calendar calendar = Calendar.getInstance();
+//        Calendar calendar = Calendar.getInstance();
         printDateResult(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
 
         // 달력 그림 눌렀을 때 달력 다이얼로그 띄우기
+//        calendarImageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                DialogFragment newFragment = new DatePickerFragment();
+//                newFragment.show(getSupportFragmentManager(), "datePicker");
+//            }
+//        });
+        // TODO 날짜 선택시 이벤트가 있는 아래 함수로 바꿔야함
         calendarImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getSupportFragmentManager(), "datePicker");
+//                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(WriteReview.this, new DatePickerDialog.OnDateSetListener() {
+                    // 날자를 선택했을 때
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
+                        nowYear = Integer.toString(yy);
+                        nowMonth = mm + 1 < 10 ? "0" + (mm + 1) : "" + (mm + 1);
+                        nowDate = dd < 10 ? "0" + dd : "" + dd;
+                        date = nowYear + "-" + nowMonth + "-" + nowDate;
+                        dateTextView.setText(date);
+
+                        menuDataParser = new MenuDataParser(jsonObject, date);
+                        Log.e("list", menuDataParser.getHanulMenuData().toString());
+                        cafeteriaSpinner.setSelection(0);
+                        menuSpinner.setSelection(0);
+
+                    }
+                }, Integer.parseInt(nowYear), Integer.parseInt(nowMonth) - 1, Integer.parseInt(nowDate)); // 처음 DatePicker가 켜졌을 때 최초로 선택되어 있는 날짜
+                datePickerDialog.show();
             }
         });
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,items);
-        Spinner spinner = findViewById(R.id.write_review_toDayMenu);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(0);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ArrayAdapter<String> adapterMenu = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new String[] {"메뉴"});
+        menuSpinner.setAdapter(adapterMenu);
+        menuSpinner.setSelection(0);
+        menuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        ArrayAdapter<String> adapterCafeteria = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, cafeteriaNames);
+        cafeteriaSpinner.setAdapter(adapterCafeteria);
+        cafeteriaSpinner.setSelection(0);
+        cafeteriaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                menus = null;
+//                menuSpinner.setAdapter(null);
+                if ("한울식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getHanulMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("학생식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getStudentMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("교직원식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getProfessorMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("K-Bob".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getKBobMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("청향 한식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getChungHyangKoreanMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("청향 양식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
+                    ArrayList<String> menuArrayList = menuDataParser.getChungHyangWesternMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                } else if ("생활관식당".equals(cafeteriaSpinner.getSelectedItem().toString())){
+                    ArrayList<String> menuArrayList = menuDataParser.getDormitoryMenuData();
+                    int sizeOfMenu = menuArrayList.size() / 2;
+                    menus = new String[sizeOfMenu];
+
+                    for (int k = 0; k < sizeOfMenu; k++) {
+                        menus[k] = menuArrayList.get(k);
+                    }
+                    ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
+                    menuSpinner.setAdapter(menuAdapter);
+                }
             }
 
             @Override
@@ -173,85 +333,87 @@ public class WriteReview extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!(editTextMenuName.getText().toString().equals("") || editTextReview.getText().toString().equals("") || !isFilledImage)) {
+                if (!(editTextReview.getText().toString().equals("") || !isFilledImage)) {
                     // 채우지 않은 항목이 있거나, 이미지가 없을 경우
-                    String menuNameTemp = editTextMenuName.getText().toString();
-                    String descriptionTemp = editTextReview.getText().toString();
-                    float starTemp = ratingBar.getRating();
+                    if (!(cafeteriaSpinner.getSelectedItem().toString().equals("식당") || menuSpinner.getSelectedItem().toString().equals("메뉴"))) {
 
-                    File newFile = new File(getApplicationContext().getFilesDir(), "test.png");
-                    FileOutputStream fileOutputStream = null;
-                    try {
-                        fileOutputStream = new FileOutputStream(newFile);
-                        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        fileOutputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        File newFile = new File(getApplicationContext().getFilesDir(), "test.png");
+                        FileOutputStream fileOutputStream = null;
+                        try {
+                            fileOutputStream = new FileOutputStream(newFile);
+                            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            fileOutputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), newFile);
-                    MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
+                        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), newFile);
+                        MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
 
 
-                    RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
-                    RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTemp);
-                    RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
-                    RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(starTemp));
-                    RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
-                    RequestBody description = RequestBody.create(MultipartBody.FORM, descriptionTemp);
-                    RequestBody restaurantName = RequestBody.create(MultipartBody.FORM, "한울식당");
+                        RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
+                        RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuSpinner.getSelectedItem().toString());
+                        RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
+                        RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(ratingBar.getRating()));
+                        RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
+                        RequestBody description = RequestBody.create(MultipartBody.FORM, editTextReview.getText().toString());
+                        RequestBody restaurantName = RequestBody.create(MultipartBody.FORM, cafeteriaSpinner.getSelectedItem().toString());
 
-                    HashMap<String, RequestBody> map = new HashMap<>();
-                    map.put("reviewUserId", reviewUserId);
-                    map.put("menuName", menuName);
-                    map.put("writeDate", writeDate);
-                    map.put("star", star);
-                    map.put("reviewLike", reviewLike);
-                    map.put("description", description);
-                    map.put("restaurantName", restaurantName);
+                        HashMap<String, RequestBody> map = new HashMap<>();
+                        map.put("reviewUserId", reviewUserId);
+                        map.put("menuName", menuName);
+                        map.put("writeDate", writeDate);
+                        map.put("star", star);
+                        map.put("reviewLike", reviewLike);
+                        map.put("description", description);
+                        map.put("restaurantName", restaurantName);
 
-                    // TODO 유저 아이디("jihun" 아직 상수), 식당 이름("한울식당" 아직 상수), 메뉴 이름("edit Text로 쓰게 되있음 현재"), date(날짜는 서버시간으로 할 것임)
-                    Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
-                    call.enqueue(new Callback<Result>() {
-                        @Override
-                        public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+                        // TODO 유저 아이디("jihun" 아직 상수) 유저관리로 변수로 받아야함
+                        Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
+                        call.enqueue(new Callback<Result>() {
+                            @Override
+                            public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
 
-                            // 서버에서 응답을 받아옴
-                            if (response.isSuccessful() && response.body() != null) {
-                                Boolean success = response.body().getSuccess();
-                                String message = response.body().getMessage();
-                                // 입력성공시 서버에서 메시지를 받아와서 테스트용으로 토스트로 출력
-                                // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
-                                if (success) {
-                                    Log.e("LOGLOG", "success1");
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                // 서버에서 응답을 받아옴
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Boolean success = response.body().getSuccess();
+                                    String message = response.body().getMessage();
+                                    // 입력성공시 서버에서 메시지를 받아와서 테스트용으로 토스트로 출력
+                                    // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
+                                    if (success) {
+                                        Log.e("LOGLOG", "success1");
+                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                                    Log.e("서버에서 받아온내용", message);
+                                        Log.e("서버에서 받아온내용", message);
+                                    } else {
+                                        Log.e("LOGLOG", "success2");
+                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    }
+                                    // 응답을 받아오지 못했을경우
                                 } else {
-                                    Log.e("LOGLOG", "success2");
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    assert response.body() != null;
+                                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Log.e("LOGLOG", "success3");
                                 }
-                                // 응답을 받아오지 못했을경우
-                            } else {
-                                assert response.body() != null;
-                                Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.e("LOGLOG", "success3");
                             }
-                        }
-                        // 통신실패시
-                        @Override
-                        public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-                            Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e("LOGLOG", "success4");
 
-                        }
-                    });
+                            // 통신실패시
+                            @Override
+                            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+                                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                Log.e("LOGLOG", "success4");
 
-                    finish();
+                            }
+                        });
+                        finish();
+                    } else {
+                        Toast.makeText(WriteReview.this, "식당을 고르고, 메뉴를 선택하십시오", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
                     Toast.makeText(WriteReview.this, "내용을 채우거나 이미지를 등록하십시오", Toast.LENGTH_SHORT).show();
                 }
@@ -331,7 +493,7 @@ public class WriteReview extends AppCompatActivity {
         // TODO 월 -1이라서 고쳐야함
         String today_Month = month+1 < 10 ? "0" + (month+1) : "" + (month+1);
         String today_Date = Integer.toString(date).length() < 2 ? "0" + date : Integer.toString(date);
-        String day = today_Year +"-"+today_Month + "-" + today_Date;
-        dateTextView.setText(day);
+        chosenDate = today_Year +"-"+today_Month + "-" + today_Date;
+        dateTextView.setText(chosenDate);
     }
 }
