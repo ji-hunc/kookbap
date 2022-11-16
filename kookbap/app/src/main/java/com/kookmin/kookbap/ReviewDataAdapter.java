@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -35,7 +36,11 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
     public void onBindViewHolder(@NonNull ReviewDataAdapter.ReviewDataViewHolder holder, int position) {
         holder.reviewContext.setText(reviewDataArray.get(position).getDescription());
         // TODO image는 임시로 heart
-        holder.reviewImage.setImageResource(R.drawable.ic_filled_heart);
+//        holder.reviewImage.setImageResource(R.drawable.ic_filled_heart);
+        String url = "https://kookbap.run.goorm.io/images/" + reviewDataArray.get(position).getImage();
+        holder.webView.loadUrl(url);
+        holder.webView.setFocusable(false);
+        Log.e("url", reviewDataArray.get(position).getImage());
         holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
 
@@ -59,12 +64,14 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         TextView reviewContext, reviewReviewerName;
         ImageView reviewImage, likeImage;
         RatingBar reviewRating;
+        WebView webView;
         //LinearLayout reviewCardLayout;
         public ReviewDataViewHolder(@NonNull View itemView) {
             super(itemView);
             reviewContext = itemView.findViewById(R.id.reviewContextTextView);
             reviewReviewerName = itemView.findViewById(R.id.reviewReviewerID);
-            reviewImage = itemView.findViewById((R.id.reviewFoodImage));
+//            reviewImage = itemView.findViewById((R.id.reviewFoodImage));
+            webView = itemView.findViewById(R.id.ID_IMG);
             //likeImage = itemView.findViewById(R.id.)
             reviewRating = itemView.findViewById(R.id.reviewRatingBar);
             //reviewCardLayout = itemView.findViewById(R.id.reviewCardView);

@@ -17,11 +17,19 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaChungHyangKorean;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaChungHyangWestern;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaDormitory;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaHanul;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaKBob;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaProfessor;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaStudent;
 import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -97,7 +105,6 @@ public class HomeFragment extends Fragment {
                         // menu 띄워주는 adapter에 받아온 jsonObject을 넘김
                         cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
                         viewPager2.setAdapter(cafeteriaViewPagerAdapter);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
