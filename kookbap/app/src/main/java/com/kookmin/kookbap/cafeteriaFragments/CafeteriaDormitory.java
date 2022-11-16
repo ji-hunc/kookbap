@@ -27,6 +27,12 @@ public class CafeteriaDormitory extends Fragment {
     MenuDataAdapter reviewDataAdapter;
     private final JSONObject jsonObject;
     String date;
+    static ArrayList<String> menus = new ArrayList<>();
+
+
+    public static ArrayList<String> getDormitoryMenus() {
+        return menus;
+    }
 
     public CafeteriaDormitory(JSONObject jsonObject, String date) {
         this.jsonObject = jsonObject;
@@ -41,40 +47,13 @@ public class CafeteriaDormitory extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         reviewData = new ArrayList<>();
         reviewDataAdapter = new MenuDataAdapter(reviewData, requireActivity().getApplicationContext());
-        ArrayList<String> boothNames = new ArrayList<>();
 
-        try {
-            JSONObject jsonObject2 = jsonObject.getJSONObject("생활관식당 정기식(생활관 A동 1층)").getJSONObject(date);
-            Log.e("json1", jsonObject2.toString());
-            Iterator<String> iter = jsonObject2.keys();
-            while (iter.hasNext()) {
-                String boothName = iter.next().toString();
-                boothNames.add(boothName);
-            }
-
-            try {
-                for (int i=0; i<boothNames.size(); i++) {
-                    String menu = jsonObject2.getJSONObject(boothNames.get(i)).getString("메뉴");
-                    String price = jsonObject2.getJSONObject(boothNames.get(i)).getString("가격");
-//                Log.e("menu", menu);
-//                Log.e("price", price);
-
-                    String[] array = menu.split("\r\n");
-                    if (!menu.equals("") && !price.equals("")) {
-                        menu = array[0];
-                        reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
-                    }
-
-                }
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity().getApplicationContext(), "메뉴 데이터 처리 중 어딘가에서 인덱스 에러가 났습니다. 로그를 확인하세요", Toast.LENGTH_SHORT).show();
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-//            Log.e("json2", jsonObject.toString());
+        MenuDataParser menuDataParser = new MenuDataParser(jsonObject, date);
+        ArrayList<String> menuDatas = menuDataParser.getDormitoryMenuData();
+        for (int i=0; i<menuDatas.size()/2; i++) {
+            reviewData.add(new MenuData(menuDatas.get(i), "아직 작성된 리뷰가 없습니다.", menuDatas.get(menuDatas.size()/2 + i), "delicious", R.drawable.ic_setting, (float) (Math.random() * 5), 0));
         }
+
         recyclerView.setAdapter(reviewDataAdapter);
 
         return view;

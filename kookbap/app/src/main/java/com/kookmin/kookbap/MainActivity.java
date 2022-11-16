@@ -3,34 +3,20 @@ package com.kookmin.kookbap;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     HomeFragment homeFragment = new HomeFragment();
     ReviewFragment reviewFragment = new ReviewFragment();
-    RestaurantFragment restaurantFragment = new RestaurantFragment();
+    RecommendMenuFragment recommendMenuFragment = new RecommendMenuFragment();
     SettingFragment settingFragment = new SettingFragment();
 
     @Override
@@ -56,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         return true;
                     case R.id.restaurant:
-                        changeFragment(restaurantFragment);
+                        changeFragment(recommendMenuFragment);
                         return true;
                     case R.id.setting:
                         changeFragment(settingFragment);
