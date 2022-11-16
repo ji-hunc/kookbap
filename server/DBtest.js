@@ -41,7 +41,7 @@ request(options, function (error, response, body) {
 //json 다 받아오고 실행.
 setTimeout(() => {
     var day = new Date(S_DATE);
-    for (var j = 0; j < 100; j++) {
+    for (var j = 0; j < 111; j++) {
         day.setDate(day.getDate() + 1);
         var goToSql = staffRest(
             menuJsonObject,
@@ -73,9 +73,22 @@ async function updateSql(data) {
         FROM menu_appearance A join menu M on M.menu_id = A.menu_Id
         Where restaurant_name = '${data.restaurant}' and menu_name = "${data.menuName}" and date="${data.date}";`,
         function (error, results) {
-            // var appearCheck = results[0].appearCheck;
-            // if (appearCheck == 0) {
-            // }
+            var appearCheck = results[0].appearCheck;
+            if (appearCheck == 0) {
+                db.query(
+                    `SELECT menu_id FROM Kookbob.menu
+                    where menu_name = '${data.menuName}' and restaurant_name = "${data.restaurant}";`,
+                    function (error, results) {
+                        var menu_id = results[0].menu_id;
+                        db.query(
+                            `insert into menu_appearance (menu_id, date) values ("${menu_id}", "${data.date}");`,
+                            function (error, results) {
+                                console.log(menu_id, data.date);
+                            }
+                        );
+                    }
+                );
+            }
         }
     );
 }
