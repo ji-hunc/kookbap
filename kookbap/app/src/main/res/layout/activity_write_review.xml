@@ -17,29 +17,31 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             >
-
             <TextView
-                android:id="@+id/myMenu"
-                android:layout_width="130dp"
+                android:id="@+id/write_review_dateText"
+                android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:hint="매뉴명"
-                android:textSize="40dp" />
+                />
+            <Button
+                android:id="@+id/write_review_datebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_toRightOf="@id/write_review_dateText"
+                android:text="날짜 선택"
+                />
 
-            <TextView
-                android:id="@+id/myPrice"
+            <Spinner
+                android:id="@+id/write_review_toDayMenu"
                 android:layout_width="150dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_toRightOf="@id/myMenu"
-                android:hint="가격"
-                android:textSize="20dp" />
+                android:layout_height="50dp"
+                android:layout_toRightOf="@id/write_review_datebtn" />
+
 
             <ImageView
                 android:id="@+id/myFood"
                 android:layout_width="260dp"
                 android:layout_height="200dp"
-                android:layout_below="@id/myMenu"
+                android:layout_below="@id/write_review_datebtn"
                 android:src="@drawable/ic_add" />
 
             <RatingBar

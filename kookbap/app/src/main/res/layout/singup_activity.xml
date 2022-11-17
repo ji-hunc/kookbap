@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/Singup_img"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/example_img"
+        android:layout_centerHorizontal="true"
+        />
+    <LinearLayout
+        android:id="@+id/Singup_email_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Singup_img"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp"
+        >
+        <EditText
+            android:id="@+id/Singup_email"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:maxLines="1"
+            android:hint="Email"
+            android:layout_marginLeft="50dp"
+            />
+        <TextView
+            android:id="@+id/Singup_datcom"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="kookmin.ac.kr"
+            />
+    </LinearLayout>
+    <EditText
+        android:id="@+id/Singup_password"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:maxLines="1"
+        android:hint="PassWord"
+        android:inputType="textPassword"
+        android:layout_below="@id/Singup_email_layout"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        />
+    <EditText
+        android:id="@+id/Singup_name"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:maxLines="1"
+        android:hint="닉네임 설정"
+        android:inputType="text"
+        android:layout_below="@id/Singup_password"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        />
+    <Button
+        android:id="@+id/Singup_checkEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="이메일 인증"
+        android:layout_below="@id/Singup_name"
+
+        />
+    <Button
+        android:id="@+id/Singup_singup_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Singup_checkEmail"
+        android:text="회원가입"
+        />
+
+
+
+</RelativeLayout>
