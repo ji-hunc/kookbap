@@ -58,6 +58,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         Log.e("url", reviewDataArray.get(position).getImage());
         holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
+        holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
 
 
         // TODO 메뉴 버튼을 눌렀을 때, 본인이면 신고/수정/삭제하기<->아니면 신고하기만, 현재는 다 가능
@@ -141,9 +142,9 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
             super(itemView);
             reviewContext = itemView.findViewById(R.id.reviewContextTextView);
             reviewReviewerName = itemView.findViewById(R.id.reviewReviewerID);
+            reviewDate = itemView.findViewById(R.id.reviewDate);
 //            reviewImage = itemView.findViewById((R.id.reviewFoodImage));
             webView = itemView.findViewById(R.id.ID_IMG);
-            //likeImage = itemView.findViewById(R.id.)
             reviewRating = itemView.findViewById(R.id.reviewRatingBar);
             //reviewCardLayout = itemView.findViewById(R.id.reviewCardView);
             editMenuImageButton = itemView.findViewById(R.id.reviewEditMenuImageView);

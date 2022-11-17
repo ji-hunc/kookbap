@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/review"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="7dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/reviewCardView"
@@ -68,31 +69,10 @@
                         android:layout_gravity="left"
                         android:text="0" />
 
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_review_menu"
-                    android:id="@+id/reviewEditMenuImageView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/reviewFoodImage"-->
-            <!--                android:layout_width="200dp"-->
-            <!--                android:layout_height="200dp"-->
-            <!--                android:layout_gravity="center_horizontal|top"-->
-            <!--                app:srcCompat="@drawable/ic_review" />-->
-
-            <WebView
-                android:id="@+id/ID_IMG"
-                android:layout_width="200dp"
+            <WebView android:id="@+id/ID_IMG"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="300dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal|top"
                 android:clickable="false"
@@ -100,8 +80,9 @@
                 android:scrollbars="none" />
 
             <TextView
+                android:layout_gravity="center"
                 android:id="@+id/reviewContextTextView"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="리뷰 내용" />
         </LinearLayout>
