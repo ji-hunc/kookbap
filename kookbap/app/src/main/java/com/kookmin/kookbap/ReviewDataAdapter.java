@@ -46,6 +46,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         Log.e("url", reviewDataArray.get(position).getImage());
         holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
+        holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
 
 
 
@@ -64,7 +65,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
     }
 
     public class ReviewDataViewHolder extends RecyclerView.ViewHolder {
-        TextView reviewContext, reviewReviewerName;
+        TextView reviewContext, reviewReviewerName, reviewDate;
         ImageView reviewImage, likeImage;
         RatingBar reviewRating;
         WebView webView;
@@ -73,11 +74,10 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
             super(itemView);
             reviewContext = itemView.findViewById(R.id.reviewContextTextView);
             reviewReviewerName = itemView.findViewById(R.id.reviewReviewerID);
+            reviewDate = itemView.findViewById(R.id.reviewDate);
 //            reviewImage = itemView.findViewById((R.id.reviewFoodImage));
             webView = itemView.findViewById(R.id.ID_IMG);
-            //likeImage = itemView.findViewById(R.id.)
             reviewRating = itemView.findViewById(R.id.reviewRatingBar);
-            //reviewCardLayout = itemView.findViewById(R.id.reviewCardView);
         }
     }
 }

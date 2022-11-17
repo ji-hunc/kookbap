@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    android:layout_marginBottom="7dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/reviewCardView"
@@ -31,13 +31,15 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/reviewDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2022-11-04"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RatingBar
@@ -49,22 +51,28 @@
                     android:numStars="5"
                     android:rating="2.5"
                     android:stepSize="0.5"
-                    android:theme="@style/RatingBar" />
+                    android:theme="@style/RatingBar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:text="좋아요 수 : "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"/>
+                    android:layout_gravity="left"
+                    android:text="좋아요: "
+                    app:layout_constraintEnd_toStartOf="@+id/reviewLikes"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/reviewLikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:text="0"/>
+                    android:text="0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 <!--            <ImageView-->
 <!--                android:id="@+id/reviewFoodImage"-->
@@ -74,7 +82,9 @@
 <!--                app:srcCompat="@drawable/ic_review" />-->
 
             <WebView android:id="@+id/ID_IMG"
-                android:layout_width="200dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="300dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal|top"
                 android:scrollbars="none"
@@ -82,8 +92,9 @@
                 android:focusable="false"/>
 
             <TextView
+                android:layout_gravity="center"
                 android:id="@+id/reviewContextTextView"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="리뷰 내용"/>
         </LinearLayout>
