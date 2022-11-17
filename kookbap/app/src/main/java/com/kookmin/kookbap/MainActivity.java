@@ -10,6 +10,8 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.kookmin.kookbap.ReviewRank.ReviewFragment;
+import com.kookmin.kookbap.cafeteriaFragments.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
