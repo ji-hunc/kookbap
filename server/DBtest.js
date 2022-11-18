@@ -48,6 +48,7 @@ setTimeout(() => {
     for (var j = 0; j < prograssDate; j++) {
         day.setDate(day.getDate() + 1); //청향의경우 7일(+7)로 설정
         var goToSql = chunghyangKoRest(
+            // 함수명 밑에있는걸로 바꿔가며 쓰면 됨
             menuJsonObject,
             day.toISOString().split("T")[0]
         );
@@ -58,6 +59,7 @@ setTimeout(() => {
     }
 }, 500);
 
+//sql 서버에 탑제
 async function updateSql(data) {
     try {
         if (data.menuName.includes("미운영") || data.menuName == "") {
@@ -103,6 +105,7 @@ async function updateSql(data) {
     }
 }
 
+// 교직원식당 json 재가공
 function staffRest(data, date) {
     var name = "교직원식당(복지관 1층)";
     var connerList = ["키친1", "키친2", "석식"];
@@ -140,7 +143,7 @@ function staffRest(data, date) {
     } catch (e) {}
     return returnArray;
 }
-
+// 한울 json 재가공
 function hanwoolRest(data, date) {
     var name = "한울식당(법학관 지하1층)";
     var connerList = [
@@ -191,7 +194,7 @@ function hanwoolRest(data, date) {
     } catch (e) {}
     return returnArray;
 }
-
+//학생식당 json 재가공
 function studentRest(data, date) {
     var name = "학생식당(복지관 1층)";
     var connerList = [
@@ -244,6 +247,7 @@ function studentRest(data, date) {
     return returnArray;
 }
 
+//청향 json 재가공
 function chunghyangKoRest(data, date) {
     var name = "청향 한식당(법학관 5층)";
     var connerList = [
