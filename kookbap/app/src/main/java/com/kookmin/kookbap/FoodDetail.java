@@ -56,8 +56,11 @@ public class FoodDetail extends AppCompatActivity {
         addReviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // FoodDetail에서 받은 메뉴정보들 리뷰작성 페이지로 전달
                 Intent intent = new Intent(getApplicationContext(),WriteReview.class);
-                intent.putExtra("menuName",foodDetailName.getText());
+                intent.putExtra("signal", 2); // INFORMED_WRITE. 메뉴정보를 가지고 리뷰작성 페이지로 이동하는 경우
+                intent.putExtra("restaurantName", getIntent().getStringExtra("restaurantName"));
+                intent.putExtra("foodName", getIntent().getStringExtra("foodName"));
                 startActivity(intent);
             }
         });

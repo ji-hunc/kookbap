@@ -86,4 +86,43 @@ router.post('/post', parser, function(request, response) {
     )
 })
 
+router.post('/modify', parser, function(request, response) {
+    console.log(request.body);
+
+    if (request.body.isUploadNewImage == 'false') {
+        // 이미지를 수정하지 않은 경우
+        db.query(`UPDATE review SET star = '${request.body.star}', description = '${request.body.description}' WHERE review_number = '${request.body.reviewNumber}';`);
+        console.log('modified');
+    } else {
+        // 이미지를 수정한 경우
+        // TODO 기존이미지 삭제 코드 추가해야함
+        request.files.image.name = `${request.body.menuName}_${request.body.reviewUserId}_${new Date().toISOString().slice(0, 19).replace('T', ' ')}.png`;
+        const { image } = request.files;
+        image.mv(__dirname + '/../public/images/' + image.name);
+        var imageUrl = request.files.image.name;
+        db.query(`UPDATE review SET star = '${request.body.star}', description = '${request.body.description}', image = '${imageUrl}' WHERE review_number = '${request.body.reviewNumber}';`);
+
+    }
+
+    // 결과값 전송
+    response.json(
+        {
+        "success": true,
+        "message": "GOOD"
+        }
+    )
+});
+
+router.post('/delete', function(request, response) {
+    console.log(request.body);
+    db.query(`DELETE FROM review WHERE review_number = '${request.body.reviewNumber}';`);
+
+    response.json(
+        {
+        "success": true,
+        "message": "GOOD"
+        }
+    )
+});
+
 module.exports = router;

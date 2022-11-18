@@ -5,11 +5,12 @@ public class MenuData {
     String subMenuName;
     String price;
     String reviewText;
+    String restaurantName;
     int image;
     float stars;
     int heart;
 
-    public MenuData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart) {
+    public MenuData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart, String restaurantName) {
         this.menuName = menuName;
         this.subMenuName = subMenuName;
         this.price = price;
@@ -17,6 +18,7 @@ public class MenuData {
         this.image = image;
         this.stars = stars;
         this.heart = heart;
+        this.restaurantName = restaurantName;
     }
 
     public MenuData(String a, String subMenuName, int i, String delicious, int ic_setting, float stars, int heart) {
@@ -76,5 +78,9 @@ public class MenuData {
 
     public void setSubMenuName(String subMenuName) {
         this.subMenuName = subMenuName;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
     }
 }

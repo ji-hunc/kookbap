@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.add_review:
                         Intent intent = new Intent(getApplicationContext(), WriteReview.class);
+                        // 아무 정보 없이 일반 적으로 작성하는 Signal 1번. 2번 -> 메뉴 접속후 작성, 3번 -> 수정
+                        intent.putExtra("signal", 1);
                         startActivity(intent);
                         return true;
                     case R.id.restaurant:

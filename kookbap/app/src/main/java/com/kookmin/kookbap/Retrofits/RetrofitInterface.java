@@ -95,4 +95,16 @@ public interface RetrofitInterface {
     Call<Result> uploadFileWithPartMap(
             @PartMap() Map<String, RequestBody> partMap,
             @Part MultipartBody.Part file);
+
+    @Multipart
+    @POST("/review/modify")
+    Call<Result> modifyReview(
+            @PartMap() Map<String, RequestBody> partMap,
+            @Part MultipartBody.Part file);
+
+    @FormUrlEncoded
+    @POST("/review/delete")
+    Call<Result> deleteReview(
+            @Field("reviewNumber") int reviewNumber
+    );
 }
