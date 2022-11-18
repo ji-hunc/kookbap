@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.add_review:
                         Intent intent = new Intent(getApplicationContext(), WriteReview.class);
-                        // 아무 정보 없이 일반 적으로 작성하는 Signal 1번. 2번 -> 메뉴 접속후 작성, 3번 -> 수정
+                        // signal: 1 아무런 정보 없이 바텀네비게이션에서 클릭하여 생으로 리뷰를 작성하는 경우
+                        // signal: 2 메뉴 상세페이지에서 리뷰를 작성하는 경우
+                        // signal: 3 리뷰 수정하기로 리뷰 작성페이지를 들어가는 경우
                         intent.putExtra("signal", 1);
                         startActivity(intent);
                         return true;

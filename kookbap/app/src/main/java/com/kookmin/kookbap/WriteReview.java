@@ -113,9 +113,12 @@ public class WriteReview extends AppCompatActivity {
         fixedLayout = findViewById(R.id.fixedLayout);
         menuNameTextview = findViewById(R.id.menuNameTextview);
 
-        /***********
-        // 리뷰 작성페이지를 signal에 따라 다른 경우로 진입함. 1번 -> 그냥 작성. 2번 -> 메뉴 상세페이지에서 작성. 3번 -> 수정
-        ************/
+        /**************************************************************************************************************************
+        * 리뷰 작성페이지를 signal에 따라 다른 경우로 진입함
+        * signal: 1 -> GENERAL_WRITE   Bottom Navigation 에서 진입한 경우: 초기화할 아무런 데이터가 없음
+        * signal: 2 -> INFORMED_WRITE  메뉴 상세페이지에서 진입한 경우: 메뉴이름을 초기화하고, 날짜, 식당을 없앰
+        * signal: 3 -> MODIFY_WRITE    리뷰카드의 수정하기를 눌러서 진입한 경우: 메뉴이름, 이미지, 별점, 리뷰내용을 초기화하고 날짜, 식당을 없앰
+        ***************************************************************************************************************************/
         int reviewWriteSignal = getIntent().getIntExtra("signal", 0);
 
         //사진 등록

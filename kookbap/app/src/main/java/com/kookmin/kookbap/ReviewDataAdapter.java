@@ -65,7 +65,6 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.webView.setFocusable(false);
         holder.webView.getSettings().setUseWideViewPort(true);
         holder.webView.getSettings().setLoadWithOverviewMode(true);
-        Log.e("url", reviewDataArray.get(position).getImage());
         holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
         holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
@@ -82,9 +81,9 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()){
                             case R.id.editMenuDoEditReview:
-                                // 수정하기창 초기화에 필요한 데이터들과, DB에서 key로 쓰일 review_number를 넘겨줌
+                                // 수정하기모드로 리뷰작성페이지 들어갈시에 초기화에 필요한 데이터들과, DB에서 key로 쓰일 review_number를 넘겨줌
                                 Intent intent = new Intent(view.getContext(),WriteReview.class);
-                                intent.putExtra("signal", 3);
+                                intent.putExtra("signal", 3); // signal: 3 수정하기 모드
                                 intent.putExtra("review_number", reviewDataArray.get(position).getReview_number());
                                 intent.putExtra("foodName", reviewDataArray.get(position).getMenu_name());
                                 intent.putExtra("star", reviewDataArray.get(position).getStar());
@@ -100,7 +99,10 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                                        // DB에서 reivew 테이블의 키로 쓰일 review_number를 인텐트로 받아옴
                                         int reviewNumber = reviewDataArray.get(position).getReview_number();
+
+                                        // 레트로핏 수정하는 함수 deleteReview(int reviewNumber)를 부름
                                         Call<Result> call = RetrofitClient.getApiService().deleteReview(reviewNumber);
                                         call.enqueue(new Callback<Result>() {
                                             @Override
@@ -114,7 +116,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                                     // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
                                                     if (success) {
                                                         Log.e("LOGLOG", "success1");
-
+                                                        Toast.makeText(view.getContext(),"정상적으로 삭제되었습니다.",Toast.LENGTH_SHORT).show();
                                                         Log.e("서버에서 받아온내용", message);
                                                     } else {
                                                         Log.e("LOGLOG", "success2");
@@ -130,13 +132,9 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                             @Override
                                             public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
                                                 Log.e("LOGLOG", "success4");
-
                                             }
                                         });
-
-
                                         //사라져라 얍!
-                                        Toast.makeText(view.getContext(),holder.reviewContext.getText().toString()+"가 삭제됨.",Toast.LENGTH_SHORT).show();
                                         dialogInterface.dismiss();
                                     }
                                 })
@@ -168,14 +166,6 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                 popupMenu.show();
             }
         });
-
-//        holder.likeImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                holder.likeImage.setSelected(!holder.likeImage.isSelected());
-//            }
-//        });
-
     }
 
     @Override
