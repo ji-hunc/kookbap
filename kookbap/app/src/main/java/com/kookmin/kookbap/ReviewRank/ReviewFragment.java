@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.ReviewRank;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.kookmin.kookbap.MainActivity;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
+import com.kookmin.kookbap.R;
 
 import java.util.ArrayList;
 
@@ -130,7 +133,7 @@ public class ReviewFragment extends Fragment {
         for( int i =0; i<3; i++){
             String name = i +"등";
             int rank = i;
-            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
+            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0, "식당이름 알 수 없음"));
             bestReviewerData.add(new BestReviewerData( rank,"uzznknown",(10-i)*100));
         }
 

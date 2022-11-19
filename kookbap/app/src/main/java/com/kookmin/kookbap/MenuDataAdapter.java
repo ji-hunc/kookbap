@@ -45,6 +45,7 @@ public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDa
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // FoodDetail 페이지(메뉴 클릭했을 때 나오는 리뷰 리스트 페이지)로 클릭한 메뉴 데이터 정보 intent로 전달
                 Intent intent = new Intent(context, FoodDetail.class);
                 intent.putExtra("foodName", MenuDataArray.get(position).getMenuName());
                 intent.putExtra("foodNameSide", MenuDataArray.get(position).getSubMenuName());
@@ -52,6 +53,7 @@ public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDa
                 intent.putExtra("image", MenuDataArray.get(position).getImage());
                 intent.putExtra("heart", MenuDataArray.get(position).getHeart());
                 intent.putExtra("rating", MenuDataArray.get(position).getStars());
+                intent.putExtra("restaurantName", MenuDataArray.get(position).getRestaurantName());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });

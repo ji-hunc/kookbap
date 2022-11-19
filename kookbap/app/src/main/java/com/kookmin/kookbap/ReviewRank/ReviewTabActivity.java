@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.ReviewRank;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
+import com.kookmin.kookbap.R;
+
 import java.util.ArrayList;
 
 public class ReviewTabActivity extends AppCompatActivity {
@@ -65,7 +70,7 @@ public class ReviewTabActivity extends AppCompatActivity {
         for( int i =0; i<10; i++){
             String name = i +"등";
             int rank = i;
-            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.test_bread_picture, (float) (Math.random()*5), 0));
+            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.test_bread_picture, (float) (Math.random()*5), 0, "식당이름 알 수 없음"));
             bestReviewerData.add(new BestReviewerData( rank,"uzznknown",(10-i)*100));
         }
     }

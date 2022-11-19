@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.Retrofits;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

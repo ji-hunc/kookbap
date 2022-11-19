@@ -10,6 +10,8 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.kookmin.kookbap.ReviewRank.ReviewFragment;
+import com.kookmin.kookbap.cafeteriaFragments.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.add_review:
                         Intent intent = new Intent(getApplicationContext(), WriteReview.class);
+                        // signal: 1 아무런 정보 없이 바텀네비게이션에서 클릭하여 생으로 리뷰를 작성하는 경우
+                        // signal: 2 메뉴 상세페이지에서 리뷰를 작성하는 경우
+                        // signal: 3 리뷰 수정하기로 리뷰 작성페이지를 들어가는 경우
+                        intent.putExtra("signal", 1);
                         startActivity(intent);
                         return true;
                     case R.id.restaurant:
