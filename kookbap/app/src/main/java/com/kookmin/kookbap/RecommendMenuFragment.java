@@ -92,36 +92,36 @@ public class RecommendMenuFragment extends Fragment {
 //        });
 
 //         Retrofit 으로 서버와 통신히여 menu 데이터를 받아오는 부분
-        Call<Object> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
-        call = RetrofitClient.getApiService().getMenuData();
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                    try {
-                        jsonObject = new JSONObject(new Gson().toJson(response.body()));
-
-                        // menu 띄워주는 adapter에 받아온 jsonObject을 넘김
-                        cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
-                        recommendMenuViewPager.setAdapter(cafeteriaViewPagerAdapter);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
-                Log.e("Error", t.getMessage());
-            }
-        });
+//        Call<Object> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
+//        call = RetrofitClient.getApiService().getMenuData();
+//        call.enqueue(new Callback<Object>() {
+//            @Override
+//            public void onResponse(@NonNull Call call, @NonNull Response response) {
+//                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+//                    try {
+//                        jsonObject = new JSONObject(new Gson().toJson(response.body()));
+//
+//                        // menu 띄워주는 adapter에 받아온 jsonObject을 넘김
+//                        cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
+//                        recommendMenuViewPager.setAdapter(cafeteriaViewPagerAdapter);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+//                Log.e("Error", t.getMessage());
+//            }
+//        });
 
         recommendMenuTabLayout = view.findViewById(R.id.recommendMenuTabLayout);
         recommendMenuTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                recommendMenuViewPager.setCurrentItem(tab.getPosition());
+//                recommendMenuViewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -135,14 +135,14 @@ public class RecommendMenuFragment extends Fragment {
             }
         });
 
-        recommendMenuViewPager= view.findViewById(R.id.recommendMenuViewPager);
-        recommendMenuViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                Objects.requireNonNull(recommendMenuTabLayout.getTabAt(position)).select();
-            }
-        });
+//        recommendMenuViewPager= view.findViewById(R.id.recommendMenuViewPager);
+//        recommendMenuViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                super.onPageSelected(position);
+//                Objects.requireNonNull(recommendMenuTabLayout.getTabAt(position)).select();
+//            }
+//        });
 
         return view;
     }
