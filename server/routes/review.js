@@ -31,6 +31,15 @@ router.get('/:menuName', function(request, response) {
 });
 
 
+router.get('/users/:userName', function(request, response) {
+    db.query(`SELECT * FROM review WHERE review_user_id = '${request.params.userName}'`, function(error, results) {
+        console.log(request.params.menuName);
+        response.json(results);
+        console.log(results);
+    })
+});
+
+
 router.get('/', function(request, response) {
     response.send("GOOD");
 });

@@ -44,6 +44,15 @@ public interface RetrofitInterface {
     );
 
 
+    // review/users 페이지에 유저 이름으로 들어갔을 때
+    // http://kookbap.run.goorm.io/review/users/jihun
+    // http://10.0.2.2:3000/review/users/jihun
+    @GET("/review/users/{userName}") // 주소를 /review/users/:userName 으로 쿼리 넣어서
+    Call<ArrayList<ReviewData>> getUserReviewData(
+            @Path("userName") String userName
+    );
+
+
     // review 업로드. 이미지와 다른 변수들을 같이 보내려면 다른 변수들은 HashMap으로 묶어서 보내야만 함.
     // http://kookbap.run.goorm.io/review/post
     // http://10.0.2.2:3000/review/post
