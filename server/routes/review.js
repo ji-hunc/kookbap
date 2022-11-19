@@ -11,9 +11,7 @@ const upload = multer({dest: 'images/'}); //dest : 저장 위치
 var fs = require("fs");
 
 
-
 var mysql = require('mysql');
-const path = require('path');
 var db = mysql.createConnection({
   host     : '127.0.0.1',
   user     : 'root',
@@ -35,7 +33,6 @@ router.get('/:menuName', function(request, response) {
 
 router.get('/', function(request, response) {
     response.send("GOOD");
-    //   response.send(`<img src="/images/qq_jihun_2022-11-14 03:29:02.png" style="width:300px; display:block; margin:10px;">`);
 });
 
 
