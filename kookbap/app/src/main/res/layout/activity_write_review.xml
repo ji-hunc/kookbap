@@ -12,33 +12,54 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/myMenu_info"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/selectAbleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-            <Spinner
-                android:id="@+id/cafeteriaSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <Spinner
+                    android:id="@+id/cafeteriaSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/write_review_dateText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <ImageView
-                android:id="@+id/write_review_datebtn"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="날짜 선택"
-                android:src="@drawable/ic_calendar"/>
-            <Spinner
-                android:id="@+id/menuSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/write_review_dateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:id="@+id/write_review_datebtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="날짜 선택"
+                    android:src="@drawable/ic_calendar"/>
+                <Spinner
+                    android:id="@+id/menuSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:id="@+id/fixedLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/menuNameTextview"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="메뉴이름"/>
+            </LinearLayout>
+        </FrameLayout>
 
         <ImageView
             android:layout_marginTop="15dp"

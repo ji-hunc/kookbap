@@ -8,6 +8,7 @@ var parser = bodyParser.urlencoded({extended: false});
 
 const multer = require('multer');
 const upload = multer({dest: 'images/'}); //dest : 저장 위치
+var fs = require("fs");
 
 
 var mysql = require('mysql');
@@ -32,7 +33,6 @@ router.get('/:menuName', function(request, response) {
 
 router.get('/', function(request, response) {
     response.send("GOOD");
-    //   response.send(`<img src="/images/qq_jihun_2022-11-14 03:29:02.png" style="width:300px; display:block; margin:10px;">`);
 });
 
 
@@ -77,7 +77,7 @@ router.post('/post', parser, function(request, response) {
         });
     })
 
-    // 결과값 전송
+    // 결과값 전송 일단은 무조건 GOOD
     response.json(
         {
         "success": true,
@@ -85,5 +85,78 @@ router.post('/post', parser, function(request, response) {
         }
     )
 })
+
+router.post('/modify', parser, function(request, response) {
+    console.log(request.body);
+
+    if (request.body.isUploadNewImage == 'false') {
+        // 이미지를 수정하지 않은 경우
+        db.query(`UPDATE review SET star = '${request.body.star}', description = '${request.body.description}' WHERE review_number = '${request.body.reviewNumber}';`);
+        console.log('modified');
+    } else {
+        // 이미지를 수정한 경우
+        // 기존의 이미지 삭제
+        db.query(`SELECT image FROM review WHERE review_number = '${request.body.reviewNumber}';`, function(error, result) {
+            if (error) {
+                console.log(error);
+            }
+            file_name = result[0].image;
+            console.log("public/images/" + file_name);
+    
+            try {
+                fs.unlinkSync("public/images/" + file_name);
+                console.log("image delete!");
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+        // 새로운 이미지 파일이름 변경 후, 다시 저장 및 review table에 Image link 업데이트
+        request.files.image.name = `${request.body.menuName}_${request.body.reviewUserId}_${new Date().toISOString().slice(0, 19).replace('T', ' ')}.png`;
+        const { image } = request.files;
+        image.mv(__dirname + '/../public/images/' + image.name);
+        var imageUrl = request.files.image.name;
+        db.query(`UPDATE review SET star = '${request.body.star}', description = '${request.body.description}', image = '${imageUrl}' WHERE review_number = '${request.body.reviewNumber}';`);
+
+    }
+
+    // 결과값 전송 일단은 무조건 GOOD
+    response.json(
+        {
+        "success": true,
+        "message": "GOOD"
+        }
+    )
+});
+
+router.post('/delete', function(request, response) {
+    console.log(request.body);
+    // reviewNumber로 지울 리뷰의 사진파일 이름을 구하고, 삭제
+    db.query(`SELECT image FROM review WHERE review_number = '${request.body.reviewNumber}';`, function(error, result) {
+        if (error) {
+            console.log(error);
+        }
+        file_name = result[0].image;
+        console.log("public/images/" + file_name);
+
+        try {
+            fs.unlinkSync("public/images/" + file_name);
+            console.log("image delete!");
+        } catch (error) {
+            console.log(error);
+        }
+    });
+    // 사진파일은 위에서 지웠고, review table에서 해당 Row 삭제
+    db.query(`DELETE FROM review WHERE review_number = '${request.body.reviewNumber}';`);
+
+
+    // 결과값 전송 일단은 무조건 GOOD
+    response.json(
+        {
+        "success": true,
+        "message": "GOOD"
+        }
+    )
+});
 
 module.exports = router;
