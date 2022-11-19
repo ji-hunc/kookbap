@@ -532,8 +532,8 @@ public class WriteReview extends AppCompatActivity {
             int reviewNumberOrigin = getIntent().getIntExtra("review_number", 0);
             float oldStar = getIntent().getFloatExtra("star", 0);
             String oldDescription = getIntent().getStringExtra("description");
-            String imageUrl = "http://10.0.2.2:3000/images/" + getIntent().getStringExtra("imageUrl");
-//            String imageUrl = "https://kookbap.run.goorm.io/images/" + getIntent().getStringExtra("imageUrl");
+//            String imageUrl = "http://10.0.2.2:3000/images/" + getIntent().getStringExtra("imageUrl");
+            String imageUrl = "https://kookbap.run.goorm.io/images/" + getIntent().getStringExtra("imageUrl");
 
 
             // 외부이미지 이미지뷰에 적용해주는 클래스
