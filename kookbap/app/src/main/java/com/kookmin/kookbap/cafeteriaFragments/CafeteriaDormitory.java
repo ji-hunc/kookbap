@@ -51,7 +51,7 @@ public class CafeteriaDormitory extends Fragment {
         MenuDataParser menuDataParser = new MenuDataParser(jsonObject, date);
         ArrayList<String> menuDatas = menuDataParser.getDormitoryMenuData();
         for (int i=0; i<menuDatas.size()/2; i++) {
-            reviewData.add(new MenuData(menuDatas.get(i), "아직 작성된 리뷰가 없습니다.", menuDatas.get(menuDatas.size()/2 + i), "delicious", R.drawable.ic_setting, (float) (Math.random() * 5), 0, "생활관식당"));
+            reviewData.add(new MenuData(menuDatas.get(i), "아직 작성된 리뷰가 없습니다.", menuDatas.get(menuDatas.size()/2 + i), "delicious", R.drawable.ic_spoon, (float) (Math.random() * 5), 0, "생활관식당"));
         }
 
         recyclerView.setAdapter(reviewDataAdapter);
