@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.ReviewRank;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.kookmin.kookbap.MainActivity;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
+import com.kookmin.kookbap.R;
 
 import java.util.ArrayList;
 

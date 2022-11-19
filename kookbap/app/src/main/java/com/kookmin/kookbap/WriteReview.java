@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,28 +31,23 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 
 import com.google.gson.Gson;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaHanul;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaStudent;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
+import com.kookmin.kookbap.Retrofits.Result;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
 import com.kookmin.kookbap.cafeteriaFragments.MenuDataParser;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import okhttp3.MediaType;
@@ -62,7 +56,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Field;
 
 
 public class WriteReview extends AppCompatActivity {

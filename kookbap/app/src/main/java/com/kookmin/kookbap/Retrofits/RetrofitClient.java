@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.Retrofits;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
