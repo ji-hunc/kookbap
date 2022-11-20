@@ -82,6 +82,9 @@ public interface RetrofitInterface {
             @Field("reviewNumber") int reviewNumber
     );
 
+    @GET("/rank/review/total_review")
+    Call<ArrayList<RankData>> getUserReviewRankData();
+
 
 //    @Multipart
 ////    @FormUrlEncoded

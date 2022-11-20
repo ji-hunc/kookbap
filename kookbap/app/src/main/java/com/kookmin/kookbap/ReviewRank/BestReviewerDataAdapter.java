@@ -1,5 +1,6 @@
 package com.kookmin.kookbap.ReviewRank;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kookmin.kookbap.R;
+import com.kookmin.kookbap.Retrofits.RankData;
 
 import java.util.ArrayList;
 
 public class BestReviewerDataAdapter extends RecyclerView.Adapter<BestReviewerDataAdapter.BestReviewerViewHolder>{
-    private ArrayList<BestReviewerData> bestReviewerData;
+    private ArrayList<RankData> bestReviewerData;
+    Context context;
+
+    public BestReviewerDataAdapter(ArrayList<RankData> bestReviewerData, Context context){
+        this.bestReviewerData = bestReviewerData;
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -24,17 +32,19 @@ public class BestReviewerDataAdapter extends RecyclerView.Adapter<BestReviewerDa
 
     @Override
     public void onBindViewHolder(@NonNull BestReviewerViewHolder holder, int position) {
-        holder.onBind(bestReviewerData.get(position));
+        holder.rank.setText(bestReviewerData.get(position).getNickname()+"");
+        holder.name.setText(bestReviewerData.get(position).getNickname()+"");
+        holder.reviewCount.setText(bestReviewerData.get(position).getTotal()+"");
     }
 
     @Override
     public int getItemCount() {
-        return bestReviewerData.size();
+        return this.bestReviewerData.size();
     }
-    public void setBestReviewerData(ArrayList<BestReviewerData> bestReviewerData){
-        this.bestReviewerData = bestReviewerData;
-        notifyDataSetChanged();
-    }
+//    public void setBestReviewerData(ArrayList<RankData> bestReviewerData){
+//        this.bestReviewerData = bestReviewerData;
+//        notifyDataSetChanged();
+//    }
 
 
      class BestReviewerViewHolder extends RecyclerView.ViewHolder{
@@ -46,11 +56,6 @@ public class BestReviewerDataAdapter extends RecyclerView.Adapter<BestReviewerDa
             rank = itemView.findViewById(R.id.reviewRank);
             name = itemView.findViewById(R.id.reviewerName);
             reviewCount = itemView.findViewById(R.id.reviewCount);
-        }
-        void onBind(BestReviewerData bestReviewerData){
-            rank.setText(bestReviewerData.getRank()+"");
-            name.setText(bestReviewerData.getName());
-            reviewCount.setText(bestReviewerData.getCount()+"");
         }
     }
 }

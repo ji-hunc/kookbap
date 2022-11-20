@@ -1,13 +1,5 @@
 const express = require("express");
-const request = require("request");
-const app = express();
 var router = express.Router();
-
-var bodyParser = require("body-parser");
-var parser = bodyParser.urlencoded({ extended: false });
-
-const multer = require("multer");
-var fs = require("fs");
 
 var mysql = require("mysql");
 var db = mysql.createConnection({
@@ -40,12 +32,13 @@ router.get("/:section/:category", function (request, response) {
         }
         //리뷰 많은 리뷰어
         else if (category == "total_review") {
-            querySentence = `select review_user_id, count(*) as total from Kookbob.review group by review_user_id order by total desc limit 10`;
+            querySentence = `select review_user_id as user_id, nickname, total from Kookbob.user U join (select review_user_id, count(*) as total from Kookbob.review group by review_user_id order by total desc limit 10) R on U.user_id = R.review_user_id order by total desc`;
         }
     }
 
     db.query(querySentence, function (error, results) {
-        response.send(results);
+        response.json(results);
+        console.log(results);
     });
 });
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.MenuDataAdapter;
 import com.kookmin.kookbap.R;
+import com.kookmin.kookbap.Retrofits.RankData;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class ReviewTabActivity extends AppCompatActivity {
 
     String targetData; // intent로 어떤것의 더보기인가 받아올 정보
 
-    ArrayList<BestReviewerData> bestReviewerData;
+    ArrayList<RankData> bestReviewerData;
     BestReviewerDataAdapter bestReviewerDataAdapter;
     ArrayList<MenuData> starRankReviewData;
     MenuDataAdapter reviewDataAdapter;
@@ -39,15 +40,15 @@ public class ReviewTabActivity extends AppCompatActivity {
         textView.setText(targetData);
 
         //testdata 생성, 리사이클러뷰 지정
-        createTestData();
+        //createTestData();
         recyclerView = findViewById(R.id.showMoreRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //intent에서 보낸대로 데이터받아 화면생성.
         switch (targetData){
             case "bestReviewer":
-                bestReviewerDataAdapter = new BestReviewerDataAdapter();
-                recyclerView.setAdapter(bestReviewerDataAdapter);
-                bestReviewerDataAdapter.setBestReviewerData(bestReviewerData);
+//                bestReviewerDataAdapter = new BestReviewerDataAdapter();
+//                recyclerView.setAdapter(bestReviewerDataAdapter);
+//                bestReviewerDataAdapter.setBestReviewerData(bestReviewerData);
                 break;
 
             default:
@@ -71,7 +72,7 @@ public class ReviewTabActivity extends AppCompatActivity {
             String name = i +"등";
             int rank = i;
             starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.test_bread_picture, (float) (Math.random()*5), 0, "식당이름 알 수 없음"));
-            bestReviewerData.add(new BestReviewerData( rank,"uzznknown",(10-i)*100));
+            bestReviewerData.add(new RankData("!","1","1"));
         }
     }
 }
