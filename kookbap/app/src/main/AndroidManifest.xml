@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Kookbap"
         tools:targetApi="31">
         <activity
-            android:name=".ReviewRank.ReviewTabActivity"
+            android:name=".ReviewRank.ShowMoreRankActivity"
             android:exported="false" />
         <activity
             android:name=".FoodDetail"
