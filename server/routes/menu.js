@@ -24,7 +24,7 @@ request(options, function(error, response, body) {
     menuJsonObject = JSON.parse(body);
 
 	hanulMenus = menuJsonObject['한울식당(법학관 지하1층)'];
-	for (var i=10; i < 21; i++) {
+	for (var i=21; i < 22; i++) {
 		var date = "2022-11-" + i;
 
 		menuEachDate = hanulMenus[date];
