@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.ReviewRank;
 
 // bestReviewer class
 public class BestReviewerData {

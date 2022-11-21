@@ -3,34 +3,22 @@ package com.kookmin.kookbap;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
+import com.kookmin.kookbap.ReviewRank.ReviewFragment;
+import com.kookmin.kookbap.cafeteriaFragments.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     HomeFragment homeFragment = new HomeFragment();
     ReviewFragment reviewFragment = new ReviewFragment();
-    RestaurantFragment restaurantFragment = new RestaurantFragment();
+    RecommendMenuFragment recommendMenuFragment = new RecommendMenuFragment();
     SettingFragment settingFragment = new SettingFragment();
 
     @Override
@@ -53,10 +41,14 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.add_review:
                         Intent intent = new Intent(getApplicationContext(), WriteReview.class);
+                        // signal: 1 아무런 정보 없이 바텀네비게이션에서 클릭하여 생으로 리뷰를 작성하는 경우
+                        // signal: 2 메뉴 상세페이지에서 리뷰를 작성하는 경우
+                        // signal: 3 리뷰 수정하기로 리뷰 작성페이지를 들어가는 경우
+                        intent.putExtra("signal", 1);
                         startActivity(intent);
                         return true;
                     case R.id.restaurant:
-                        changeFragment(restaurantFragment);
+                        changeFragment(recommendMenuFragment);
                         return true;
                     case R.id.setting:
                         changeFragment(settingFragment);

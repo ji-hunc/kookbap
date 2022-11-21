@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.MenuData;
@@ -39,34 +40,11 @@ public class CafeteriaChungHyangKorean extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         reviewData = new ArrayList<>();
         reviewDataAdapter = new MenuDataAdapter(reviewData, requireActivity().getApplicationContext());
-        ArrayList<String> boothNames = new ArrayList<>();
 
-        try {
-            JSONObject jsonObjectBoothNames = jsonObject.getJSONObject("청향 한식당(법학관 5층)").getJSONObject(date);
-            Iterator<String> iter = jsonObjectBoothNames.keys();
-
-            while (iter.hasNext()) {
-                String boothName = iter.next().toString();
-                boothNames.add(boothName);
-            }
-
-            for (int i=0; i<boothNames.size(); i++) {
-                String menu = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("메뉴");
-                String price = jsonObjectBoothNames.getJSONObject(boothNames.get(i)).getString("가격");
-                price = price.replaceAll("[^0-9]", "").replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-//                Log.e("menu", menu);
-//                Log.e("price", price);
-
-                String[] array = menu.split("\r\n");
-                if (!((menu.equals("")) && (price.equals("")))) {
-                    menu = array[0];
-                    reviewData.add(new MenuData(menu, "아직 작성된 리뷰가 없습니다.", price, "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
-                }
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-//            Log.e("json2", jsonObject.toString());
+        MenuDataParser menuDataParser = new MenuDataParser(jsonObject, date);
+        ArrayList<String> menuDatas = menuDataParser.getChungHyangKoreanMenuData();
+        for (int i=0; i<menuDatas.size()/2; i++) {
+            reviewData.add(new MenuData(menuDatas.get(i), "아직 작성된 리뷰가 없습니다.", menuDatas.get(menuDatas.size()/2 + i), "delicious", R.drawable.ic_spoon, (float) (Math.random() * 5), 0, "청향 한식당"));
         }
         recyclerView.setAdapter(reviewDataAdapter);
 
