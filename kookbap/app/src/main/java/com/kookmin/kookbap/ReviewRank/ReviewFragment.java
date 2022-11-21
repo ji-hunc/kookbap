@@ -108,6 +108,9 @@ public class ReviewFragment extends Fragment {
                         } //스크롤 방지
                     });
                 }else{
+                        }
+                    });
+                } else {
                 }
             }
             @Override
@@ -115,6 +118,7 @@ public class ReviewFragment extends Fragment {
                 Log.d("tag","fail");
             }
         });
+
         //좋아요 많은 순 항목
         Call<ArrayList<MenuData>> mostLikeMenuCall;
         mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData("total_like",3);
