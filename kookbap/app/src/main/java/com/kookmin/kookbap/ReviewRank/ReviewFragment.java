@@ -153,7 +153,14 @@ public class ReviewFragment extends Fragment {
                     ArrayList<RankData> bestReviewerData=(ArrayList<RankData>) response.body();
                     bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, getActivity().getApplicationContext());
                     bestReviewerData.add(new RankData("1","1","2"));
-                }else{
+                    bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
+                    bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+                        @Override
+                        public boolean canScrollVertically(){
+                            return false;
+                        }
+                    });
+                } else {
                 }
             }
             @Override
@@ -161,17 +168,6 @@ public class ReviewFragment extends Fragment {
                 Log.d("tag","fail");
             }
         });
-
-        bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
-        bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
-            @Override
-            public boolean canScrollVertically(){
-                return false;
-            }
-        });
-
-
-
 
         menuDataAdapter = new MenuDataAdapter(starRankReviewData, getActivity().getApplicationContext());
         firstReviewRecycler.setAdapter(menuDataAdapter);
