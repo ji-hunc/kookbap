@@ -14,19 +14,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.RatingBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,8 +56,11 @@ public class FoodDetail extends AppCompatActivity {
         addReviewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // FoodDetail에서 받은 메뉴정보들 리뷰작성 페이지로 전달
                 Intent intent = new Intent(getApplicationContext(),WriteReview.class);
-                intent.putExtra("menuName",foodDetailName.getText());
+                intent.putExtra("signal", 2); // INFORMED_WRITE. 메뉴정보를 가지고 리뷰작성 페이지로 이동하는 경우
+                intent.putExtra("restaurantName", getIntent().getStringExtra("restaurantName"));
+                intent.putExtra("foodName", getIntent().getStringExtra("foodName"));
                 startActivity(intent);
             }
         });

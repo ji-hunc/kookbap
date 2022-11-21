@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.cafeteriaFragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -17,20 +17,12 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaChungHyangKorean;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaChungHyangWestern;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaDormitory;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaHanul;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaKBob;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaProfessor;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaStudent;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
+import com.kookmin.kookbap.R;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
