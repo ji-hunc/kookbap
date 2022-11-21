@@ -14,7 +14,7 @@ var mysql = require("mysql");
 var db = mysql.createConnection({
     host: "127.0.0.1",
     user: "root",
-    password: "YOUR PASSWORD",
+    password: "wlgns620",
     database: "Kookbob",
     port: "3306",
 });
@@ -32,19 +32,19 @@ router.get("/:menuName", function (request, response) {
 });
 
 router.get("/users/:userName", function (request, response) {
-    db.query(
-        `SELECT * FROM review WHERE review_user_id = '${request.params.userName}'`,
+    db.query(`SELECT * FROM review WHERE review_user_id = '${request.params.userName}'`,
         function (error, results) {
             console.log(request.params.menuName);
             response.json(results);
             console.log(results);
-        }
-    );
+    });
 });
+
 
 router.get("/", function (request, response) {
     response.send("GOOD");
 });
+
 
 router.post("/post", parser, function (request, response) {
     console.log(request.body);
@@ -52,10 +52,8 @@ router.post("/post", parser, function (request, response) {
     console.log(request.files);
     console.log("Enter!!!!!");
 
-    db.query(
-        `SELECT EXISTS (SELECT menu_name FROM menu WHERE menu_name='${request.body.menuName}' limit 1) as success;`,
+    db.query(`SELECT EXISTS (SELECT menu_name FROM menu WHERE menu_name='${request.body.menuName}' limit 1) as success;`,
         function (error, results) {
-            // results의 형식: [ RowDataPacket { success: 1 } ]
             if (results[0].success == 0) {
                 // 클라이언트로부터 받아온 menu_name 데이터가 menu 테이블에 없음.
                 // 신규 메뉴로 menu 테이블에 등록해야함
