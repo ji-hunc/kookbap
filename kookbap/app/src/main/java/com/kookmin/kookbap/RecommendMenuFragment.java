@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -44,10 +45,15 @@ public class RecommendMenuFragment extends Fragment {
     JSONObject jsonObject;
     String date;
 
+    ViewPager2 viewPager22;
+
+
     TabLayout recommendMenuTabLayout;
     RecyclerView recommendMenuBestRecyclerView;
     ArrayList<MenuData> recommendMenuData;
     MenuDataAdapter recommendMenuDataAdapter;
+    CafeteriaViewPagerAdapter cafeteriaViewPagerAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,16 +83,46 @@ public class RecommendMenuFragment extends Fragment {
             }
         });
 
-        recommendMenuBestRecyclerView = view.findViewById(R.id.recommendMenuBestRecyclerView);
-        recommendMenuData = new ArrayList<MenuData>();
-        recommendMenuDataAdapter = new MenuDataAdapter(recommendMenuData, getContext());
+        viewPager22 = view.findViewById(R.id.viewPager22);
+
+        Call<ArrayList<MenuData>> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
+        call = RetrofitClient.getApiService().getRecommendMenuData("jihun");
+        call.enqueue(new Callback<ArrayList<MenuData>>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                    try {
+                        jsonObject = new JSONObject(new Gson().toJson(response.body()));
+
+                        // menu 띄워주는 adapter에 받아온 jsonObject을 넘김
+                        cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
+                        viewPager22.setAdapter(cafeteriaViewPagerAdapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
+
+        // Retrofit 으로 서버와 통신히여 menu 데이터를 받아오는 부분
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recommendMenuBestRecyclerView.setLayoutManager(linearLayoutManager);
-        recommendMenuBestRecyclerView.setAdapter(recommendMenuDataAdapter);
-
-        loadUserReviewsData();
+//        recommendMenuBestRecyclerView = view.findViewById(R.id.recommendMenuBestRecyclerView);
+//        recommendMenuData = new ArrayList<MenuData>();
+//        recommendMenuDataAdapter = new MenuDataAdapter(recommendMenuData, getContext());
+//
+//
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//        recommendMenuBestRecyclerView.setLayoutManager(linearLayoutManager);
+//        recommendMenuBestRecyclerView.setAdapter(recommendMenuDataAdapter);
+//
+//        loadUserReviewsData();
 
 
         recommendMenuTabLayout = view.findViewById(R.id.recommendMenuTabLayout);

@@ -1,5 +1,6 @@
 package com.kookmin.kookbap.Retrofits;
 
+import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.ReviewData;
 
 import org.json.JSONObject;
@@ -84,6 +85,14 @@ public interface RetrofitInterface {
 
     @GET("/rank/review/total_review")
     Call<ArrayList<RankData>> getUserReviewRankData();
+
+    // recommendMenu/users 페이지에 유저 이름으로 들어갔을 때.
+    // http://kookbap.run.goorm.io/recommendMenu/jihun
+    // http://10.0.2.2:3000/recommendMenu/jihun"
+    @GET("/recommendMenu/{userName}")
+    Call<ArrayList<MenuData>> getRecommendMenuData(
+            @Path("userName") String userName
+    );
 
 
 //    @Multipart
