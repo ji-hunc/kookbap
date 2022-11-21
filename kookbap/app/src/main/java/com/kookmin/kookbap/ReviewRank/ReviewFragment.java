@@ -107,12 +107,9 @@ public class ReviewFragment extends Fragment {
                             return false;
                         } //스크롤 방지
                     });
-                }else{
-                        }
-                    });
-                } else {
-                }
-            }
+                }else{}
+                    }
+
             @Override
             public void onFailure(Call<ArrayList<RankData>> call, Throwable t) {
                 Log.d("tag","fail");
