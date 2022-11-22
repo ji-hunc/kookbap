@@ -4,14 +4,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.google.android.material.tabs.TabLayout;
@@ -23,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -37,14 +42,18 @@ public class RecommendMenuFragment extends Fragment {
     String selectTime = times[0];
     String[] cafeterias = {"전체", "한울식당", "학생식당", "교직원식당", "K-BOB",
             "청향 한식당", "청향 양식당", "생활관식당 정기식"};
-//    String selectCafeteria = cafeterias[0];
     JSONObject jsonObject;
-    CafeteriaViewPagerAdapter cafeteriaViewPagerAdapter;
-    MenuDataAdapter menuDataAdapter;
     String date;
 
+    ViewPager2 viewPager22;
+
+
     TabLayout recommendMenuTabLayout;
-    ViewPager2 recommendMenuViewPager;
+    RecyclerView recommendMenuBestRecyclerView;
+    ArrayList<MenuData> recommendMenuData;
+    MenuDataAdapter recommendMenuDataAdapter;
+    CafeteriaViewPagerAdapter cafeteriaViewPagerAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,7 +65,6 @@ public class RecommendMenuFragment extends Fragment {
         date = sdf.format(today);
 
         timeSpinner = view.findViewById(R.id.recommendMenuTimeSpinner);
-//        cafeteriaSpinner = view.findViewById(R.id.recommendMenuCafeteriaSpinner);
 
         ArrayAdapter<String> timesAdapter = new ArrayAdapter<String>(
                 getContext(), android.R.layout.simple_spinner_item, times
@@ -75,27 +83,11 @@ public class RecommendMenuFragment extends Fragment {
             }
         });
 
-//        ArrayAdapter<String> cafeteriasAdapter = new ArrayAdapter<String>(
-//                getContext(), android.R.layout.simple_spinner_item, cafeterias
-//        );
-//        cafeteriasAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-//        cafeteriaSpinner.setAdapter(cafeteriasAdapter);
-//        cafeteriaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                selectCafeteria = cafeterias[i];
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
+        viewPager22 = view.findViewById(R.id.viewPager22);
 
-//         Retrofit 으로 서버와 통신히여 menu 데이터를 받아오는 부분
-        Call<Object> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
-        call = RetrofitClient.getApiService().getMenuData();
-        call.enqueue(new Callback<Object>() {
+        Call<ArrayList<MenuData>> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
+        call = RetrofitClient.getApiService().getRecommendMenuData("jihun");
+        call.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
@@ -104,7 +96,7 @@ public class RecommendMenuFragment extends Fragment {
 
                         // menu 띄워주는 adapter에 받아온 jsonObject을 넘김
                         cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), jsonObject, date);
-                        recommendMenuViewPager.setAdapter(cafeteriaViewPagerAdapter);
+                        viewPager22.setAdapter(cafeteriaViewPagerAdapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -118,11 +110,26 @@ public class RecommendMenuFragment extends Fragment {
             }
         });
 
+        // Retrofit 으로 서버와 통신히여 menu 데이터를 받아오는 부분
+
+
+//        recommendMenuBestRecyclerView = view.findViewById(R.id.recommendMenuBestRecyclerView);
+//        recommendMenuData = new ArrayList<MenuData>();
+//        recommendMenuDataAdapter = new MenuDataAdapter(recommendMenuData, getContext());
+//
+//
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//        recommendMenuBestRecyclerView.setLayoutManager(linearLayoutManager);
+//        recommendMenuBestRecyclerView.setAdapter(recommendMenuDataAdapter);
+//
+//        loadUserReviewsData();
+
+
         recommendMenuTabLayout = view.findViewById(R.id.recommendMenuTabLayout);
         recommendMenuTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                recommendMenuViewPager.setCurrentItem(tab.getPosition());
+//                recommendMenuViewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -136,15 +143,12 @@ public class RecommendMenuFragment extends Fragment {
             }
         });
 
-        recommendMenuViewPager= view.findViewById(R.id.recommendMenuViewPager);
-        recommendMenuViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                Objects.requireNonNull(recommendMenuTabLayout.getTabAt(position)).select();
-            }
-        });
 
         return view;
     }
+    public void loadUserReviewsData(){
+//        recommendMenuData.add(new MenuData("menuName", "subMenuName", "price", "reviewText", 123, 4, 3));
+        recommendMenuDataAdapter.notifyDataSetChanged();
+    }
+
 }
