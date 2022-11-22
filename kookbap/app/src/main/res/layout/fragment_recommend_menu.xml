@@ -7,88 +7,22 @@
     tools:context=".RecommendMenuFragment"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="오늘의 추천 메뉴"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="30dp"/>
-
-    <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right">
-
-        <Spinner
-            android:id="@+id/recommendMenuTimeSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-
-    </LinearLayout>
-
-    <com.google.android.material.tabs.TabLayout
-        app:tabMode="scrollable"
-        android:id="@+id/recommendMenuTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="전체"/>-->
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="한울식당"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="학생식당"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="교직원식당"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="K-Bob"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="청향 한식당"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="청향 양식당"/>
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="생활관식당 정기식"/>
-
-    </com.google.android.material.tabs.TabLayout>
 
 
     <TextView
+        android:layout_marginTop="15dp"
+        android:id="@+id/testTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BEST 추천 메뉴"/>
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recommendMenuBestRecyclerView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"/>-->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager22"
+        android:gravity="center_horizontal"
+        android:text="BEST 추천 메뉴"
+        android:textSize="35dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recommendMenuRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
+
 
 
 
