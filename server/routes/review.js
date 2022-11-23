@@ -14,15 +14,29 @@ var mysql = require("mysql");
 var db = mysql.createConnection({
     host: "127.0.0.1",
     user: "root",
-    password: "wlgns620",
+    password: "12341234",
     database: "Kookbob",
     port: "3306",
 });
 db.connect();
 
 router.get("/:menuName", function (request, response) {
+    //request에서 받아온 query로 어떻게 정렬할지 지정.
+    var orderBy = request.query.orderBy;
+    switch (orderBy) {
+        case "최신순":
+            orderBy = "write_date desc";
+            break;
+        case "높은 평점순":
+            orderBy = "star desc";
+            break;
+        case "낮은 평점순":
+            orderBy = "star asc";
+            break;
+    }
+
     db.query(
-        `SELECT * FROM review WHERE menu_name = '${request.params.menuName}'`,
+        `SELECT * FROM review WHERE menu_name = '${request.params.menuName}' order by ${orderBy} ;`,
         function (error, results) {
             console.log(request.params.menuName);
             response.json(results);
@@ -32,19 +46,19 @@ router.get("/:menuName", function (request, response) {
 });
 
 router.get("/users/:userName", function (request, response) {
-    db.query(`SELECT * FROM review WHERE review_user_id = '${request.params.userName}'`,
+    db.query(
+        `SELECT * FROM review WHERE review_user_id = '${request.params.userName}'`,
         function (error, results) {
             console.log(request.params.menuName);
             response.json(results);
             console.log(results);
-    });
+        }
+    );
 });
-
 
 router.get("/", function (request, response) {
     response.send("GOOD");
 });
-
 
 router.post("/post", parser, function (request, response) {
     console.log(request.body);
@@ -52,7 +66,8 @@ router.post("/post", parser, function (request, response) {
     console.log(request.files);
     console.log("Enter!!!!!");
 
-    db.query(`SELECT EXISTS (SELECT menu_name FROM menu WHERE menu_name='${request.body.menuName}' limit 1) as success;`,
+    db.query(
+        `SELECT EXISTS (SELECT menu_name FROM menu WHERE menu_name='${request.body.menuName}' limit 1) as success;`,
         function (error, results) {
             if (results[0].success == 0) {
                 // 클라이언트로부터 받아온 menu_name 데이터가 menu 테이블에 없음.

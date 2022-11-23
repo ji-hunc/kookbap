@@ -13,7 +13,11 @@ public class MenuData {
     String menuName;
 
     String subMenuName;
+
+    @SerializedName("price")
+    @Expose
     String price;
+
     String reviewText;
 
     @SerializedName("restaurant_name")

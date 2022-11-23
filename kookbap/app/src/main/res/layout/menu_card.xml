@@ -52,16 +52,31 @@
                         android:text="반찬 이름 나열"
                         android:textSize="13sp" />
 
-                <RatingBar
-                    android:id="@+id/foodRatingBar"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:numStars="5"
-                    android:rating="2.5"
-                    android:stepSize="0.5"
-                    android:theme="@style/RatingBar" />
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/foodRatingBar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:numStars="5"
+                        android:rating="2.5"
+                        android:stepSize="0.5"
+                        android:theme="@style/RatingBar" />
+
+                    <TextView
+                        android:id="@+id/foodRatingNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="평균별점"
+                        android:textAlignment="viewStart"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

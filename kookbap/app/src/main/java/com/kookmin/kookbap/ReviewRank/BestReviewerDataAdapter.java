@@ -31,9 +31,9 @@ public class BestReviewerDataAdapter extends RecyclerView.Adapter<BestReviewerDa
 
     @Override
     public void onBindViewHolder(@NonNull BestReviewerViewHolder holder, int position) {
-        holder.rank.setText(bestReviewerData.get(position).getNickname()+"");
+        holder.rank.setText(position+1+"등");
         holder.name.setText(bestReviewerData.get(position).getNickname()+"");
-        holder.reviewCount.setText(bestReviewerData.get(position).getTotal()+"");
+        holder.reviewCount.setText(bestReviewerData.get(position).getTotal()+"개");
     }
 
     @Override
