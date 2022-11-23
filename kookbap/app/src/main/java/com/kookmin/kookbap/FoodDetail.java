@@ -29,7 +29,7 @@ import retrofit2.Response;
 
 public class FoodDetail extends AppCompatActivity {
 
-    TextView foodDetailName, foodDetailNameSide, foodDetailPrice;
+    TextView foodDetailName, foodDetailNameSide, foodDetailPrice, foodDetailRatingNum;
     ImageView foodDetailImage, foodDetailHeart;
     RatingBar foodDetailRating;
     FloatingActionButton addReviewButton;
@@ -51,6 +51,7 @@ public class FoodDetail extends AppCompatActivity {
         //foodDetailImage = findViewById(R.id.foodDetailImage);
         foodDetailHeart = findViewById(R.id.foodDetailHeart);
         foodDetailRating = findViewById(R.id.foodDetailRatingBar);
+        foodDetailRatingNum = findViewById(R.id.foodDetailRatingNum);
 
         addReviewButton = findViewById(R.id.reviewAddReviewButton);
         addReviewButton.setOnClickListener(new View.OnClickListener() {
@@ -92,22 +93,14 @@ public class FoodDetail extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedWay = adapterView.getSelectedItem().toString();
                 Call<ArrayList<ReviewData>> call;
-                call = RetrofitClient.getApiService().getReviewData(menuName);
+                // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
+                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay);
                 call.enqueue(new Callback<ArrayList<ReviewData>>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) {
                         if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
                             ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
-                            //TODO 여기에 정렬 할 수 있도록 하기
-                            switch (selectedWay){
-                                case "최신순":
-                                    break;
-                                case "높은 평점순":
-                                    break;
-                                case "낮은 평점 순":
-                                    break;
-                            }
                             reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList);
                             reviewRecyclerView.setAdapter(reviewDataAdapter);
                         } else {
@@ -130,9 +123,10 @@ public class FoodDetail extends AppCompatActivity {
         // 리뷰 페이지 최상단 정보 내용 초기화 부분
         foodDetailName.setText(menuName);
         foodDetailNameSide.setText(getIntent().getStringExtra(("foodNameSide")));
-        foodDetailPrice.setText(getIntent().getStringExtra(("price")));
+        foodDetailPrice.setText("₩" +getIntent().getStringExtra(("price")));
         //foodDetailImage.setImageResource(getIntent().getIntExtra("image", 0));
         foodDetailRating.setRating(getIntent().getFloatExtra("rating", 0));
+        foodDetailRatingNum.setText(getIntent().getStringExtra("ratingNum"));
 
 
         foodDetailHeart.setOnClickListener(new View.OnClickListener() {

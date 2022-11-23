@@ -40,9 +40,11 @@ public interface RetrofitInterface {
     // review 페이지에 메뉴 이름으로 들어갔을 때
     // http://kookbap.run.goorm.io/review/김치찌개
     // http://10.0.2.2:3000/review/김치찌개
+    // 쿼리로 어떻게 정렬할 것인지를 받아옴
     @GET("/review/{menuName}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
     Call<ArrayList<ReviewData>> getReviewData(
-            @Path("menuName") String menuName
+            @Path("menuName") String menuName,
+            @Query("orderBy") String orderBy
     );
 
     // recommendMenu/users 페이지에 유저 이름으로 들어갔을 때.

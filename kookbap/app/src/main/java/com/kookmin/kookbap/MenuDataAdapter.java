@@ -36,11 +36,14 @@ public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDa
 
     @Override
     public void onBindViewHolder(@NonNull MenuDataAdapter.MenuDataViewHolder holder, final int position) {
+
         holder.foodName.setText(MenuDataArray.get(position).getMenuName());
         holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenuName());
-        holder.foodPrice.setText(MenuDataArray.get(position).getPrice());
+        holder.foodPrice.setText("₩ "+MenuDataArray.get(position).getPrice());
         holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
         holder.foodRating.setRating(MenuDataArray.get(position).getStars());
+        //반올림해서 소수점 한자리까지 화면에 보여줌
+        holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStars()));
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +56,9 @@ public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDa
                 intent.putExtra("image", MenuDataArray.get(position).getImage());
                 intent.putExtra("heart", MenuDataArray.get(position).getHeart());
                 intent.putExtra("rating", MenuDataArray.get(position).getStars());
+                intent.putExtra("ratingNum", String.format("%.1f",MenuDataArray.get(position).getStars()));
                 intent.putExtra("restaurantName", MenuDataArray.get(position).getRestaurantName());
+
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -75,7 +80,7 @@ public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDa
 
     public static class MenuDataViewHolder extends RecyclerView.ViewHolder {
 
-        TextView foodName, foodNameSide, foodPrice;
+        TextView foodName, foodNameSide, foodPrice, foodRatingNum;
         ImageView foodImage, foodHeart;
         RatingBar foodRating;
         LinearLayout cardLayout;
@@ -89,6 +94,7 @@ public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDa
             foodHeart = itemView.findViewById(R.id.foodHeart);
             foodRating = itemView.findViewById(R.id.foodRatingBar);
             cardLayout = itemView.findViewById(R.id.cardLayout);
+            foodRatingNum = itemView.findViewById(R.id.foodRatingNum);
         }
     }
 }
