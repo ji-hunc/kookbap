@@ -18,6 +18,7 @@ var S_DATE = "2022-01-03"; //월요일
 
 var S_DATE = new Date().toISOString().split("T")[0]; // 오늘로 설정
 
+
 //데이터 뽑아낼때 쓸 객체
 class menuData {
     constructor(restaurant, menuName, price, date) {
@@ -38,12 +39,15 @@ request(options, function (error, response, body) {
         console.log(error);
     }
     menuJsonObject = JSON.parse(body);
+
     console.log(menuJsonObject);
+
 });
 
 var prograssDate = Math.ceil(
     (new Date(E_DATE) - new Date(S_DATE)) / (1000 * 60 * 60 * 24)
 ); //2022- 01-01 부터 현재까지 일수 계산
+
 
 // 교직원식당: staffRest
 // 한울식당: hanwoolRest
@@ -66,6 +70,7 @@ setTimeout(() => {
         );
         for (var i = 0; i < goToSqlstaff.length; i++) {
             updateSql(goToSqlstaff[i]);
+
         }
 
         //한울식당 등록
