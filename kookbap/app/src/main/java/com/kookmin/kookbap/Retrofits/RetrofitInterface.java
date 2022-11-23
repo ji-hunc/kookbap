@@ -3,9 +3,8 @@ package com.kookmin.kookbap.Retrofits;
 import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.RankData;
-
+import com.kookmin.kookbap.testRecommendMenuData;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -44,6 +43,14 @@ public interface RetrofitInterface {
     @GET("/review/{menuName}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
     Call<ArrayList<ReviewData>> getReviewData(
             @Path("menuName") String menuName
+    );
+
+    // recommendMenu/users 페이지에 유저 이름으로 들어갔을 때.
+    // http://kookbap.run.goorm.io/recommendMenu/jihun
+    // http://10.0.2.2:3000/recommendMenu/jihun"
+    @GET("/recommendMenu/{userName}")
+    Call<ArrayList<testRecommendMenuData>> getRecommendMenuData(
+            @Path("userName") String userName
     );
 
 
@@ -93,6 +100,7 @@ public interface RetrofitInterface {
             //데이터 갯수제한
             @Query("endR") int endR
     );
+
 
     @GET("/rank/menu/{category}")
     Call<ArrayList<MenuData>> getMenuReviewRankData(
