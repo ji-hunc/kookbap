@@ -1,10 +1,10 @@
 package com.kookmin.kookbap.Retrofits;
 
+import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.ReviewData;
+import com.kookmin.kookbap.ReviewRank.RankData;
 import com.kookmin.kookbap.testRecommendMenuData;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -19,6 +19,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface RetrofitInterface {
 
@@ -91,8 +92,36 @@ public interface RetrofitInterface {
             @Field("reviewNumber") int reviewNumber
     );
 
+
+    //Rank 관련 함수
+    //review와 관련된 순위
     @GET("/rank/review/total_review")
-    Call<ArrayList<RankData>> getUserReviewRankData();
+    Call<ArrayList<RankData>> getUserReviewRankData(
+            //데이터 갯수제한
+            @Query("endR") int endR
+    );
+
+
+    @GET("/rank/menu/{category}")
+    Call<ArrayList<MenuData>> getMenuReviewRankData(
+            //review_like or total_review
+            @Path("category") String category,
+            //데이터 갯수 제한
+            @Query("endR") int endR
+
+    );
+
+    //제네릭타입으로 만들어서 리팩토링할때 쓸 주소
+    @GET("/rank/{section}}/{category}")
+    Call<ArrayList<MenuData>> getRankData(
+            //
+            @Path("section") String section,
+            //review_like or total_review
+            @Path("category") String category,
+            //데이터 갯수 제한
+            @Query("endR") int endR
+
+    );
 
 //    @Multipart
 ////    @FormUrlEncoded

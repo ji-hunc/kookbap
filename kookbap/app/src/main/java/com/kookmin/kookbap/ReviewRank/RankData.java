@@ -1,4 +1,4 @@
-package com.kookmin.kookbap.Retrofits;
+package com.kookmin.kookbap.ReviewRank;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

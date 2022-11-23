@@ -93,7 +93,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/firstReviewShowMore"
+                        android:id="@+id/mostLikeMenuShowMore"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -103,7 +103,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="첫 리뷰"
+                            android:text="좋아요 많은순"
                             android:textSize="20sp" />
 
                         <TextView
@@ -114,7 +114,7 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/firstReviewRecycler"
+                        android:id="@+id/mostLikeMenuRecycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#E4BD82" />

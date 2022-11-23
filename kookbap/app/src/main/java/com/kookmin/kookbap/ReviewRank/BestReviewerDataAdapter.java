@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kookmin.kookbap.R;
-import com.kookmin.kookbap.Retrofits.RankData;
 
 import java.util.ArrayList;
 
