@@ -2,7 +2,7 @@ package com.kookmin.kookbap.Retrofits;
 
 import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.ReviewData;
-import com.kookmin.kookbap.ReviewRank.RankData;
+import com.kookmin.kookbap.ReviewRank.UserRankData;
 import com.kookmin.kookbap.testRecommendMenuData;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ public interface RetrofitInterface {
     //Rank 관련 함수
     //review와 관련된 순위
     @GET("/rank/review/total_review")
-    Call<ArrayList<RankData>> getUserReviewRankData(
+    Call<ArrayList<UserRankData>> getUserReviewRankData(
             //데이터 갯수제한
             @Query("endR") int endR
     );

@@ -3,8 +3,8 @@ package com.kookmin.kookbap.ReviewRank;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RankData {
-    public RankData(String user_id, String nickname, String total){
+public class UserRankData {
+    public UserRankData(String user_id, String nickname, String total){
         this.nickname=nickname;
         this.user_id=user_id;
         this.total=total;
@@ -21,7 +21,6 @@ public class RankData {
     @SerializedName("total")
     @Expose
     private String total;
-
 
     public String getUser_id() {
         return user_id;
@@ -46,4 +45,5 @@ public class RankData {
     public void setTotal(String total) {
         this.total = total;
     }
+
 }

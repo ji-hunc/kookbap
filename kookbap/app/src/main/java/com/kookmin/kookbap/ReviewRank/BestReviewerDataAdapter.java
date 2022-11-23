@@ -14,10 +14,10 @@ import com.kookmin.kookbap.R;
 import java.util.ArrayList;
 
 public class BestReviewerDataAdapter extends RecyclerView.Adapter<BestReviewerDataAdapter.BestReviewerViewHolder>{
-    private ArrayList<RankData> bestReviewerData;
+    private ArrayList<UserRankData> bestReviewerData;
     Context context;
 
-    public BestReviewerDataAdapter(ArrayList<RankData> bestReviewerData, Context context){
+    public BestReviewerDataAdapter(ArrayList<UserRankData> bestReviewerData, Context context){
         this.bestReviewerData = bestReviewerData;
         this.context = context;
     }
@@ -40,7 +40,7 @@ public class BestReviewerDataAdapter extends RecyclerView.Adapter<BestReviewerDa
     public int getItemCount() {
         return this.bestReviewerData.size();
     }
-//    public void setBestReviewerData(ArrayList<RankData> bestReviewerData){
+//    public void setBestReviewerData(ArrayList<UserRankData> bestReviewerData){
 //        this.bestReviewerData = bestReviewerData;
 //        notifyDataSetChanged();
 //    }

@@ -29,7 +29,7 @@ import retrofit2.Response;
 
 public class FoodDetail extends AppCompatActivity {
 
-    TextView foodDetailName, foodDetailNameSide, foodDetailPrice, foodDetailRatingNum;
+    TextView foodDetailName, foodDetailNameSide, foodDetailPrice, foodDetailRatingNum, foodDetailRestaurant;
     ImageView foodDetailImage, foodDetailHeart;
     RatingBar foodDetailRating;
     FloatingActionButton addReviewButton;
@@ -52,6 +52,7 @@ public class FoodDetail extends AppCompatActivity {
         foodDetailHeart = findViewById(R.id.foodDetailHeart);
         foodDetailRating = findViewById(R.id.foodDetailRatingBar);
         foodDetailRatingNum = findViewById(R.id.foodDetailRatingNum);
+        foodDetailRestaurant = findViewById(R.id.foodDetailRestaurant);
 
         addReviewButton = findViewById(R.id.reviewAddReviewButton);
         addReviewButton.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +128,7 @@ public class FoodDetail extends AppCompatActivity {
         //foodDetailImage.setImageResource(getIntent().getIntExtra("image", 0));
         foodDetailRating.setRating(getIntent().getFloatExtra("rating", 0));
         foodDetailRatingNum.setText(getIntent().getStringExtra("ratingNum"));
+        foodDetailRestaurant.setText(getIntent().getStringExtra("restaurantName"));
 
 
         foodDetailHeart.setOnClickListener(new View.OnClickListener() {

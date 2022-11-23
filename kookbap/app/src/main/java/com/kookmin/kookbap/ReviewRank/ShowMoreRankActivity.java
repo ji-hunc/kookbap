@@ -102,13 +102,13 @@ public class ShowMoreRankActivity extends AppCompatActivity {
 
     // review 관련된 Rank 데이터를 가져오고, recyclerview에 붙여주는 함수.
     public void getPasteDataAboutReview(int SHOW_NUM, RecyclerView recyclerView, Context context){
-        Call<ArrayList<RankData>> rankDataCall;
+        Call<ArrayList<UserRankData>> rankDataCall;
         rankDataCall = RetrofitClient.getApiService().getUserReviewRankData(SHOW_NUM);
-        rankDataCall.enqueue(new Callback<ArrayList<RankData>>() {
+        rankDataCall.enqueue(new Callback<ArrayList<UserRankData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code()==200){
-                    ArrayList<RankData> bestReviewerData=(ArrayList<RankData>) response.body();
+                    ArrayList<UserRankData> bestReviewerData=(ArrayList<UserRankData>) response.body();
                     BestReviewerDataAdapter bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, context);
                     recyclerView.setAdapter(bestReviewerDataAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -116,7 +116,7 @@ public class ShowMoreRankActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<RankData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRankData>> call, Throwable t) {
                 Log.d("tag","fail");
             }
         });

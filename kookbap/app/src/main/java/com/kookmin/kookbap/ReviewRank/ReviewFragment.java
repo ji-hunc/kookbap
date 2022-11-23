@@ -92,13 +92,13 @@ public class ReviewFragment extends Fragment {
         lotOfReviewRecycler = view.findViewById(R.id.countRankRecycler); //리뷰 많은 순 항목
 
         //베트스 리뷰어 항목
-        Call<ArrayList<RankData>> rankDataCall;
+        Call<ArrayList<UserRankData>> rankDataCall;
         rankDataCall = RetrofitClient.getApiService().getUserReviewRankData(3);
-        rankDataCall.enqueue(new Callback<ArrayList<RankData>>() {
+        rankDataCall.enqueue(new Callback<ArrayList<UserRankData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code()==200){
-                    ArrayList<RankData> bestReviewerData=(ArrayList<RankData>) response.body();
+                    ArrayList<UserRankData> bestReviewerData=(ArrayList<UserRankData>) response.body();
                     bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, getActivity().getApplicationContext());
                     bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
                     bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
@@ -111,7 +111,7 @@ public class ReviewFragment extends Fragment {
                     }
 
             @Override
-            public void onFailure(Call<ArrayList<RankData>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserRankData>> call, Throwable t) {
                 Log.d("tag","fail");
             }
         });
@@ -166,7 +166,7 @@ public class ReviewFragment extends Fragment {
 
         //리뷰 많은 순 항목 (항목 다른걸로 바까야될듯)
         Call<ArrayList<MenuData>> lotOfReviewCall;
-        lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("star_avg",3);
+        lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("count_review",3);
         lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {

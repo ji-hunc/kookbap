@@ -34,6 +34,11 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/foodDetailRestaurant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
                     android:id="@+id/foodDetailNameSide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
