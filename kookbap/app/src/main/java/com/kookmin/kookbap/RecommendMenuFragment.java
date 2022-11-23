@@ -44,7 +44,7 @@ public class RecommendMenuFragment extends Fragment {
 
         recommendMenuRecyclerView = view.findViewById(R.id.recommendMenuRecyclerView);
         testTextView = view.findViewById(R.id.testTextView);
-        testTextView.setText("123");
+        testTextView.setText("추천 메뉴 분석중...");
 
         Call<ArrayList<testRecommendMenuData>> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
         call = RetrofitClient.getApiService().getRecommendMenuData("jihun");
@@ -55,7 +55,7 @@ public class RecommendMenuFragment extends Fragment {
                     testRecommendMenuData = (ArrayList<testRecommendMenuData>) response.body();
                     menuData = new ArrayList<MenuData>();
 
-                    for (int i = 0; i < testRecommendMenuData.size(); i++){
+                    for (int i = 0; i < 5; i++){
                         menuData.add(new MenuData(testRecommendMenuData.get(i).get_menu_name(), testRecommendMenuData.get(i).get_count_review(),
                                 testRecommendMenuData.get(i).get_price(), "delicious", R.drawable.ic_spoon, testRecommendMenuData.get(i).get_star_avg(),
                                 0, testRecommendMenuData.get(i).get_restaurant_name()));
@@ -70,7 +70,7 @@ public class RecommendMenuFragment extends Fragment {
 
 
                 } else {
-                    testTextView.setText("fail");
+                    testTextView.setText("추천 메뉴 분석 실패");
                 }
             }
 
