@@ -13,8 +13,11 @@ db.connect();
 
 //기본적으로 쓸 것들.
 var menuAndPrice = ["메뉴", "가격"];
+
 var S_DATE = "2022-01-03"; //월요일
-var E_DATE = new Date().toISOString().split("T")[0]; // 오늘로 설정
+
+var S_DATE = var E_DATE = new Date().toISOString().split("T")[0]; // 오늘로 설정
+
 
 //데이터 뽑아낼때 쓸 객체
 class menuData {
@@ -36,26 +39,49 @@ request(options, function (error, response, body) {
         console.log(error);
     }
     menuJsonObject = JSON.parse(body);
+    // console.log(menuJsonObject);
+
 });
 
 var prograssDate = Math.ceil(
     (new Date(E_DATE) - new Date(S_DATE)) / (1000 * 60 * 60 * 24)
 ); //2022- 01-01 부터 현재까지 일수 계싼
 
+
+
+// 교직원식당: staffRest
+// 한울식당: hanwoolRest
+// 학생식당: studentRest
+// 청향한식당: chunghyangKoRest
+// 청향양식당: chunghyangWEstRest
+// K-Bob: KbobRest
+// 생활관식당: DormitoryRest
 //json 다 받아오고 실행.
 setTimeout(() => {
     var day = new Date(S_DATE);
     for (var j = 0; j < prograssDate; j++) {
         day.setDate(day.getDate() + 1); //청향의경우 7일(+7)로 설정
+
         var goToSql = staffRest(
             // 함수명 밑에있는걸로 바꿔가며 쓰면 됨
             menuJsonObject,
             day.toISOString().split("T")[0]
         );
 
+
         for (var i = 0; i < goToSql.length; i++) {
             updateSql(goToSql[i]);
         }
+
+        console.log("done1");
+
+        console.log(goToSql);
+        for (var i = 0; i < goToSql.length; i++) {
+            updateSql(goToSql[i]);
+            console.log("done2");
+        }
+        console.log("done3");
+
     }
 }, 500);
 
@@ -143,9 +169,17 @@ function staffRest(data, date) {
     } catch (e) {}
     return returnArray;
 }
+
 // 한울 json 재가공
 function hanwoolRest(data, date) {
     var name = "한울식당(법학관 지하1층)";
+
+// 한울 json 재가공
+function hanwoolRest(data, date) {
+    var name = "한울식당(법학관 지하1층)";
+    // 코너이름이 바뀔 가능성을 위해??
+    // var connerList = Object.keys(data);
+
     var connerList = [
         "1코너<br>SNACK1",
         "1코너<br>SNACK2",
@@ -295,3 +329,110 @@ function chunghyangKoRest(data, date) {
     } catch (e) {}
     return returnArray;
 }
+
+
+//청향 jsonWes 재가공
+function chunghyangWestRest(data, date) {
+    var name = "청향 양식당(법학관 5층)";
+    var connerList = [
+        "PASTA",
+        "RISOTTO",
+        "STEAK"
+    ];
+    var returnArray = [];
+
+    try {
+        for (var i = 0; i < connerList.length; i++) {
+            var dayMenuName;
+            var dayMenuPrice;
+
+            var temp = data[name][date][connerList[i]][menuAndPrice[0]].split("\r\n");
+            // console.log(temp);
+            // temp.split("\r\n");
+            // console.log(temp);
+            // console.log({temp});
+
+            for (var j=0; j<temp.length/2; j++) {
+                dayMenuName = temp[2*j];
+                dayMenuPrice = temp[2*j+1];
+                if (dayMenuName.includes("해산물토마토파스타")) {
+                    dayMenuName = "해산물토마토파스타";
+                    dayMenuPrice = "23,000원";
+                }
+                if (j >= 4) {
+                    dayMenuName = temp[2*j-1];
+                    dayMenuPrice = temp[2*j];
+                }
+                aa = new menuData("청향 양식당", dayMenuName, dayMenuPrice, date);
+                returnArray.push(aa);
+                console.log(aa);
+            }
+
+
+        }
+    } catch (e) {}
+    return returnArray;
+}
+
+//K-Bob jsonWes 재가공
+function KbobRest(data, date) {
+    var name = "K-Bob<sup>+</sup>";
+    var connerList = [
+        "간편도시락",
+        "김밥",
+        "분식"
+    ];
+    var returnArray = [];
+
+    try {
+        for (var i = 0; i < connerList.length; i++) {
+            var dayMenuName;
+            var dayMenuPrice;
+
+            var temp = data[name][date][connerList[i]][menuAndPrice[0]].split("\r\n");
+            temp = temp.filter(Boolean);
+            // console.log(temp);
+
+            for (var j=0; j<temp.length/2; j++) {
+                dayMenuName = temp[2*j];
+                dayMenuPrice = temp[2*j+1];
+                aa = new menuData("K-BOB", dayMenuName, dayMenuPrice, date);
+                returnArray.push(aa);
+                console.log(aa);
+            }
+
+
+        }
+    } catch (e) {}
+    return returnArray;
+}
+
+// 생활관식당 json 재가공
+function DormitoryRest(data, date) {
+    var name = "생활관식당 정기식(생활관 A동 1층)";
+    var connerList = [
+        "조식",
+        "중식",
+        "석식"
+    ];
+    var returnArray = [];
+
+    try {
+        for (var i = 0; i < connerList.length; i++) {
+            var dayMenuName;
+            var dayMenuPrice;
+
+            var temp = data[name][date][connerList[i]][menuAndPrice[0]].split("\r\n");
+            var dayMenuName = temp[0];
+            var dayMenuPrice = "정기식 신청자 한정";
+
+            if (dayMenuName != "") {
+                aa = new menuData("생활관식당 정기식", dayMenuName, dayMenuPrice, date);
+                console.log(aa);
+                returnArray.push(aa);
+            }
+        }
+    } catch (e) {}
+    return returnArray;
+}
+
