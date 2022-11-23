@@ -36,28 +36,55 @@ request(options, function (error, response, body) {
         console.log(error);
     }
     menuJsonObject = JSON.parse(body);
+    console.log(menuJsonObject);
 });
 
 var prograssDate = Math.ceil(
     (new Date(E_DATE) - new Date(S_DATE)) / (1000 * 60 * 60 * 24)
-); //2022- 01-01 부터 현재까지 일수 계싼
+); //2022- 01-01 부터 현재까지 일수 계산
 
 //json 다 받아오고 실행.
 setTimeout(() => {
     var day = new Date(S_DATE);
     for (var j = 0; j < prograssDate; j++) {
         day.setDate(day.getDate() + 1); //청향의경우 7일(+7)로 설정
-        var goToSql = staffRest(
-            // 함수명 밑에있는걸로 바꿔가며 쓰면 됨
+        // 함수명 밑에있는걸로 바꿔가며 쓰면 됨
+
+        //교직원 식당 등록
+        var goToSqlstaff = staffRest(
             menuJsonObject,
             day.toISOString().split("T")[0]
         );
+        for (var i = 0; i < goToSqlstaff.length; i++) {
+            updateSql(goToSqlstaff[i]);
+        }
 
-        for (var i = 0; i < goToSql.length; i++) {
-            updateSql(goToSql[i]);
+        //한울식당 등록
+        var goToSqlhanwool = hanwoolRest(
+            menuJsonObject,
+            day.toISOString().split("T")[0]
+        );
+        for (var i = 0; i < goToSqlhanwool.length; i++) {
+            updateSql(goToSqlhanwool[i]);
+        }
+        //학생식당 등록
+        var goToSqlstudent = studentRest(
+            menuJsonObject,
+            day.toISOString().split("T")[0]
+        );
+        for (var i = 0; i < goToSqlstudent.length; i++) {
+            updateSql(goToSqlstudent[i]);
+        }
+        //청향 등록
+        var goToSqlchunghyangKo = chunghyangKoRest(
+            menuJsonObject,
+            day.toISOString().split("T")[0]
+        );
+        for (var i = 0; i < goToSqlchunghyangKo.length; i++) {
+            updateSql(goToSqlchunghyangKo[i]);
         }
     }
-}, 500);
+}, 2000);
 
 //sql 서버에 탑제
 async function updateSql(data) {
@@ -90,9 +117,9 @@ async function updateSql(data) {
                         function (error, results) {
                             var menu_id = results[0].menu_id;
                             db.query(
-                                `insert into menu_appearance (menu_id, date) values ("${menu_id}", "${data.date}");`,
+                                `insert into menu_appearance (menu_id, date, price) values ("${menu_id}", "${data.date}", "${data.price}");`,
                                 function (error, results) {
-                                    console.log(menu_id, data.date);
+                                    console.log(menu_id, data.date, data.price);
                                 }
                             );
                         }
@@ -143,12 +170,14 @@ function staffRest(data, date) {
     } catch (e) {}
     return returnArray;
 }
+
 // 한울 json 재가공
 function hanwoolRest(data, date) {
     var name = "한울식당(법학관 지하1층)";
     var connerList = [
         "1코너<br>SNACK1",
         "1코너<br>SNACK2",
+        "2코너<BR>NOODLE",
         "3코너<br>CUTLET",
         "4코너<br>RICE.Oven",
         "5코너<br>GUKBAP.Chef",
@@ -170,7 +199,8 @@ function hanwoolRest(data, date) {
                     temp.includes("~") ||
                     temp.includes("휴점") ||
                     temp.includes("휴 점") ||
-                    temp.includes("더진국")
+                    temp.includes("더진국") ||
+                    temp.includes("휴일")
                 ) {
                     temp = "";
                 } else {
@@ -194,6 +224,7 @@ function hanwoolRest(data, date) {
     } catch (e) {}
     return returnArray;
 }
+
 //학생식당 json 재가공
 function studentRest(data, date) {
     var name = "학생식당(복지관 1층)";
