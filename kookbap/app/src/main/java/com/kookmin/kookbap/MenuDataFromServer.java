@@ -3,7 +3,7 @@ package com.kookmin.kookbap;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class testRecommendMenuData {
+public class MenuDataFromServer {
     @SerializedName("menu_Id")
     @Expose
     private int menu_Id;
@@ -40,6 +40,11 @@ public class testRecommendMenuData {
     @Expose
     private String price;
 
+//    서버(디비)에 이미지 추가되면 이미지도 받아와야 함.
+//    @SerializedName("image")
+//    @Expose
+//    private int image;
+
     public int get_menu_Id(){
         return menu_Id;
     }
@@ -72,6 +77,15 @@ public class testRecommendMenuData {
         price = price.substring(0, r) + "," + price.substring(r);
         return price;
     }
+
+//    public int get_image(){
+//        if (image == 0){
+//            return (R.drawable.ic_spoon);
+//        }
+//        else{
+//            return image;
+//        }
+//    }
 
 
 }

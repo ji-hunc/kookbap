@@ -9,16 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -30,11 +26,12 @@ import retrofit2.Response;
 public class RecommendMenuFragment extends Fragment {
     JSONObject jsonObject;
     RecyclerView recommendMenuRecyclerView;
-    testRecommendMenuData data;
-    ArrayList<testRecommendMenuData> testRecommendMenuData;
+    MenuDataFromServer data;
+    ArrayList<MenuDataFromServer> testRecommendMenuData;
     ArrayList<MenuData> menuData;
     MenuDataAdapter menuDataAdapter;
     TextView testTextView;
+    String userName = "jihun"; // 유저 구현 시 변경 필요
 
 
     @Override
@@ -46,13 +43,13 @@ public class RecommendMenuFragment extends Fragment {
         testTextView = view.findViewById(R.id.testTextView);
         testTextView.setText("추천 메뉴 분석중...");
 
-        Call<ArrayList<testRecommendMenuData>> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
-        call = RetrofitClient.getApiService().getRecommendMenuData("jihun");
-        call.enqueue(new Callback<ArrayList<testRecommendMenuData>>() {
+        Call<ArrayList<MenuDataFromServer>> call;
+        call = RetrofitClient.getApiService().getRecommendMenuData(userName);
+        call.enqueue(new Callback<ArrayList<MenuDataFromServer>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                    testRecommendMenuData = (ArrayList<testRecommendMenuData>) response.body();
+                    testRecommendMenuData = (ArrayList<MenuDataFromServer>) response.body();
                     menuData = new ArrayList<MenuData>();
 
                     for (int i = 0; i < 5; i++){
@@ -61,13 +58,11 @@ public class RecommendMenuFragment extends Fragment {
                                 0, testRecommendMenuData.get(i).get_restaurant_name()));
                     }
 
-                    testTextView.setText("오늘의 BEST 메뉴 : \n" + String.valueOf(menuData.get(0).getMenuName()));
+                    testTextView.setText(userName+" 님, 이 메뉴는 어떠세요?");
 
                     menuDataAdapter = new MenuDataAdapter(menuData, view.getContext());
                     recommendMenuRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
                     recommendMenuRecyclerView.setAdapter(menuDataAdapter);
-
-
 
                 } else {
                     testTextView.setText("추천 메뉴 분석 실패");

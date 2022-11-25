@@ -130,7 +130,7 @@ public class WriteReview extends AppCompatActivity {
                 galleryPermission = ContextCompat.checkSelfPermission(WriteReview.this, Manifest.permission.READ_EXTERNAL_STORAGE);
                 // 카메라와 앨범 중 원하는 방법을 고르기 위한 dialog 출력
                 AlertDialog.Builder dlg = new AlertDialog.Builder(WriteReview.this);
-                dlg.setTitle("프로필 사진 설정하기");
+                dlg.setTitle("리뷰 사진 등록하기");
                 final String[] selectProfileImages = new String[]{"카메라로 사진 찍기", "앨범에서 사진 가져오기"};
                 dlg.setItems(selectProfileImages, new DialogInterface.OnClickListener() {
                     @Override
