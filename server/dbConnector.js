@@ -1,3 +1,7 @@
+/*
+db접속 코드 중복 줄이기 위한 파일.
+*/
+
 var mysql = require("mysql");
 
 //로컬 db 접속

@@ -1,3 +1,9 @@
+/*
+don't use
+혹시몰라서 삭제는 안했음.
+
+*/
+
 const request = require("request");
 
 //db 연결
