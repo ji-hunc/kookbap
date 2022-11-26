@@ -27,7 +27,7 @@ app.listen(port, () => {
 var updateDB = require("./updateDb");
 var cron = require("node-cron");
 cron.schedule("*, *, 6, *, *, Sunday", () => {
-    console.log("node - cron test");
+    console.log(`주간 업데이트 일시 : ${Date()}`);
     updateDB();
     console.log("complete");
 });
