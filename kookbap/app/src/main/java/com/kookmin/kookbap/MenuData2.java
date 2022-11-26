@@ -4,9 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MenuData2 {
-    @SerializedName("menu_id")
+    @SerializedName("menu_Id")
     @Expose
-    private int menu_id;
+    private int menu_Id;
 
     @SerializedName("restaurant_name")
     @Expose
@@ -45,7 +45,7 @@ public class MenuData2 {
     }
 
     public int getMenu_id() {
-        return menu_id;
+        return menu_Id;
     }
 
     public String getRestaurant_name() {

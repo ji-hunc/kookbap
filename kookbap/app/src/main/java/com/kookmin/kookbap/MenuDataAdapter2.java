@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
 //                intent.putExtra("image", MenuDataArray.get(position).getImage());
 //                intent.putExtra("heart", MenuDataArray.get(position).getHeart());
 //                intent.putExtra("foodNameSide", MenuDataArray.get(position).getSubMenuName());
+                intent.putExtra("menuId", MenuDataArray.get(position).getMenu_id());
                 intent.putExtra("foodName", MenuDataArray.get(position).getMenu_name());
                 intent.putExtra("price", MenuDataArray.get(position).getPrice());
                 intent.putExtra("rating", MenuDataArray.get(position).getStar_avg());

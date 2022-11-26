@@ -461,6 +461,7 @@ public class WriteReview extends AppCompatActivity {
                         MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
 
 
+                        RequestBody menuId = RequestBody.create(MultipartBody.FORM, String.valueOf(getIntent().getIntExtra("menuId", 0)));
                         RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
                         RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTextview.getText().toString());
                         RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
@@ -470,6 +471,7 @@ public class WriteReview extends AppCompatActivity {
                         RequestBody restaurantName = RequestBody.create(MultipartBody.FORM, getIntent().getStringExtra("restaurantName"));
 
                         HashMap<String, RequestBody> map = new HashMap<>();
+                        map.put("menuId", menuId);
                         map.put("reviewUserId", reviewUserId);
                         map.put("menuName", menuName);
                         map.put("writeDate", writeDate);
@@ -597,6 +599,7 @@ public class WriteReview extends AppCompatActivity {
                             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), newFile);
                             MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
 
+                            RequestBody menuId = RequestBody.create(MultipartBody.FORM, String.valueOf(getIntent().getIntExtra("menuId", 0)));
                             RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
                             RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTextview.getText().toString());
                             RequestBody reviewNumber = RequestBody.create(MultipartBody.FORM, String.valueOf(reviewNumberOrigin));
@@ -605,6 +608,7 @@ public class WriteReview extends AppCompatActivity {
                             RequestBody isUploadNewImage = RequestBody.create(MultipartBody.FORM, String.valueOf(isFilledImage));
 
                             HashMap<String, RequestBody> map = new HashMap<>();
+                            map.put("menuId", menuId);
                             map.put("reviewUserId", reviewUserId);
                             map.put("menuName", menuName);
                             map.put("reviewNumber", reviewNumber);
