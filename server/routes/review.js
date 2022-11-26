@@ -9,15 +9,7 @@ const multer = require("multer");
 const upload = multer({ dest: "images/" }); //dest : 저장 위치
 var fs = require("fs");
 
-var mysql = require("mysql");
-var db = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "wlgns620",
-    database: "Kookbob",
-    port: "3306",
-});
-db.connect();
+
 
 // 메뉴 이름으로 리뷰들 조회. 정렬기준도 있음
 router.get("/:menuName", function (request, response) {
