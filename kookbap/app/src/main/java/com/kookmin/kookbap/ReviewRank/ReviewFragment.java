@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.kookmin.kookbap.MainActivity;
 import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.MenuDataAdapter;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;

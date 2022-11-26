@@ -84,6 +84,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                 // 수정하기모드로 리뷰작성페이지 들어갈시에 초기화에 필요한 데이터들과, DB에서 key로 쓰일 review_number를 넘겨줌
                                 Intent intent = new Intent(view.getContext(),WriteReview.class);
                                 intent.putExtra("signal", 3); // signal: 3 수정하기 모드
+                                intent.putExtra("menuId", reviewDataArray.get(position).getReview_menu_id_reviewd());
                                 intent.putExtra("review_number", reviewDataArray.get(position).getReview_number());
                                 intent.putExtra("foodName", reviewDataArray.get(position).getMenu_name());
                                 intent.putExtra("star", reviewDataArray.get(position).getStar());
@@ -101,9 +102,11 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
 
                                         // DB에서 reivew 테이블의 키로 쓰일 review_number를 인텐트로 받아옴
                                         int reviewNumber = reviewDataArray.get(position).getReview_number();
+                                        int menuId = reviewDataArray.get(position).getReview_menu_id_reviewd();
+                                        float star = reviewDataArray.get(position).getStar();
 
                                         // 레트로핏 수정하는 함수 deleteReview(int reviewNumber)를 부름
-                                        Call<Result> call = RetrofitClient.getApiService().deleteReview(reviewNumber);
+                                        Call<Result> call = RetrofitClient.getApiService().deleteReview(reviewNumber, menuId, star);
                                         call.enqueue(new Callback<Result>() {
                                             @Override
                                             public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
