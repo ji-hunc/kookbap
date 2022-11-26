@@ -16,8 +16,7 @@ var menuAndPrice = ["메뉴", "가격"];
 
 var S_DATE = "2022-01-03"; //월요일
 
-var S_DATE = new Date().toISOString().split("T")[0]; // 오늘로 설정
-
+var E_DATE = new Date().toISOString().split("T")[0]; // 오늘로 설정
 
 //데이터 뽑아낼때 쓸 객체
 class menuData {
@@ -41,13 +40,11 @@ request(options, function (error, response, body) {
     menuJsonObject = JSON.parse(body);
 
     console.log(menuJsonObject);
-
 });
 
 var prograssDate = Math.ceil(
     (new Date(E_DATE) - new Date(S_DATE)) / (1000 * 60 * 60 * 24)
 ); //2022- 01-01 부터 현재까지 일수 계산
-
 
 // 교직원식당: staffRest
 // 한울식당: hanwoolRest
@@ -59,7 +56,7 @@ var prograssDate = Math.ceil(
 //json 다 받아오고 실행.
 setTimeout(() => {
     var day = new Date(S_DATE);
-    for (var j = 0; j < prograssDate; j++) {
+    for (var j = 0; j < prograssDate + 1; j++) {
         day.setDate(day.getDate() + 1); //청향의경우 7일(+7)로 설정
         // 함수명 밑에있는걸로 바꿔가며 쓰면 됨
 
@@ -70,7 +67,6 @@ setTimeout(() => {
         );
         for (var i = 0; i < goToSqlstaff.length; i++) {
             updateSql(goToSqlstaff[i]);
-
         }
 
         //한울식당 등록
