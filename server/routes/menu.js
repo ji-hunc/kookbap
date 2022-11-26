@@ -6,6 +6,15 @@ var router = express.Router();
 var menuJsonObject;
 var hanulMenus;
 var studentMenus;
+var mysql = require("mysql");
+var db = mysql.createConnection({
+    host: "127.0.0.1",
+    user: "root",
+    password: "wlgns620",
+    database: "Kookbob",
+    port: "3306",
+});
+db.connect();
 
 
 router.get('/', (req, res) => {
@@ -13,6 +22,19 @@ router.get('/', (req, res) => {
 	// res.json(menuJsonObject);
 	// console.log("CONNECT: someone enter the /menu");
 });
+
+router.get('/:date', (req, res) => {
+	console.log(req.body);
+	db.query(
+        `SELECT * FROM menu INNER JOIN menu_appearance ON menu.menu_id = menu_appearance.menu_id WHERE date='${req.params.date}';`,
+        function (error, results) {
+			if (error) {
+				console.log(error);
+			}
+            res.json(results);
+        }
+    );
+})
 
 const options = {
     	uri: "https://kmucoop.kookmin.ac.kr/menu/menujson.php?sdate=2022-11-01&edate=2022-11-30"

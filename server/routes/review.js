@@ -14,12 +14,13 @@ var mysql = require("mysql");
 var db = mysql.createConnection({
     host: "127.0.0.1",
     user: "root",
-    password: "12341234",
+    password: "wlgns620",
     database: "Kookbob",
     port: "3306",
 });
 db.connect();
 
+// 메뉴 이름으로 리뷰들 조회. 정렬기준도 있음
 router.get("/:menuName", function (request, response) {
     //request에서 받아온 query로 어떻게 정렬할지 지정.
     var orderBy = request.query.orderBy;

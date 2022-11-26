@@ -1,6 +1,7 @@
 package com.kookmin.kookbap.Retrofits;
 
 import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.UserRankData;
 import com.kookmin.kookbap.MenuDataFromServer;
@@ -46,6 +47,17 @@ public interface RetrofitInterface {
             @Path("menuName") String menuName,
             @Query("orderBy") String orderBy
     );
+
+
+    // review 페이지에 메뉴 이름으로 들어갔을 때
+    // http://kookbap.run.goorm.io/review/김치찌개
+    // http://10.0.2.2:3000/review/김치찌개
+    // 쿼리로 어떻게 정렬할 것인지를 받아옴
+    @GET("/menu/{date}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
+    Call<ArrayList<MenuData2>> getMenuDataEachDate(
+            @Path("date") String date
+    );
+
 
     // recommendMenu/users 페이지에 유저 이름으로 들어갔을 때.
     // http://kookbap.run.goorm.io/recommendMenu/jihun

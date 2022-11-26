@@ -1,13 +1,13 @@
 const request = require("request");
 
-//db 연결
+// db 연결
 var mysql = require("mysql");
 var db = mysql.createConnection({
-    host: "13.209.133.64",
+    host: "127.0.0.1",
     user: "root",
-    password: "1234",
+    password: "wlgns620",
     database: "Kookbob",
-    port: "50609",
+    port: "3306",
 });
 db.connect();
 
