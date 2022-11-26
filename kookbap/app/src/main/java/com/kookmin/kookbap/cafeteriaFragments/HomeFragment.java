@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment {
     String date, nowYear, nowMonth, nowDate;
 
     ArrayList<MenuData2> todayMenus;
-    JSONObject jsonObject;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

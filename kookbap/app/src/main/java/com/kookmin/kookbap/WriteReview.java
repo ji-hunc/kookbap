@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
+import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 import com.kookmin.kookbap.cafeteriaFragments.MenuDataParser;
 
 import org.jetbrains.annotations.NotNull;
@@ -81,7 +82,7 @@ public class WriteReview extends AppCompatActivity {
 
 
     boolean isFilledImage;
-    JSONObject jsonObject;
+    ArrayList<MenuData2> todayMenus;
     String[] cafeteriaNames = {"식당", "한울식당", "학생식당", "교직원식당", "K-Bob", "청향 한식당", "청향 양식당", "생활관식당"};
     String[] menus;
     ArrayList<ArrayList<String>> menuArrayListsss = new ArrayList<>();
@@ -93,7 +94,6 @@ public class WriteReview extends AppCompatActivity {
     final int MODIFY_WRITE = 3;
 
 
-    MenuDataParser menuDataParser;
     private static final int SINGLE_PERMISSION = 1004;
 
     @Override
@@ -183,18 +183,13 @@ public class WriteReview extends AppCompatActivity {
             date = nowYear + "-" + nowMonth + "-" + nowDate; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
             isFilledImage = false;
 
-            Call<Object> call; // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
-            call = RetrofitClient.getApiService().getMenuData();
-            call.enqueue(new Callback<Object>() {
+            Call<ArrayList<MenuData2>> call;
+            call = RetrofitClient.getApiService().getMenuDataEachDate(date);
+            call.enqueue(new Callback<ArrayList<MenuData2>>() {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) {
                     if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                        try {
-                            jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                            menuDataParser = new MenuDataParser(jsonObject, chosenDate);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        todayMenus = (ArrayList<MenuData2>) response.body();
                     } else {
                     }
                 }
@@ -221,8 +216,23 @@ public class WriteReview extends AppCompatActivity {
                             date = nowYear + "-" + nowMonth + "-" + nowDate;
                             dateTextView.setText(date);
 
-                            menuDataParser = new MenuDataParser(jsonObject, date);
-                            Log.e("list", menuDataParser.getHanulMenuData().toString());
+                            Call<ArrayList<MenuData2>> call;
+                            call = RetrofitClient.getApiService().getMenuDataEachDate(date);
+                            call.enqueue(new Callback<ArrayList<MenuData2>>() {
+                                @Override
+                                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                                    if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                                        todayMenus = (ArrayList<MenuData2>) response.body();
+                                    } else {
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                                    Log.e("Error", t.getMessage());
+                                }
+                            });
+
                             cafeteriaSpinner.setSelection(0);
                             menuSpinner.setSelection(0);
 
@@ -258,73 +268,101 @@ public class WriteReview extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     menus = null;
                     // 식당 스피너 조건별로 메뉴 스피너 값 변경
+                    ArrayList<String> menuHanul = new ArrayList<>();
+                    ArrayList<String> menuStudent = new ArrayList<>();
+                    ArrayList<String> menuProfessor = new ArrayList<>();
+                    ArrayList<String> menuKbob = new ArrayList<>();
+                    ArrayList<String> menuChungHyangKorean = new ArrayList<>();
+                    ArrayList<String> menuChungHyangWestern = new ArrayList<>();
+                    ArrayList<String> menuDormitory = new ArrayList<>();
+                    String cafeteriaName;
+                    for (int j=0; j<todayMenus.size(); j++) {
+                        cafeteriaName = todayMenus.get(j).getRestaurant_name();
+                        switch (cafeteriaName) {
+                            case "한울식당":
+                                menuHanul.add(todayMenus.get(j).getMenu_name());
+                                break;
+                            case "학생식당":
+                                menuStudent.add(todayMenus.get(j).getMenu_name());
+                                break;
+                            case "교직원식당":
+                                menuProfessor.add(todayMenus.get(j).getMenu_name());
+                                break;
+                            case "K-BOB":
+                                menuKbob.add(todayMenus.get(j).getMenu_name());
+                                break;
+                            case "청향 한식당":
+                                menuChungHyangKorean.add(todayMenus.get(j).getMenu_name());
+                                break;
+                            case "청향 양식당":
+                                menuChungHyangWestern.add(todayMenus.get(j).getMenu_name());
+                                break;
+                            case "생활관식당 정기식":
+                                menuDormitory.add(todayMenus.get(j).getMenu_name());
+                                break;
+                        }
+                    }
+
                     if ("한울식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
-                        ArrayList<String> menuArrayList = menuDataParser.getHanulMenuData();
-                        int sizeOfMenu = menuArrayList.size() / 2;
+                        int sizeOfMenu = menuHanul.size();
                         menus = new String[sizeOfMenu];
 
                         for (int k = 0; k < sizeOfMenu; k++) {
-                            menus[k] = menuArrayList.get(k);
+                            menus[k] = menuHanul.get(k);
                         }
                         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
                         menuSpinner.setAdapter(menuAdapter);
                     } else if ("학생식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
-                        ArrayList<String> menuArrayList = menuDataParser.getStudentMenuData();
-                        int sizeOfMenu = menuArrayList.size() / 2;
+                        int sizeOfMenu = menuStudent.size();
                         menus = new String[sizeOfMenu];
 
                         for (int k = 0; k < sizeOfMenu; k++) {
-                            menus[k] = menuArrayList.get(k);
+                            menus[k] = menuStudent.get(k);
                         }
                         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
                         menuSpinner.setAdapter(menuAdapter);
                     } else if ("교직원식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
-                        ArrayList<String> menuArrayList = menuDataParser.getProfessorMenuData();
-                        int sizeOfMenu = menuArrayList.size() / 2;
+                        int sizeOfMenu = menuProfessor.size();
                         menus = new String[sizeOfMenu];
 
                         for (int k = 0; k < sizeOfMenu; k++) {
-                            menus[k] = menuArrayList.get(k);
+                            menus[k] = menuProfessor.get(k);
                         }
                         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
                         menuSpinner.setAdapter(menuAdapter);
                     } else if ("K-Bob".equals(cafeteriaSpinner.getSelectedItem().toString())) {
-                        ArrayList<String> menuArrayList = menuDataParser.getKBobMenuData();
-                        int sizeOfMenu = menuArrayList.size() / 2;
+                        int sizeOfMenu = menuKbob.size();
                         menus = new String[sizeOfMenu];
 
                         for (int k = 0; k < sizeOfMenu; k++) {
-                            menus[k] = menuArrayList.get(k);
+                            menus[k] = menuKbob.get(k);
                         }
                         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
                         menuSpinner.setAdapter(menuAdapter);
                     } else if ("청향 한식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
-                        ArrayList<String> menuArrayList = menuDataParser.getChungHyangKoreanMenuData();
-                        int sizeOfMenu = menuArrayList.size() / 2;
+                        int sizeOfMenu = menuChungHyangKorean.size();
                         menus = new String[sizeOfMenu];
 
                         for (int k = 0; k < sizeOfMenu; k++) {
-                            menus[k] = menuArrayList.get(k);
+                            menus[k] = menuChungHyangKorean.get(k);
                         }
                         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
                         menuSpinner.setAdapter(menuAdapter);
                     } else if ("청향 양식당".equals(cafeteriaSpinner.getSelectedItem().toString())) {
-                        ArrayList<String> menuArrayList = menuDataParser.getChungHyangWesternMenuData();
-                        int sizeOfMenu = menuArrayList.size() / 2;
+                        int sizeOfMenu = menuChungHyangWestern.size();
                         menus = new String[sizeOfMenu];
 
                         for (int k = 0; k < sizeOfMenu; k++) {
-                            menus[k] = menuArrayList.get(k);
+                            menus[k] = menuChungHyangWestern.get(k);
                         }
                         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
                         menuSpinner.setAdapter(menuAdapter);
                     } else if ("생활관식당".equals(cafeteriaSpinner.getSelectedItem().toString())){
-                        ArrayList<String> menuArrayList = menuDataParser.getDormitoryMenuData();
-                        int sizeOfMenu = menuArrayList.size() / 2;
+                        int sizeOfMenu = menuDormitory.size();
                         menus = new String[sizeOfMenu];
 
                         for (int k = 0; k < sizeOfMenu; k++) {
-                            menus[k] = menuArrayList.get(k);
+                            menus[k] = menuDormitory.get(k);
                         }
                         ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, menus);
                         menuSpinner.setAdapter(menuAdapter);

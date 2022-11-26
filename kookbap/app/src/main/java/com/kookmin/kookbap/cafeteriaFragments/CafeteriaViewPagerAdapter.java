@@ -21,7 +21,7 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
     private final ArrayList<MenuData2> menuProfessor = new ArrayList<>();
     private final ArrayList<MenuData2> menuKbob = new ArrayList<>();
     private final ArrayList<MenuData2> menuChungHyangKorean = new ArrayList<>();
-    private final ArrayList<MenuData2> getMenuChungHyangWestern = new ArrayList<>();
+    private final ArrayList<MenuData2> menuChungHyangWestern = new ArrayList<>();
     private final ArrayList<MenuData2> menuDormitory = new ArrayList<>();
     String date;
 
@@ -50,7 +50,7 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
                     menuChungHyangKorean.add(todayMenus.get(i));
                     break;
                 case "청향 양식당":
-                    getMenuChungHyangWestern.add(todayMenus.get(i));
+                    menuChungHyangWestern.add(todayMenus.get(i));
                     break;
                 case "생활관식당 정기식":
                     menuDormitory.add(todayMenus.get(i));
@@ -74,7 +74,7 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
             case 4:
                 return new CafeteriaChungHyangKorean(menuChungHyangKorean, date);
             case 5:
-                return new CafeteriaChungHyangWestern(getMenuChungHyangWestern, date);
+                return new CafeteriaChungHyangWestern(menuChungHyangWestern, date);
             case 6:
                 return new CafeteriaDormitory(menuDormitory, date);
             default:
