@@ -102,9 +102,11 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
 
                                         // DB에서 reivew 테이블의 키로 쓰일 review_number를 인텐트로 받아옴
                                         int reviewNumber = reviewDataArray.get(position).getReview_number();
+                                        int menuId = reviewDataArray.get(position).getReview_menu_id_reviewd();
+                                        float star = reviewDataArray.get(position).getStar();
 
                                         // 레트로핏 수정하는 함수 deleteReview(int reviewNumber)를 부름
-                                        Call<Result> call = RetrofitClient.getApiService().deleteReview(reviewNumber);
+                                        Call<Result> call = RetrofitClient.getApiService().deleteReview(reviewNumber, menuId, star);
                                         call.enqueue(new Callback<Result>() {
                                             @Override
                                             public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {

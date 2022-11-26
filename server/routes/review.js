@@ -188,7 +188,7 @@ router.post("/modify", parser, function (request, response) {
             }
             var count_review = results[0]['count_review'];
             var star_avg = results[0]['star_avg'];
-            db.query(`UPDATE menu SET star_avg = ${((star_avg * count_review) - oldStar + recentStar) / count_review} WHERE menu_id = ${menuId}`, function(error, result) {
+            db.query(`UPDATE menu SET star_avg = ${((star_avg * count_review) - oldStar + recentStar) / count_review} WHERE menu_id = ${menuId};`, function(error, result) {
                 if (error) {
                     console.log(error);
                 }
@@ -226,6 +226,28 @@ router.post("/delete", function (request, response) {
             }
         }
     );
+    
+    // review table에서 삭제하기 전에 menu table에서 star_avg와 review_count 변경
+    var menuId = request.body.menuId;
+    var star = request.body.star;
+    db.query(`SELECT count_review, star_avg FROM menu WHERE menu_id = '${menuId}';`, function(error, results) {
+        if (error) {
+            console.log(error);
+        }
+        var count_review = results[0]['count_review'];
+        var star_avg = results[0]['star_avg'];
+        var future_star = ((star_avg * count_review) - star) / (count_review - 1);
+        if (count_review == 1) {
+            // 0으로 나눠지는 것을 막기 위해
+            future_star = 0;
+        }
+        db.query(`UPDATE menu SET star_avg = ${future_star}, count_review = ${count_review - 1} WHERE menu_id = ${menuId};`, function(error, results) {
+            if (error) {
+                console.log(error);
+            }
+        })
+    });
+    
     // 사진파일은 위에서 지웠고, review table에서 해당 Row 삭제
     db.query(
         `DELETE FROM review WHERE review_number = '${request.body.reviewNumber}';`

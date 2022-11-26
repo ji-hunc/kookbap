@@ -103,7 +103,9 @@ public interface RetrofitInterface {
     @FormUrlEncoded
     @POST("/review/delete")
     Call<Result> deleteReview(
-            @Field("reviewNumber") int reviewNumber
+            @Field("reviewNumber") int reviewNumber,
+            @Field("menuId") int menuId,
+            @Field("star") float star
     );
 
 
