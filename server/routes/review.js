@@ -46,6 +46,7 @@ router.get("/:menuName", function (request, response) {
     );
 });
 
+// user가 쓴 모든 리뷰들을 조회
 router.get("/users/:userName", function (request, response) {
     db.query(
         `SELECT * FROM review WHERE review_user_id = '${request.params.userName}'`,
@@ -61,63 +62,72 @@ router.get("/", function (request, response) {
     response.send("GOOD");
 });
 
+// 리뷰 작성
 router.post("/post", parser, function (request, response) {
+    console.log("Enter!!!!!");
+    console.log("@@@@@@@@@@@@@@@@@@@@");
     console.log(request.body);
     console.log("@@@@@@@@@@@@@@@@@@@@");
     console.log(request.files);
-    console.log("Enter!!!!!");
+    console.log("@@@@@@@@@@@@@@@@@@@@");
 
     db.query(
-        `SELECT EXISTS (SELECT menu_name FROM menu WHERE menu_name='${request.body.menuName}' limit 1) as success;`,
+        `SELECT menu_id FROM menu WHERE menu_name = '${request.body.menuName}';`,
         function (error, results) {
-            if (results[0].success == 0) {
-                // 클라이언트로부터 받아온 menu_name 데이터가 menu 테이블에 없음.
-                // 신규 메뉴로 menu 테이블에 등록해야함
-                // console.log("no menuname in menu");
-                // console.log(results[0]);
-                db.query(`INSERT INTO menu (restaurant_name, menu_name, count_review, star_avg, total_like)
-            VALUES ('${request.body.restaurantName}', '${request.body.menuName}', 0, 0, 0);`);
-
-                // 클라이언트로부터 받아온 menu_name 데이터가 menu 테이블에 있음.
-                // console.log("already exist");
-                // console.log(results);
+            if (error) {
+                console.log(error);
             }
-            // 클라리언트로부터 받아온 리뷰내용 review 테이블에 post하는 부분
-            // console.log(results[0]);
-            db.query(
-                `SELECT menu_id FROM menu WHERE menu_name = '${request.body.menuName}';`,
-                function (error, results2) {
+            // review_menu_id_reviewd 받아오는 부분
+            const review_menu_id_reviewd = results[0].menu_id;
+
+            // 이미지 이름 변경하는 부분
+            request.files.image.name = `${request.body.menuName}_${
+                request.body.reviewUserId
+            }_${new Date()
+                .toISOString()
+                .slice(0, 19)
+                .replace("T", " ")}.png`;
+            const { image } = request.files;
+            image.mv(__dirname + "/../public/images/" + image.name);
+            var imageUrl = request.files.image.name;
+
+            // 리뷰 내용 DB에 INSERT
+            db.query(`INSERT INTO review (review_user_id, review_menu_id_reviewd, menu_name, write_date, star, review_like, description, image) 
+            VALUES (
+                '${request.body.reviewUserId}', 
+                '${review_menu_id_reviewd}', 
+                '${request.body.menuName}', 
+                '${new Date().toISOString().slice(0, 19).replace("T", " ")}', 
+                '${request.body.star}', 
+                '${request.body.reviewLike}', 
+                '${request.body.description}', 
+                '${imageUrl}'
+            );`);
+
+            // 메뉴 테이블에 review_count을 1올리고, 평점 평균을 새로 반영하여 계산후 바꿔줌
+            // db.query(
+            //     `UPDATE review SET star = '${request.body.star}', description = '${request.body.description}' WHERE review_number = '${request.body.reviewNumber}';`
+            // );
+            db.query(`SELECT count_review, star_avg FROM menu WHERE menu_id = ${review_menu_id_reviewd}`, function(error, results2) {
+                if (error) {
+                    console.log(error);
+                }
+                var count_review = results2[0]['count_review'];
+                var star_avg = results2[0]['star_avg'];
+
+                if (count_review == null) {count_review = 0}
+                if (star_avg == null) {star_avg = 0}
+
+                star = request.body.star;
+                star *= 1; // string을 number로 바꾸기 위해
+                console.log(((star_avg * count_review) + star) / (count_review + 1));
+                db.query(`UPDATE menu SET count_review = ${count_review + 1}, star_avg = ${((star_avg * count_review) + star) / (count_review + 1)} WHERE menu_id = ${review_menu_id_reviewd}`, function(error, results3) {
                     if (error) {
                         console.log(error);
                     }
-                    // review_menu_id_reviewd 받아오는 부분
-                    const review_menu_id_reviewd = results2[0].menu_id;
-
-                    // 이미지 이름 변경하는 부분
-                    request.files.image.name = `${request.body.menuName}_${
-                        request.body.reviewUserId
-                    }_${new Date()
-                        .toISOString()
-                        .slice(0, 19)
-                        .replace("T", " ")}.png`;
-                    const { image } = request.files;
-                    image.mv(__dirname + "/../public/images/" + image.name);
-                    var imageUrl = request.files.image.name;
-
-                    // DB에 INSERT
-                    db.query(`INSERT INTO review (review_user_id, review_menu_id_reviewd, menu_name, write_date, star, review_like, description, image)
-            VALUES ('${
-                request.body.reviewUserId
-            }', '${review_menu_id_reviewd}', '${
-                        request.body.menuName
-                    }', '${new Date()
-                        .toISOString()
-                        .slice(0, 19)
-                        .replace("T", " ")}', '${request.body.star}', '${
-                        request.body.reviewLike
-                    }', '${request.body.description}', '${imageUrl}');`);
-                }
-            );
+                })
+            })
+            
         }
     );
 
@@ -128,6 +138,7 @@ router.post("/post", parser, function (request, response) {
     });
 });
 
+// 리뷰 수정
 router.post("/modify", parser, function (request, response) {
     console.log(request.body);
 
@@ -177,6 +188,7 @@ router.post("/modify", parser, function (request, response) {
     });
 });
 
+// 리뷰 삭제
 router.post("/delete", function (request, response) {
     console.log(request.body);
     // reviewNumber로 지울 리뷰의 사진파일 이름을 구하고, 삭제
