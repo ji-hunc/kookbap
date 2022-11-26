@@ -1,6 +1,5 @@
 const express = require("express");
-const request = require("request");
-const app = express();
+var db = require("../dbConnector");
 var router = express.Router();
 
 var bodyParser = require("body-parser");
@@ -9,16 +8,6 @@ var parser = bodyParser.urlencoded({ extended: false });
 const multer = require("multer");
 const upload = multer({ dest: "images/" }); //dest : 저장 위치
 var fs = require("fs");
-
-var mysql = require("mysql");
-var db = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "12341234",
-    database: "Kookbob",
-    port: "3306",
-});
-db.connect();
 
 router.get("/:menuName", function (request, response) {
     //request에서 받아온 query로 어떻게 정렬할지 지정.
