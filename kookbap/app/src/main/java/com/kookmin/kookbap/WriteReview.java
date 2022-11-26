@@ -130,7 +130,7 @@ public class WriteReview extends AppCompatActivity {
                 galleryPermission = ContextCompat.checkSelfPermission(WriteReview.this, Manifest.permission.READ_EXTERNAL_STORAGE);
                 // 카메라와 앨범 중 원하는 방법을 고르기 위한 dialog 출력
                 AlertDialog.Builder dlg = new AlertDialog.Builder(WriteReview.this);
-                dlg.setTitle("프로필 사진 설정하기");
+                dlg.setTitle("리뷰 사진 등록하기");
                 final String[] selectProfileImages = new String[]{"카메라로 사진 찍기", "앨범에서 사진 가져오기"};
                 dlg.setItems(selectProfileImages, new DialogInterface.OnClickListener() {
                     @Override
@@ -461,6 +461,7 @@ public class WriteReview extends AppCompatActivity {
                         MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
 
 
+                        RequestBody menuId = RequestBody.create(MultipartBody.FORM, String.valueOf(getIntent().getIntExtra("menuId", 0)));
                         RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
                         RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTextview.getText().toString());
                         RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
@@ -470,6 +471,7 @@ public class WriteReview extends AppCompatActivity {
                         RequestBody restaurantName = RequestBody.create(MultipartBody.FORM, getIntent().getStringExtra("restaurantName"));
 
                         HashMap<String, RequestBody> map = new HashMap<>();
+                        map.put("menuId", menuId);
                         map.put("reviewUserId", reviewUserId);
                         map.put("menuName", menuName);
                         map.put("writeDate", writeDate);
@@ -532,8 +534,8 @@ public class WriteReview extends AppCompatActivity {
             int reviewNumberOrigin = getIntent().getIntExtra("review_number", 0);
             float oldStar = getIntent().getFloatExtra("star", 0);
             String oldDescription = getIntent().getStringExtra("description");
-//            String imageUrl = "http://10.0.2.2:3000/images/" + getIntent().getStringExtra("imageUrl");
-            String imageUrl = "https://kookbap.run.goorm.io/images/" + getIntent().getStringExtra("imageUrl");
+            String imageUrl = "http://10.0.2.2:3000/images/" + getIntent().getStringExtra("imageUrl");
+//            String imageUrl = "https://kookbap.run.goorm.io/images/" + getIntent().getStringExtra("imageUrl");
 
 
             // 외부이미지 이미지뷰에 적용해주는 클래스
@@ -597,6 +599,7 @@ public class WriteReview extends AppCompatActivity {
                             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), newFile);
                             MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
 
+                            RequestBody menuId = RequestBody.create(MultipartBody.FORM, String.valueOf(getIntent().getIntExtra("menuId", 0)));
                             RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
                             RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTextview.getText().toString());
                             RequestBody reviewNumber = RequestBody.create(MultipartBody.FORM, String.valueOf(reviewNumberOrigin));
@@ -605,6 +608,7 @@ public class WriteReview extends AppCompatActivity {
                             RequestBody isUploadNewImage = RequestBody.create(MultipartBody.FORM, String.valueOf(isFilledImage));
 
                             HashMap<String, RequestBody> map = new HashMap<>();
+                            map.put("menuId", menuId);
                             map.put("reviewUserId", reviewUserId);
                             map.put("menuName", menuName);
                             map.put("reviewNumber", reviewNumber);

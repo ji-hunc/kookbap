@@ -1,9 +1,11 @@
 package com.kookmin.kookbap.Retrofits;
 
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.ReviewData;
-
+import com.kookmin.kookbap.ReviewRank.UserRankData;
+import com.kookmin.kookbap.MenuDataFromServer;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -18,6 +20,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface RetrofitInterface {
 
@@ -38,9 +41,30 @@ public interface RetrofitInterface {
     // review 페이지에 메뉴 이름으로 들어갔을 때
     // http://kookbap.run.goorm.io/review/김치찌개
     // http://10.0.2.2:3000/review/김치찌개
+    // 쿼리로 어떻게 정렬할 것인지를 받아옴
     @GET("/review/{menuName}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
     Call<ArrayList<ReviewData>> getReviewData(
-            @Path("menuName") String menuName
+            @Path("menuName") String menuName,
+            @Query("orderBy") String orderBy
+    );
+
+
+    // review 페이지에 메뉴 이름으로 들어갔을 때
+    // http://kookbap.run.goorm.io/review/김치찌개
+    // http://10.0.2.2:3000/review/김치찌개
+    // 쿼리로 어떻게 정렬할 것인지를 받아옴
+    @GET("/menu/{date}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
+    Call<ArrayList<MenuData2>> getMenuDataEachDate(
+            @Path("date") String date
+    );
+
+
+    // recommendMenu/users 페이지에 유저 이름으로 들어갔을 때.
+    // http://kookbap.run.goorm.io/recommendMenu/jihun
+    // http://10.0.2.2:3000/recommendMenu/jihun"
+    @GET("/recommendMenu/{userName}")
+    Call<ArrayList<MenuDataFromServer>> getRecommendMenuData(
+            @Path("userName") String userName
     );
 
 
@@ -79,9 +103,41 @@ public interface RetrofitInterface {
     @FormUrlEncoded
     @POST("/review/delete")
     Call<Result> deleteReview(
-            @Field("reviewNumber") int reviewNumber
+            @Field("reviewNumber") int reviewNumber,
+            @Field("menuId") int menuId,
+            @Field("star") float star
     );
 
+
+    //Rank 관련 함수
+    //review와 관련된 순위
+    @GET("/rank/review/total_review")
+    Call<ArrayList<UserRankData>> getUserReviewRankData(
+            //데이터 갯수제한
+            @Query("endR") int endR
+    );
+
+
+    @GET("/rank/menu/{category}")
+    Call<ArrayList<MenuData>> getMenuReviewRankData(
+            //review_like or total_review
+            @Path("category") String category,
+            //데이터 갯수 제한
+            @Query("endR") int endR
+
+    );
+
+    //제네릭타입으로 만들어서 리팩토링할때 쓸 주소
+    @GET("/rank/{section}}/{category}")
+    Call<ArrayList<MenuData>> getRankData(
+            //
+            @Path("section") String section,
+            //review_like or total_review
+            @Path("category") String category,
+            //데이터 갯수 제한
+            @Query("endR") int endR
+
+    );
 
 //    @Multipart
 ////    @FormUrlEncoded

@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDataViewHolder> {
+public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.MenuDataViewHolder> {
 
-    ArrayList<MenuData> MenuDataArray;
+    ArrayList<MenuData2> MenuDataArray;
     Context context;
 
-    public MenuDataAdapter(ArrayList<MenuData> MenuDataArray, Context context) {
+    public MenuDataAdapter2(ArrayList<MenuData2> MenuDataArray, Context context) {
         this.MenuDataArray = MenuDataArray;
         this.context = context;
 //        Log.e("size", Integer.toString(MenuDataArray.size()));
@@ -28,36 +29,37 @@ public class MenuDataAdapter extends RecyclerView.Adapter<MenuDataAdapter.MenuDa
 
     @NonNull
     @Override
-    public MenuDataAdapter.MenuDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MenuDataAdapter2.MenuDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.menu_card, parent, false);
         return new MenuDataViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MenuDataAdapter.MenuDataViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull MenuDataAdapter2.MenuDataViewHolder holder, final int position) {
 
-        holder.foodName.setText(MenuDataArray.get(position).getMenuName());
-        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenuName());
-        holder.foodPrice.setText("₩ "+MenuDataArray.get(position).getPrice());
-        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
-        holder.foodRating.setRating(MenuDataArray.get(position).getStars());
+//        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenuName());
+//        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
+        holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
+        holder.foodPrice.setText("₩ " + MenuDataArray.get(position).getPrice());
+        holder.foodRating.setRating(MenuDataArray.get(position).getStar_avg());
         //반올림해서 소수점 한자리까지 화면에 보여줌
-        holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStars()));
+        holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // FoodDetail 페이지(메뉴 클릭했을 때 나오는 리뷰 리스트 페이지)로 클릭한 메뉴 데이터 정보 intent로 전달
                 Intent intent = new Intent(context, FoodDetail.class);
-                intent.putExtra("foodName", MenuDataArray.get(position).getMenuName());
-                intent.putExtra("foodNameSide", MenuDataArray.get(position).getSubMenuName());
+//                intent.putExtra("image", MenuDataArray.get(position).getImage());
+//                intent.putExtra("heart", MenuDataArray.get(position).getHeart());
+//                intent.putExtra("foodNameSide", MenuDataArray.get(position).getSubMenuName());
+                intent.putExtra("menuId", MenuDataArray.get(position).getMenu_id());
+                intent.putExtra("foodName", MenuDataArray.get(position).getMenu_name());
                 intent.putExtra("price", MenuDataArray.get(position).getPrice());
-                intent.putExtra("image", MenuDataArray.get(position).getImage());
-                intent.putExtra("heart", MenuDataArray.get(position).getHeart());
-                intent.putExtra("rating", MenuDataArray.get(position).getStars());
-                intent.putExtra("ratingNum", String.format("%.1f",MenuDataArray.get(position).getStars()));
-                intent.putExtra("restaurantName", MenuDataArray.get(position).getRestaurantName());
+                intent.putExtra("rating", MenuDataArray.get(position).getStar_avg());
+                intent.putExtra("ratingNum", String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
+                intent.putExtra("restaurantName", MenuDataArray.get(position).getRestaurant_name());
 
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }

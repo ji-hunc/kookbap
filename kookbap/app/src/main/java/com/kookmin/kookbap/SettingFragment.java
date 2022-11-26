@@ -57,8 +57,8 @@ import java.net.URL;
 
 public class SettingFragment extends Fragment {
     ImageView settingProfileImage;
-    TextView settingName, settingCollegeNumber, nodeTest;
-    LinearLayout settingMyReviews;
+    TextView settingName, settingCollegeNumber, textViewUserEmail, textViewAppVersion;
+    LinearLayout settingMyReviews, settingLogout;
     Switch settingNotice;
     Button settingBtnNotice;
     Boolean noticeOn = false;
@@ -75,11 +75,20 @@ public class SettingFragment extends Fragment {
         settingMyReviews = view.findViewById(R.id.settingMyReviews);
         settingNotice = view.findViewById(R.id.settingNotice);
         settingBtnNotice = view.findViewById(R.id.settingBtnNotice);
+        textViewUserEmail = view.findViewById(R.id.textViewUserEmail);
+        textViewAppVersion = view.findViewById(R.id.textViewAppVersion);
+        settingLogout = view.findViewById(R.id.settingLogout);
 
-        // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 설정
+        // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 등 설정, 유저 관리 구현하면 구현해야 함.
         settingProfileImage.setImageResource(R.drawable.ic_basic_profile);
         settingName.setText("김민제");
         settingCollegeNumber.setText("학번: 20191557");
+        textViewUserEmail.setText("kevinmj12@kookmin.ac.kr");
+
+        //
+
+        textViewAppVersion.setText("1.1.0");
+
 
 
         // 프로필 사진을 눌렀을 때 사진 변경
@@ -188,6 +197,14 @@ public class SettingFragment extends Fragment {
 //                    notificationManager.notify(0, notification.build());
 
 
+        });
+
+        settingLogout.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                // 로그아웃 기능 구현 필요
+            }
         });
 
         return view;
