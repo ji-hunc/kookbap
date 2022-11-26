@@ -1,15 +1,7 @@
 const request = require("request");
 
 //db 연결
-var mysql = require("mysql");
-var db = mysql.createConnection({
-    host: "13.209.133.64",
-    user: "root",
-    password: "1234",
-    database: "Kookbob",
-    port: "50609",
-});
-db.connect();
+var db = require("./dbConnector");
 
 //기본적으로 쓸 것들.
 var menuAndPrice = ["메뉴", "가격"];
