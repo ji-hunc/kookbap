@@ -1,16 +1,22 @@
+/*
+메뉴 db 업데이드 코드.
+
+*/
+
 const request = require("request");
+var db = require("./dbConnector"); //db 연결
 
-//db 연결
-var db = require("./dbConnector");
+//날짜 설정
+//db데이터 처음부터 다시 받아오고 싶으면 이부분 수정하면 됨.
 
-//기본적으로 쓸 것들.
-var menuAndPrice = ["메뉴", "가격"]; //json에 있는 메뉴/가격
+var PROGRASS_DATE = 7;
+var today = new Date();
+var daysAgo = new Date();
+daysAgo.setDate(today.getDate() + PROGRASS_DATE); //오늘부터 7일 뒤
+var S_DATE = today.toISOString().split("T")[0]; //데이터 탑제 시작 날짜 (update 함수를 돌리는 날짜. 일요일)
+var E_DATE = daysAgo.toISOString().split("T")[0]; // 오늘로 설정"2020-02-02" 형식으로 저장
 
-var S_DATE = "2022-01-03"; //데이터 탑제 시작 날짜. 월요일
-
-var E_DATE = new Date().toISOString().split("T")[0]; // 오늘로 설정
-
-//데이터 뽑아낼때 쓸 객체
+//가공한 데이터를 class에 담아 관리
 class menuData {
     constructor(restaurant, menuName, price, date) {
         this.restaurant = restaurant;
@@ -20,35 +26,29 @@ class menuData {
     }
 }
 
-var menuJsonObject;
+var menuAndPrice = ["메뉴", "가격"]; //json에 있는 메뉴/가격
 
+//국민대 학식 api 가져오기.
+var menuJsonObject;
 const options = {
     uri: `https://kmucoop.kookmin.ac.kr/menu/menujson.php?sdate=${S_DATE}&edate=${E_DATE}`,
 };
+
+//학식 api에 요청
 request(options, function (error, response, body) {
     if (error) {
         console.log(error);
     }
     menuJsonObject = JSON.parse(body);
-
-    console.log(menuJsonObject);
+    console.log("json loading 완료");
+    totalUpdate();
+    deleteOverlap();
+    console.log("완료");
 });
 
-var prograssDate = Math.ceil(
-    (new Date(E_DATE) - new Date(S_DATE)) / (1000 * 60 * 60 * 24)
-); //2022- 01-01 부터 현재까지 일수 계산
-
-// 교직원식당: staffRest
-// 한울식당: hanwoolRest
-// 학생식당: studentRest
-// 청향한식당: chunghyangKoRest
-// 청향양식당: chunghyangWEstRest
-// K-Bob: KbobRest
-// 생활관식당: DormitoryRest
-//json 다 받아오고 실행.
-setTimeout(() => {
+function totalUpdate() {
     var day = new Date(S_DATE);
-    for (var j = 0; j < prograssDate + 1; j++) {
+    for (var j = 0; j < PROGRASS_DATE + 1; j++) {
         day.setDate(day.getDate() + 1);
         //교직원 식당 등록
         var goToSqlstaff = staffRest(
@@ -84,9 +84,9 @@ setTimeout(() => {
             updateSql(goToSqlchunghyangKo[i]);
         }
     }
-}, 2000);
+}
 
-//sql 서버에 탑제
+//data를 넣으면 db에 업로드
 async function updateSql(data) {
     try {
         if (data.menuName.includes("미운영") || data.menuName == "") {
@@ -101,7 +101,6 @@ async function updateSql(data) {
                         `insert into menu ( restaurant_name, menu_name) values ('${data.restaurant}',"${data.menuName}");`
                     );
                 }
-                console.log(data, error);
             }
         );
         await db.query(
@@ -118,9 +117,7 @@ async function updateSql(data) {
                             var menu_id = results[0].menu_id;
                             db.query(
                                 `insert into menu_appearance (menu_id, date, price) values ("${menu_id}", "${data.date}", "${data.price}");`,
-                                function (error, results) {
-                                    console.log(menu_id, data.date, data.price);
-                                }
+                                function (error, result) {}
                             );
                         }
                     );
@@ -190,7 +187,7 @@ function hanwoolRest(data, date) {
     try {
         for (var i = 0; i < connerList.length; i++) {
             var dayMenuName;
-            var dayMenuPrice;
+            var dayMenuPrice = 0;
             for (var j = 0; j < 2; j++) {
                 var temp = data[name][date][connerList[i]][menuAndPrice[j]];
                 if (
@@ -431,3 +428,15 @@ function DormitoryRest(data, date) {
     } catch (e) {}
     return returnArray;
 }
+
+// 데이터 중복 제거
+async function deleteOverlap() {
+    await db.query("set SQL_SAFE_updates= 0;");
+    await db.query(
+        "delete t1 from menu t1 join menu t2 on t1.restaurant_name = t2.restaurant_name and t1.menu_name = t2.menu_name where t1.menu_id>t2.menu_id;"
+    );
+    await db.query("set SQL_SAFE_updates= 1;");
+    await console.log("중복제거 완료");
+}
+
+module.exports = totalUpdate;
