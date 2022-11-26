@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                         // signal: 3 리뷰 수정하기로 리뷰 작성페이지를 들어가는 경우
                         intent.putExtra("signal", 1);
                         startActivity(intent);
-                        return true;
+                        return false;
                     case R.id.restaurant:
                         changeFragment(recommendMenuFragment);
                         return true;

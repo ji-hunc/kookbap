@@ -3,7 +3,7 @@ package com.kookmin.kookbap.Retrofits;
 import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.UserRankData;
-import com.kookmin.kookbap.testRecommendMenuData;
+import com.kookmin.kookbap.MenuDataFromServer;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
@@ -51,7 +51,7 @@ public interface RetrofitInterface {
     // http://kookbap.run.goorm.io/recommendMenu/jihun
     // http://10.0.2.2:3000/recommendMenu/jihun"
     @GET("/recommendMenu/{userName}")
-    Call<ArrayList<testRecommendMenuData>> getRecommendMenuData(
+    Call<ArrayList<MenuDataFromServer>> getRecommendMenuData(
             @Path("userName") String userName
     );
 
