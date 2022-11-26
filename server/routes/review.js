@@ -1,6 +1,5 @@
 const express = require("express");
-const request = require("request");
-const app = express();
+var db = require("../dbConnector");
 var router = express.Router();
 
 var bodyParser = require("body-parser");

@@ -1,6 +1,5 @@
-const express = require('express');
-const request = require('request');
-const app = express()
+const express = require("express");
+const request = require("request");
 var router = express.Router();
 
 var menuJsonObject;
@@ -13,7 +12,6 @@ var db = mysql.createConnection({
     port: "3306",
 });
 db.connect();
-
 
 router.get('/', (req, res) => {
 	res.send("menu");
