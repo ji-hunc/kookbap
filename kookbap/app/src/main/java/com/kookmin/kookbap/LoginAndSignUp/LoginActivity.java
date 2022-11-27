@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.LoginAndSignUp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kookmin.kookbap.MainActivity;
+import com.kookmin.kookbap.R;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(prf.getBoolean("outoLogin",false)) { // 자동 로그인이 체크 되어있다면 바로 이동
             if (prf.getString("ID","") != null) {
-                Intent intent = new Intent(LoginActivity.this, MainViewActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         }
@@ -85,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 SharedPreferences.Editor editor = prf.edit();
                                 editor.putBoolean("outoLogin",mCheck);
-                                Intent intent = new Intent(LoginActivity.this,MainViewActivity.class); // 확인완료 -> 메인뷰로 이동
+                                Intent intent = new Intent(LoginActivity.this,MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                                 finish();
                             }

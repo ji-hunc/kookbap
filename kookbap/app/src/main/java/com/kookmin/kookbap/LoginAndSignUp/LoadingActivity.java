@@ -1,10 +1,12 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.LoginAndSignUp;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.kookmin.kookbap.R;
 
 public class LoadingActivity extends AppCompatActivity {
 

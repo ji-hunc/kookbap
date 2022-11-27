@@ -39,6 +39,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserReviewsActivity" />
+        <activity android:name=".LoginAndSignUp.LoadingActivity"/>
+        <activity android:name=".LoginAndSignUp.LoginActivity"/>
+        <activity android:name=".LoginAndSignUp.CheckEmailActivity"/>
+        <activity android:name=".LoginAndSignUp.SignUpActivity"/>
     </application>
 
 </manifest>
