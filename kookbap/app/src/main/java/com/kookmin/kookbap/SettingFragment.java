@@ -1,8 +1,11 @@
 package com.kookmin.kookbap;
 
 import static android.app.Activity.RESULT_OK;
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -54,6 +57,11 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class SettingFragment extends Fragment {
     ImageView settingProfileImage;
@@ -66,6 +74,7 @@ public class SettingFragment extends Fragment {
     private static final int SINGLE_PERMISSION = 1004;
     Bitmap imageBitmap, noticeBitmap;
     Uri uri;
+    AlarmManager alarmManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -161,7 +170,7 @@ public class SettingFragment extends Fragment {
                     // 알림 발생시키는 다른 방식인데 SDK버전 확인 필요
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                         NotificationChannel channel = new NotificationChannel("channel1", "hello", NotificationManager.IMPORTANCE_HIGH);
-                        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
                         notificationManager.createNotificationChannel(channel);
                         NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
                         notification.setContentTitle("테스트");
@@ -178,7 +187,6 @@ public class SettingFragment extends Fragment {
                     }
                 }
             }
-
 
 //
 //                    알림 발생시키는 다른 방식(7.0 이상에서는 작동 안됨)
@@ -198,6 +206,21 @@ public class SettingFragment extends Fragment {
 
 
         });
+        NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(NOTIFICATION_SERVICE);
+
+        alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        Calendar mCalendar = new GregorianCalendar();
+
+        //접수일 알람 버튼
+        Button button = (Button) view.findViewById(R.id.testBtn);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                setAlarm();
+            }
+        });
+
 
         settingLogout.setOnClickListener(new View.OnClickListener(){
 
@@ -209,6 +232,29 @@ public class SettingFragment extends Fragment {
 
         return view;
     }
+
+    private void setAlarm() {
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(getActivity().getApplicationContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, receiverIntent, FLAG_IMMUTABLE);
+
+        String from = "2022-11-27 15:50:00"; //임의로 날짜와 시간을 지정
+
+        //날짜 포맷을 바꿔주는 소스코드
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datetime = null;
+        try {
+            datetime = dateFormat.parse(from);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
+    }
+
 
     // 권한 요청 이후 권한 결과
     @Override

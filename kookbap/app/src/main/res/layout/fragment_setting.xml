@@ -145,6 +145,11 @@
         android:layout_height="wrap_content"
         android:text="알림 띄우기(테스트)"/>
 
+    <Button
+        android:id="@+id/testBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 
 
 
