@@ -63,7 +63,7 @@ public interface RetrofitInterface {
     // http://kookbap.run.goorm.io/recommendMenu/jihun
     // http://10.0.2.2:3000/recommendMenu/jihun"
     @GET("/recommendMenu/{userName}")
-    Call<ArrayList<MenuDataFromServer>> getRecommendMenuData(
+    Call<ArrayList<MenuData2>> getRecommendMenuData(
             @Path("userName") String userName
     );
 

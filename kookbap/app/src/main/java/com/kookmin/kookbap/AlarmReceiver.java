@@ -1,6 +1,7 @@
 package com.kookmin.kookbap;
 
 import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static android.app.PendingIntent.FLAG_MUTABLE;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -41,11 +42,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         //알림창 클릭 시 activity 화면 부름
+        RecommendMenuFragment recommendMenuFragment = new RecommendMenuFragment();
         Intent intent2 = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,101,intent2, FLAG_IMMUTABLE);
+        intent2.putExtra("notificationClicked", true);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,intent2, FLAG_MUTABLE);
 
         //알림창 제목
-        builder.setContentTitle("알람");
+        builder.setContentTitle("KookBob");
+        //알림창 내용
+        builder.setContentText("jihun님, 오늘의 추천 메뉴 확인하세요!");
         //알림창 아이콘
         builder.setSmallIcon(R.drawable.ic_launcher_background);
         //알림창 터치시 자동 삭제
@@ -54,7 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setContentIntent(pendingIntent);
 
         Notification notification = builder.build();
-        manager.notify(1,notification);
+        manager.notify(0,notification);
 
     }
 }
