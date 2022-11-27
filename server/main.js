@@ -26,7 +26,8 @@ app.listen(port, () => {
 //정해진 주기마다 코드 실행 (초, 분, 시, 일 , 달 , 월화수목금토일) "*, *, 6, *, *, Sunday" = 일요일 6시마다 실행
 var updateDB = require("./updateDb");
 var cron = require("node-cron");
-cron.schedule("*, *, 6, *, *, Sunday", () => {
+cron.schedule("* * 6 * * Sunday", () => {
+    console.log("node - cron test");
     console.log(`주간 업데이트 일시 : ${Date()}`);
     updateDB();
     console.log("complete");
