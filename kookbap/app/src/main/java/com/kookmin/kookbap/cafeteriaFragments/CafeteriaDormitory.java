@@ -6,23 +6,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.MenuDataAdapter2;
 import com.kookmin.kookbap.R;
-import com.kookmin.kookbap.MenuData;
-import com.kookmin.kookbap.MenuDataAdapter;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class CafeteriaDormitory extends Fragment {
     MenuDataAdapter2 menuDataAdapter2;
@@ -36,7 +28,7 @@ public class CafeteriaDormitory extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cafeteria_hanul, container, false);
+        View view = inflater.inflate(R.layout.fragment_cafeteria_menulists, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHanul);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

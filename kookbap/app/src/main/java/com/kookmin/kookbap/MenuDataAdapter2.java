@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +25,6 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
     public MenuDataAdapter2(ArrayList<MenuData2> MenuDataArray, Context context) {
         this.MenuDataArray = MenuDataArray;
         this.context = context;
-//        Log.e("size", Integer.toString(MenuDataArray.size()));
     }
 
     @NonNull
@@ -46,6 +46,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
         holder.foodRating.setRating(MenuDataArray.get(position).getStar_avg());
         //반올림해서 소수점 한자리까지 화면에 보여줌
         holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
+        holder.foodLikeCount.setText("좋아요 : " + Integer.toString(MenuDataArray.get(position).getTotal_like()));
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +84,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
 
     public static class MenuDataViewHolder extends RecyclerView.ViewHolder {
 
-        TextView foodName, foodNameSide, foodPrice, foodRatingNum;
+        TextView foodName, foodNameSide, foodPrice, foodRatingNum, foodLikeCount;
         ImageView foodImage, foodHeart;
         RatingBar foodRating;
         LinearLayout cardLayout;
@@ -98,6 +99,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
             foodRating = itemView.findViewById(R.id.foodRatingBar);
             cardLayout = itemView.findViewById(R.id.cardLayout);
             foodRatingNum = itemView.findViewById(R.id.foodRatingNum);
+            foodLikeCount = itemView.findViewById(R.id.menuLikeCount);
         }
     }
 }
