@@ -23,7 +23,7 @@ import com.kookmin.kookbap.R;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    Boolean autoLoginCheck = false;
+    Boolean mCheck;
     Button mLogin_btn,mLogin_toGoogle_btn;
     EditText mEmail,mPassword;
     TextView mSingup;
@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
         SharedPreferences prf = getSharedPreferences("outo_login_id",0);
 
         if(prf.getBoolean("outoLogin",false)) { // 자동 로그인이 체크 되어있다면 바로 이동
@@ -58,14 +57,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences.Editor editor = prf.edit();
                 if(mOutologin.isChecked()){
-                    autoLoginCheck = false;
+                    mCheck = false;
                     ((CheckedTextView) view).setChecked(false);
                 }
                 else {
-                    autoLoginCheck = true;
+                    mCheck = true;
                     ((CheckedTextView) view).setChecked(true);
                 }
-                editor.apply();
             }
         });
 
@@ -76,33 +74,25 @@ public class LoginActivity extends AppCompatActivity {
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
 
-                // 항목 하나라도 안 채우면 토스트 띄움
-                if (email.equals("") || password.equals("")) {
-                    if (email.equals("") && password.equals("")) {
-                        Toast.makeText(LoginActivity.this, "모든 항목을 채워주십시오", Toast.LENGTH_SHORT).show();
-                    } else if (email.equals("")) {
-                        Toast.makeText(LoginActivity.this, "이메일을 입력하십시오", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "비밀번호를 입력하십시오", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    // 모든 항목이 채워져있어야 로그인 시도
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
+                    mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+                            if(task.isSuccessful())
+                            {
+                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id",0);
                                 SharedPreferences.Editor editor = prf.edit();
-                                editor.putBoolean("outoLogin", autoLoginCheck);
+                                editor.putBoolean("outoLogin",mCheck);
+                                editor.apply();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                                 finish();
-                            } else{
-                                Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
-                                Toast.makeText(LoginActivity.this, "비밀번호가 틀리거나 등록된 이메일이 아닙니다.", Toast.LENGTH_LONG).show(); // 실패시 출력
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this,password,Toast.LENGTH_LONG).show(); // 실패시 출력
                             }
                         }
                     });
-                }
+
             }
         });
 
@@ -114,4 +104,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    /*public void onBackPressed() {
+        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("can't send","reTry");
+                }
+            }
+        });
+        super.onBackPressed();
+    }*/
 }
