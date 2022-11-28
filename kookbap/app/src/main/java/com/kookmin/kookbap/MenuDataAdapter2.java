@@ -25,10 +25,6 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
     public MenuDataAdapter2(ArrayList<MenuData2> MenuDataArray, Context context) {
         this.MenuDataArray = MenuDataArray;
         this.context = context;
-//        Log.e("size", Integer.toString(MenuDataArray.size()));
-        if (MenuDataArray.size() == 0) {
-            Toast.makeText(context, "오늘은 메뉴가 없습니다.", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @NonNull

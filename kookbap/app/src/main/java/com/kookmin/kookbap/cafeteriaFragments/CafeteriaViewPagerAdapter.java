@@ -52,9 +52,6 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
                 case "청향 양식당":
                     getMenuChungHyangWestern.add(todayMenus.get(i));
                     break;
-                case "생활관식당 정기식":
-                    menuDormitory.add(todayMenus.get(i));
-                    break;
             }
         }
     }
