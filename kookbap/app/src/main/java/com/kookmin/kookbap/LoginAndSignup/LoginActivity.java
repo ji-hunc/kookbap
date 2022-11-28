@@ -18,11 +18,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kookmin.kookbap.MainActivity;
+import com.kookmin.kookbap.R;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    Boolean mCheck;
+    Boolean mCheck = false;
     Button mLogin_btn,mLogin_toGoogle_btn;
     EditText mEmail,mPassword;
     TextView mSingup;

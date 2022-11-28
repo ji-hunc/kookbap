@@ -40,6 +40,34 @@ public class MenuData2 {
     @Expose
     private int price;
 
+//    @SerializedName("reviewLikeTrueFalse")
+//    @Expose
+//    private boolean reviewLikeTrueFalse;
+//
+//    @SerializedName("subMenuName")
+//    @Expose
+//    private String subMenuName;
+//
+//    @SerializedName("image")
+//    @Expose
+//    private String image;
+
+//    public boolean isReviewLikeTrueFalse() {
+//        return reviewLikeTrueFalse;
+//    }
+//
+//    public String getSubMenuName() {
+//        return subMenuName;
+//    }
+//
+//    public String getImage() {
+//        return image;
+//    }
+
+    public int getMenu_Id() {
+        return menu_Id;
+    }
+
     public int getPrice() {
         return price;
     }

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.kookmin.kookbap.R;
 
 public class CheckEmailActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;

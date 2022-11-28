@@ -126,7 +126,7 @@ public class FoodDetail extends AppCompatActivity {
         // 리뷰 페이지 최상단 정보 내용 초기화 부분
         foodDetailName.setText(menuName);
         foodDetailNameSide.setText(getIntent().getStringExtra(("foodNameSide")));
-        foodDetailPrice.setText("₩" +getIntent().getStringExtra(("price")));
+        foodDetailPrice.setText("₩ " + getIntent().getIntExtra("price", 0));
         //foodDetailImage.setImageResource(getIntent().getIntExtra("image", 0));
         foodDetailRating.setRating(getIntent().getFloatExtra("rating", 0));
         foodDetailRatingNum.setText(getIntent().getStringExtra("ratingNum"));

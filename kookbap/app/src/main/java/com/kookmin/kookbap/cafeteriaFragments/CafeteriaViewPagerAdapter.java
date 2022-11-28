@@ -43,7 +43,7 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
                 case "교직원식당":
                     menuProfessor.add(todayMenus.get(i));
                     break;
-                case "K-BOB":
+                case "K-BOB+":
                     menuKbob.add(todayMenus.get(i));
                     break;
                 case "청향 한식당":

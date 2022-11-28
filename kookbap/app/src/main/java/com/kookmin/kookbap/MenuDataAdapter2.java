@@ -40,6 +40,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
 
 //        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenuName());
 //        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
+        holder.foodImage.setImageResource(R.drawable.ic_spoon);
         holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
         holder.foodPrice.setText("₩ " + MenuDataArray.get(position).getPrice());
         holder.foodRating.setRating(MenuDataArray.get(position).getStar_avg());
