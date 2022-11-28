@@ -39,6 +39,32 @@ public class FoodDetail extends AppCompatActivity {
     ReviewDataAdapter reviewDataAdapter;
 
 
+    @Override
+    protected void onRestart() {
+        String menuName = getIntent().getStringExtra("foodName");
+
+        super.onRestart();
+        Call<ArrayList<ReviewData>> call;
+        // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
+        call = RetrofitClient.getApiService().getReviewData(menuName,"최신순");
+        call.enqueue(new Callback<ArrayList<ReviewData>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                    ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
+                    reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList);
+                    reviewRecyclerView.setAdapter(reviewDataAdapter);
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
