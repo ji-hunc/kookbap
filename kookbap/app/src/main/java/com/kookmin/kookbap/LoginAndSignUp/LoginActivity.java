@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,7 +23,7 @@ import com.kookmin.kookbap.R;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    Boolean mCheck;
+    Boolean mCheck = false;
     Button mLogin_btn,mLogin_toGoogle_btn;
     EditText mEmail,mPassword;
     TextView mSingup;
@@ -40,11 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         mEmail = findViewById(R.id.login_Email);
         mPassword = findViewById(R.id.login_Password);
         mOutologin = findViewById(R.id.login_outo_Login);
-        mLogin_toGoogle_btn = findViewById(R.id.login_toGoogle_btn);
         mAuth = FirebaseAuth.getInstance(); // 파이어베이스 연결
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-                .requestEmail().build();
 
 
 
