@@ -45,8 +45,6 @@ public class SignUpActivity extends AppCompatActivity {
         mDatcom = findViewById(R.id.Singup_datcom);
         mInput_btn = findViewById(R.id.fragment_signupActivity_input_btn);
 
-
-        String pattern = "^[]*$";
         SharedPreferences outo_login_prf = SignUpActivity.this.getSharedPreferences("outo_login_id",0);
         SharedPreferences.Editor editor = outo_login_prf.edit();
 
