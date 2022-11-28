@@ -43,7 +43,7 @@
             android:layout_width="160dp"
             android:layout_height="40dp"
             android:maxLines="1"
-            android:hint="PassWord"
+            android:hint="특수문자를 적어도 하나이상 사용해주세요"
             android:inputType="textPassword"
             android:layout_below="@id/Singup_email_layout"
             android:layout_marginLeft="50dp"
