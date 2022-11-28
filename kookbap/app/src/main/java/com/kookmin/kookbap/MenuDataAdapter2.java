@@ -38,7 +38,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
     @Override
     public void onBindViewHolder(@NonNull MenuDataAdapter2.MenuDataViewHolder holder, final int position) {
 
-//        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenuName());
+        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenu());
 //        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
         holder.foodImage.setImageResource(R.drawable.ic_spoon);
         holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
