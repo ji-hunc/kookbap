@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <LinearLayout
         android:id="@+id/reviewMenuCardView"
@@ -34,6 +34,11 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/foodDetailRestaurant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
                     android:id="@+id/foodDetailNameSide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,15 +46,31 @@
                     android:layout_marginBottom="10dp"
                     android:text="반찬 이름 나열" />
 
-                <RatingBar
-                    android:id="@+id/foodDetailRatingBar"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:rating="2.5"
-                    android:stepSize="0.5"
-                    android:theme="@style/RatingBar" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <RatingBar
+                        android:id="@+id/foodDetailRatingBar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:rating="2.5"
+                        android:stepSize="0.5"
+                        android:theme="@style/RatingBar" />
+
+                    <TextView
+                        android:id="@+id/foodDetailRatingNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="평균별점"
+                        android:textAlignment="viewStart"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -61,18 +82,20 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:layout_marginRight="10dp"
                     android:id="@+id/foodDetailPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="right"
                     android:text="4,000"
                     android:textSize="17sp" />
 
                 <ImageView
+                    android:layout_marginRight="10dp"
                     android:id="@+id/foodDetailHeart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="right"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/heart_selector" />
 
