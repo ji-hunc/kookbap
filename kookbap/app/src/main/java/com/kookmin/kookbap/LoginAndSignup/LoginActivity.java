@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 SharedPreferences.Editor editor = prf.edit();
                                 editor.putBoolean("outoLogin",mCheck);
+                                editor.apply();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                                 finish();
