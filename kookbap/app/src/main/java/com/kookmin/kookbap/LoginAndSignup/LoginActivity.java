@@ -23,7 +23,7 @@ import com.kookmin.kookbap.R;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    Boolean mCheck = false;
+    Boolean autoLoginCheck = false;
     Button mLogin_btn,mLogin_toGoogle_btn;
     EditText mEmail,mPassword;
     TextView mSingup;
@@ -58,11 +58,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences.Editor editor = prf.edit();
                 if(mOutologin.isChecked()){
-                    mCheck = false;
+                    autoLoginCheck = false;
                     ((CheckedTextView) view).setChecked(false);
                 }
                 else {
-                    mCheck = true;
+                    autoLoginCheck = true;
                     ((CheckedTextView) view).setChecked(true);
                 }
                 editor.apply();
@@ -76,23 +76,33 @@ public class LoginActivity extends AppCompatActivity {
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
 
-                    mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
+                // 항목 하나라도 안 채우면 토스트 띄움
+                if (email.equals("") || password.equals("")) {
+                    if (email.equals("") && password.equals("")) {
+                        Toast.makeText(LoginActivity.this, "모든 항목을 채워주십시오", Toast.LENGTH_SHORT).show();
+                    } else if (email.equals("")) {
+                        Toast.makeText(LoginActivity.this, "이메일을 입력하십시오", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "비밀번호를 입력하십시오", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    // 모든 항목이 채워져있어야 로그인 시도
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful())
-                            {
+                            if (task.isSuccessful()) {
                                 SharedPreferences.Editor editor = prf.edit();
-                                editor.putBoolean("outoLogin",mCheck);
+                                editor.putBoolean("outoLogin", autoLoginCheck);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                                 finish();
-                            }
-                            else{
-                                Toast.makeText(LoginActivity.this,password,Toast.LENGTH_LONG).show(); // 실패시 출력
+                            } else{
+                                Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
+                                Toast.makeText(LoginActivity.this, "비밀번호가 틀리거나 등록된 이메일이 아닙니다.", Toast.LENGTH_LONG).show(); // 실패시 출력
                             }
                         }
                     });
-
+                }
             }
         });
 
@@ -103,6 +113,5 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 }
