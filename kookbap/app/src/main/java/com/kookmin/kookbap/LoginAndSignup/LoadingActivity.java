@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kookmin.kookbap.R;
+
 public class LoadingActivity extends AppCompatActivity {
 
     @Override
