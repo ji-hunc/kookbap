@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
         SharedPreferences prf = getSharedPreferences("outo_login_id",0);
 
         if(prf.getBoolean("outoLogin",false)) { // 자동 로그인이 체크 되어있다면 바로 이동
@@ -65,7 +64,6 @@ public class LoginActivity extends AppCompatActivity {
                     mCheck = true;
                     ((CheckedTextView) view).setChecked(true);
                 }
-                editor.apply();
             }
         });
 
@@ -81,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful())
                             {
+                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id",0);
                                 SharedPreferences.Editor editor = prf.edit();
                                 editor.putBoolean("outoLogin",mCheck);
                                 editor.apply();
@@ -104,6 +103,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
+    /*public void onBackPressed() {
+        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("can't send","reTry");
+                }
+            }
+        });
+        super.onBackPressed();
+    }*/
 }
