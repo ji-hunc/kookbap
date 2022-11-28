@@ -55,7 +55,8 @@ public interface RetrofitInterface {
     // 쿼리로 어떻게 정렬할 것인지를 받아옴
     @GET("/menu/{date}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
     Call<ArrayList<MenuData2>> getMenuDataEachDate(
-            @Path("date") String date
+            @Path("date") String date,
+            @Query("userId") String userId
     );
 
 
