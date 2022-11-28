@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
                         // 날짜를 선택하고 확인을 누르면, 어댑터가 그 날짜에 해당하는 것들로 다시 뿌려줌
                         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
                         Call<ArrayList<MenuData2>> call;
-                        call = RetrofitClient.getApiService().getMenuDataEachDate(date); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
+                        call = RetrofitClient.getApiService().getMenuDataEachDate(date,"jongbin"); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
                         call.enqueue(new Callback<ArrayList<MenuData2>>() {
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -138,7 +138,7 @@ public class HomeFragment extends Fragment {
 
         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
         Call<ArrayList<MenuData2>> call;
-        call = RetrofitClient.getApiService().getMenuDataEachDate(date); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
+        call = RetrofitClient.getApiService().getMenuDataEachDate(date,"jongbin"); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
         call.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {

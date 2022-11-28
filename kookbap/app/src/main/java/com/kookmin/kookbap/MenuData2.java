@@ -40,17 +40,17 @@ public class MenuData2 {
     @Expose
     private int price;
 
-//    @SerializedName("reviewLikeTrueFalse")
-//    @Expose
-//    private boolean reviewLikeTrueFalse;
-//
+    @SerializedName("menuLikeTrueFalse")
+    @Expose
+    private boolean menuLikeTrueFalse;
+
     @SerializedName("subMenu")
     @Expose
     private String subMenu;
-//
-//    @SerializedName("image")
-//    @Expose
-//    private String image;
+
+    @SerializedName("image")
+    @Expose
+    private String image;
 
 //    public boolean isReviewLikeTrueFalse() {
 //        return reviewLikeTrueFalse;
