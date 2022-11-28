@@ -1,6 +1,5 @@
 package com.kookmin.kookbap.Retrofits;
 
-import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.UserRankData;
@@ -120,7 +119,7 @@ public interface RetrofitInterface {
 
 
     @GET("/rank/menu/{category}")
-    Call<ArrayList<MenuData>> getMenuReviewRankData(
+    Call<ArrayList<MenuData2>> getMenuReviewRankData(
             //review_like or total_review
             @Path("category") String category,
             //데이터 갯수 제한
@@ -130,7 +129,7 @@ public interface RetrofitInterface {
 
     //제네릭타입으로 만들어서 리팩토링할때 쓸 주소
     @GET("/rank/{section}}/{category}")
-    Call<ArrayList<MenuData>> getRankData(
+    Call<ArrayList<MenuData2>> getRankData(
             //
             @Path("section") String section,
             //review_like or total_review
