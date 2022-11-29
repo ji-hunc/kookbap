@@ -130,7 +130,7 @@ public class FoodDetail extends AppCompatActivity {
                 Call<ArrayList<ReviewData>> call;
                 // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
                 //todo : 'jongbin'부분 userid 받아오게 변경
-                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jongbin");
+                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jihun");
                 call.enqueue(new Callback<ArrayList<ReviewData>>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -148,8 +148,8 @@ public class FoodDetail extends AppCompatActivity {
                         Log.e("Error", t.getMessage());
                     }
                 });
-                animationView.cancelAnimation();
-                animationView.setVisibility(View.GONE);
+                //animationView.cancelAnimation();
+                //animationView.setVisibility(View.GONE);
             }
 
             @Override

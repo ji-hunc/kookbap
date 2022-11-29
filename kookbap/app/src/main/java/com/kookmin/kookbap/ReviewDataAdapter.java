@@ -70,11 +70,45 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
         holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
         holder.reviewLikes.setText(Integer.toString(reviewDataArray.get(position).getReview_like()));
+        Log.e("click", Integer.toString(reviewDataArray.get(position).getReviewLikeTrueFalse()));
+        if (reviewDataArray.get(position).getReviewLikeTrueFalse() == 1) {
+            holder.reviewLikeImage.setSelected(true);
+        }
 
 
         holder.reviewLikeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // TODO user_id 는 프리퍼런스에서 받아와야함
+                String user_id = "jihun";
+                // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
+                int card_id = reviewDataArray.get(position).getReview_number();
+                String type = "review";
+
+                // 좋아요 레트로핏 통신
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, true, type, 0, 0);
+                call.enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                        // 서버에서 응답을 받아옴
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            // 응답을 받아오지 못했을경우
+                        } else {
+                            assert response.body() != null;
+                        }
+                    }
+
+                    // 통신실패시
+                    @Override
+                    public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+
+                    }
+                });
+
+
                 if(holder.reviewLikeImage.isSelected())
                 {
                     holder.reviewLikeImage.setSelected(false);

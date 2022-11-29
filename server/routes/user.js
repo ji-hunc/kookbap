@@ -51,6 +51,42 @@ router.post("/like", (req, res) => {
     } else {
         // review 좋아요 버튼을 눌렀을 때
         var review_id = req.body.card_id;
+        db.query(
+            `select count(*) as existCheck from review_like where Rlike_user_id = '${user_id}' and Rlike_review_no ='${review_id}'`,
+            function (error, results) {
+                var existCheck = results[0].existCheck;
+                console.log(results);
+                if (existCheck == 0) {
+                    console.log("insert");
+                    db.query(
+                        `INSERT INTO review_like (Rlike_user_id, Rlike_review_no) VALUES ('${user_id}','${review_id}');`,
+                        function (error, result) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        }
+                    );
+                } else if (existCheck == 1) {
+                    console.log("delete");
+                    db.query(
+                        `Delete from review_like where Rlike_user_id = '${user_id}' and Rlike_review_no ='${review_id}'`,
+                        function (error, result) {
+                            if (error) {
+                                console.log(error);
+                            }
+                        }
+                    );
+                } else if (existCheck > 1) {
+                    console.log("else");
+                    db.query("set SQL_SAFE_updates= 0;");
+                    db.query(
+                        "delete t1 from review_like t1 join review_like t2 on t1.Rlike_user_id = t2.Rlike_user_id and t1.Rlike_review_no = t2.Rlike_review_no where t1.review_like_id>t2.review_like_id;"
+                    );
+                    db.query("set SQL_SAFE_updates= 1;");
+                    console.log("중복제거 완료");
+                }
+            }
+        );
     }
 
     res.json({
