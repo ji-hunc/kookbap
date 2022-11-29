@@ -86,6 +86,9 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
         //반올림해서 소수점 한자리까지 화면에 보여줌
         holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
         holder.foodLikeCount.setText("좋아요 : " + Integer.toString(MenuDataArray.get(position).getTotal_like()));
+        if (MenuDataArray.get(position).isUserLikeTrueFalse() == 1) {
+            holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
+        }
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
