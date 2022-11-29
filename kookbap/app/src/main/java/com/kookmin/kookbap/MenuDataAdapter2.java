@@ -2,6 +2,9 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.MenuDataViewHolder> {
@@ -39,8 +45,41 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
     public void onBindViewHolder(@NonNull MenuDataAdapter2.MenuDataViewHolder holder, final int position) {
 
         holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenu());
-//        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
-        holder.foodImage.setImageResource(R.drawable.ic_spoon);
+        if (MenuDataArray.get(position).getImage() == null) {
+            holder.foodImage.setImageResource(R.drawable.ic_spoon);
+        } else {
+            // 외부이미지 이미지뷰에 적용해주는 클래스
+            class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
+                @Override
+                protected Bitmap doInBackground(String... strings) {
+                    Bitmap bmp = null;
+                    try {
+                        String img_url = strings[0]; //url of the image
+                        URL url = new URL(img_url);
+                        bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return bmp;
+                }
+
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                }
+
+
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    // doInBackground 에서 받아온 total 값 사용 장소
+                    holder.foodImage.setImageBitmap(result);
+                }
+            }
+            String url = "https://kookbap.run.goorm.io/images/" + MenuDataArray.get(position).getImage();
+            new DownloadFilesTask().execute(url); // 이미지뷰에 외부 이미지 적용
+        }
         holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
         holder.foodPrice.setText("₩ " + MenuDataArray.get(position).getPrice());
         holder.foodRating.setRating(MenuDataArray.get(position).getStar_avg());
