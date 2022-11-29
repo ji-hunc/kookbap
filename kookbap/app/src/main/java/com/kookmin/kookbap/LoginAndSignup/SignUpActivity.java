@@ -46,6 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
         mInput_btn = findViewById(R.id.fragment_signupActivity_input_btn);
 
         SharedPreferences outo_login_prf = SignUpActivity.this.getSharedPreferences("outo_login_id",0);
+
         SharedPreferences.Editor editor = outo_login_prf.edit();
 
 
@@ -95,6 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 Log.d("send","sendEmail");
                                 Intent intent = new Intent(SignUpActivity.this, CheckEmailActivity.class);
+                                intent.putExtra("name", mName.getText().toString());
                                 startActivity(intent);
                                 finish();
                             }
@@ -104,5 +106,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
