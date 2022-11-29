@@ -73,6 +73,8 @@ public class LoginActivity extends AppCompatActivity {
         mLogin_btn.setOnClickListener(new View.OnClickListener() { //로그인 버튼 누름
             @Override
             public void onClick(View view) {
+                String email = mEmail.getText().toString();
+                String password = mPassword.getText().toString();
                 if (email.equals("") || password.equals("")) {
                     if (email.equals("") && password.equals("")) {
                         Toast.makeText(LoginActivity.this, "모든 항목을 채워주십시오", Toast.LENGTH_SHORT).show();
@@ -83,9 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    String email = mEmail.getText().toString();
-                    String password = mPassword.getText().toString();
-
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
