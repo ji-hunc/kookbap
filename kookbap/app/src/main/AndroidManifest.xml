@@ -50,7 +50,9 @@
         </activity>
         <activity android:name=".UserReviewsActivity" />
         <activity android:name=".LoginAndSignup.CheckEmailActivity"/>
-        <activity android:name=".MainActivity"/>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"/>
         <activity android:name=".LoginAndSignup.LoginActivity"/>
         <activity android:name=".LoginAndSignup.SignUpActivity"/>
     </application>
