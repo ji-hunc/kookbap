@@ -104,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     /*public void onBackPressed() {
         mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
