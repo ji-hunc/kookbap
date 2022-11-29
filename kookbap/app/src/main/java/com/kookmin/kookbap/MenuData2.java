@@ -4,9 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MenuData2 {
-    @SerializedName("menu_Id")
+    @SerializedName("menu_id")
     @Expose
-    private int menu_Id;
+    private int menu_id;
 
     @SerializedName("restaurant_name")
     @Expose
@@ -28,10 +28,6 @@ public class MenuData2 {
     @Expose
     private int total_like;
 
-    @SerializedName("menu_appearance_id")
-    @Expose
-    private int menu_appearance_id;
-
     @SerializedName("date")
     @Expose
     private String date;
@@ -40,36 +36,45 @@ public class MenuData2 {
     @Expose
     private int price;
 
-    @SerializedName("menuLikeTrueFalse")
-    @Expose
-    private boolean menuLikeTrueFalse;
-
     @SerializedName("subMenu")
     @Expose
     private String subMenu;
+
+    @SerializedName("menu_like_id")
+    @Expose
+    private int menu_like_id;
 
     @SerializedName("image")
     @Expose
     private String image;
 
-//    public boolean isReviewLikeTrueFalse() {
-//        return reviewLikeTrueFalse;
-//    }
-//
+    @SerializedName("Mliked_user_id")
+    @Expose
+    private String Mliked_user_id;
+
+    @SerializedName("userLikeTrueFalse")
+    @Expose
+    private int userLikeTrueFalse;
+
+
     public String getSubMenu() {
         return subMenu;
     }
-//
-//    public String getImage() {
-//        return image;
-//    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public int isUserLikeTrueFalse() {
+        return userLikeTrueFalse;
+    }
 
     public int getPrice() {
         return price;
     }
 
     public int getMenu_id() {
-        return menu_Id;
+        return menu_id;
     }
 
     public String getRestaurant_name() {
@@ -92,8 +97,12 @@ public class MenuData2 {
         return total_like;
     }
 
-    public int getMenu_appearance_id() {
-        return menu_appearance_id;
+    public int getMenu_like_id() {
+        return menu_like_id;
+    }
+
+    public String getMliked_user_id() {
+        return Mliked_user_id;
     }
 
     public String getDate() {

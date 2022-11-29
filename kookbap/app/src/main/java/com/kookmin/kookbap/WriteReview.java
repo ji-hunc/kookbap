@@ -495,6 +495,7 @@ public class WriteReview extends AppCompatActivity {
                                     if (success) {
                                         Log.e("LOGLOG", "success1");
                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                        finish();
 
                                         Log.e("서버에서 받아온내용", message);
                                     } else {
@@ -517,7 +518,6 @@ public class WriteReview extends AppCompatActivity {
 
                             }
                         });
-                        finish();
                     } else {
                         Toast.makeText(WriteReview.this, "사진을 업로드하고 내용을 입력해 주십시오", Toast.LENGTH_SHORT).show();
                     }
