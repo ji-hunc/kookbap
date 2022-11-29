@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import static android.app.Activity.RESULT_OK;
 import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 import android.Manifest;
@@ -11,9 +12,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -220,7 +223,15 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                // 로그아웃 기능 구현 필요
+                SharedPreferences prf = getActivity().getSharedPreferences("outo_login_id", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prf.edit();
+                editor.clear();
+                editor.apply();
+                PackageManager packageManager = getActivity().getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage(getActivity().getPackageName());
+                ComponentName componentName = intent.getComponent();
+                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                startActivity(mainIntent);
             }
         });
 
