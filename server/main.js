@@ -9,6 +9,7 @@ var indexRouter = require("./routes/index.js");
 var menuRouter = require("./routes/menu.js");
 var reviewRouter = require("./routes/review.js");
 var rankRouter = require("./routes/rank.js");
+var userRouter = require("./routes/user.js");
 
 app.use(express.static("public"));
 app.use(fileUpload());
@@ -18,6 +19,7 @@ app.use("/", indexRouter);
 app.use("/menu", menuRouter);
 app.use("/review", reviewRouter);
 app.use("/rank", rankRouter);
+app.use("/user", userRouter);
 
 app.listen(port, () => {
     console.log(`Example app listening on port on ${port}`);
