@@ -1,5 +1,7 @@
 package com.kookmin.kookbap.Retrofits;
 
+import android.util.Log;
+
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.UserRankData;
@@ -138,6 +140,19 @@ public interface RetrofitInterface {
             //데이터 갯수 제한
             @Query("endR") int endR
 
+    );
+
+    // http://kookbap.run.goorm.io/review/delete
+    // http://10.0.2.2:3000/review/delete
+    @FormUrlEncoded
+    @POST("/user/like")
+    Call<Result> postLikeInfo(
+            @Field("user_id") String user_id,
+            @Field("card_id") int card_id,
+            @Field("pushOrNot") boolean pushOrNot,
+            @Field("type") String type,
+            @Field("menu_like_id") int menu_like_id,
+            @Field("review_like_id") int review_like_id
     );
 
 //    @Multipart

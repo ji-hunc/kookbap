@@ -62,7 +62,7 @@ public class ShowMoreRankActivity extends AppCompatActivity {
                 getPasteDataAboutMenu(menuDataParameter,SHOW_NUM,recyclerView,context);
                 break;
             case "countRank":
-                menuDataParameter = "star_avg";
+                menuDataParameter = "count_review";
                 getPasteDataAboutMenu(menuDataParameter,SHOW_NUM,recyclerView,context);
             default:
 

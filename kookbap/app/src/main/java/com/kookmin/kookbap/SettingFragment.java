@@ -10,6 +10,7 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -225,7 +226,15 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                // 로그아웃 기능 구현 필요
+                SharedPreferences prf = getActivity().getSharedPreferences("outo_login_id", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prf.edit();
+                editor.clear();
+                editor.apply();
+                PackageManager packageManager = getActivity().getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage(getActivity().getPackageName());
+                ComponentName componentName = intent.getComponent();
+                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                startActivity(mainIntent);
             }
         });
 

@@ -18,6 +18,8 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -39,6 +41,32 @@ public class FoodDetail extends AppCompatActivity {
     ReviewDataAdapter reviewDataAdapter;
 
 
+    @Override
+    protected void onRestart() {
+        String menuName = getIntent().getStringExtra("foodName");
+
+        super.onRestart();
+        Call<ArrayList<ReviewData>> call;
+        // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
+        call = RetrofitClient.getApiService().getReviewData(menuName,"최신순", "jihun");
+        call.enqueue(new Callback<ArrayList<ReviewData>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                    ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
+                    reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList);
+                    reviewRecyclerView.setAdapter(reviewDataAdapter);
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +117,11 @@ public class FoodDetail extends AppCompatActivity {
         // 메뉴에 해당하는 리뷰들을 ArrayList 형식으로 가져옴. 각각의 리뷰객체들이 들어있음
          // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
 
-
+        LottieAnimationView animationView = findViewById(R.id.lottie);
+        animationView.setVisibility(View.VISIBLE);
+        animationView.setAnimation("loading.json");
+        animationView.setRepeatCount(LottieDrawable.INFINITE);
+        animationView.playAnimation();
 
         reviewSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -98,7 +130,7 @@ public class FoodDetail extends AppCompatActivity {
                 Call<ArrayList<ReviewData>> call;
                 // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
                 //todo : 'jongbin'부분 userid 받아오게 변경
-                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jongbin");
+                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jihun");
                 call.enqueue(new Callback<ArrayList<ReviewData>>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -116,6 +148,8 @@ public class FoodDetail extends AppCompatActivity {
                         Log.e("Error", t.getMessage());
                     }
                 });
+                //animationView.cancelAnimation();
+                //animationView.setVisibility(View.GONE);
             }
 
             @Override

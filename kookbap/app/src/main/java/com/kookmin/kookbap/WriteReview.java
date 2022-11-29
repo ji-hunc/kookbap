@@ -3,11 +3,14 @@ package com.kookmin.kookbap;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,8 +38,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.gson.Gson;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
@@ -441,6 +448,21 @@ public class WriteReview extends AppCompatActivity {
             postButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this);
+                    View dialogView = LayoutInflater.from(WriteReview.this).inflate(
+                            R.layout.loading_dialog,
+                            (ConstraintLayout)findViewById(R.id.layoutLoadingDialog));
+                    builder.setView(dialogView);
+                    LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
+                    lottieAnimationView.setAnimation("loading.json");
+                    lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
+                    lottieAnimationView.playAnimation();
+
+                    AlertDialog alertDialog =  builder.create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog.show();
+
                     if (!(editTextReview.getText().toString().equals("") || !isFilledImage)) {
                         // 채우지 않은 항목이 있거나, 이미지가 없을 경우
                         File newFile = new File(getApplicationContext().getFilesDir(), "test.png");
@@ -485,7 +507,7 @@ public class WriteReview extends AppCompatActivity {
                         call.enqueue(new Callback<Result>() {
                             @Override
                             public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
-
+                                alertDialog.dismiss();
                                 // 서버에서 응답을 받아옴
                                 if (response.isSuccessful() && response.body() != null) {
                                     Boolean success = response.body().getSuccess();
@@ -495,6 +517,7 @@ public class WriteReview extends AppCompatActivity {
                                     if (success) {
                                         Log.e("LOGLOG", "success1");
                                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                        finish();
 
                                         Log.e("서버에서 받아온내용", message);
                                     } else {
@@ -507,6 +530,7 @@ public class WriteReview extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     Log.e("LOGLOG", "success3");
                                 }
+
                             }
 
                             // 통신실패시
@@ -517,7 +541,6 @@ public class WriteReview extends AppCompatActivity {
 
                             }
                         });
-                        finish();
                     } else {
                         Toast.makeText(WriteReview.this, "사진을 업로드하고 내용을 입력해 주십시오", Toast.LENGTH_SHORT).show();
                     }

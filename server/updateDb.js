@@ -41,11 +41,11 @@ request(options, async function (error, response, body) {
         console.log(error);
     }
     menuJsonObject = JSON.parse(body);
-    console.log(menuJsonObject);
-    console.log("json loading 완료");
+    // console.log(menuJsonObject);
+    // console.log("json loading 완료");
     totalUpdate();
     deleteOverlap();
-    console.log("완료");
+    // console.log("완료");
 });
 
 //2022- 01-01 부터 현재까지 일수 계산, 전체업데이트 시 사용
@@ -147,7 +147,7 @@ async function updateSql(data) {
                             db.query(
                                 `insert into menu_appearance (menu_id, date, price, subMenu) values ("${menu_id}", "${data.date}", "${data.price}" , "${data.subMenu}");`,
                                 function (error, result) {
-                                    console.log(data.date, data.menuName);
+                                    // console.log(data.date, data.menuName);
                                     if (error) {
                                         console.log(error);
                                     }
@@ -159,7 +159,7 @@ async function updateSql(data) {
             }
         );
     } catch (e) {
-        console.log(data);
+        // console.log(data);
     }
 }
 
@@ -216,12 +216,12 @@ function staffRest(data, date) {
                 daySubMenu
             );
             if (aa.menuName != "") {
-                console.log(aa);
+                // console.log(aa);
                 returnArray.push(aa);
             }
         }
     } catch (e) {
-        console.log("데이터분류 완료");
+        // console.log("데이터분류 완료");
     }
     return returnArray;
 }
@@ -300,7 +300,7 @@ function hanwoolRest(data, date) {
                         daySubMenu.trim()
                     );
                     if (aa.menuName != "") {
-                        console.log(aa);
+                        // console.log(aa);
                         returnArray.push(aa);
                     }
                 }
@@ -320,7 +320,7 @@ function hanwoolRest(data, date) {
                     daySubMenu.trim()
                 );
                 if (aa.menuName != "") {
-                    console.log(aa);
+                    // console.log(aa);
                     returnArray.push(aa);
                 }
             }
@@ -404,7 +404,7 @@ function studentRest(data, date) {
                     daySubMenu = daySubMenu.replace("&", "");
                 }
             } catch (e) {
-                console.log(dayMenuName, daySubMenu);
+                // console.log(dayMenuName, daySubMenu);
                 console.log(e);
             }
 
@@ -416,7 +416,7 @@ function studentRest(data, date) {
                 daySubMenu
             );
             if (aa.menuName != "") {
-                console.log(aa);
+                // console.log(aa);
                 returnArray.push(aa);
             }
         }
@@ -467,7 +467,7 @@ function chunghyangKoRest(data, date) {
             }
             aa = new menuData("청향 한식당", dayMenuName, dayMenuPrice, date);
             if (aa.menuName != "") {
-                console.log(aa);
+                // console.log(aa);
                 returnArray.push(aa);
             }
         }
@@ -515,7 +515,7 @@ function chunghyangWestRest(data, date) {
                     date
                 );
                 if (aa.menuName != "") {
-                    console.log(aa);
+                    // console.log(aa);
                     returnArray.push(aa);
                 }
             }
@@ -553,7 +553,7 @@ function KbobRest(data, date) {
                 }
                 aa = new menuData("K-BOB+", dayMenuName, dayMenuPrice, date);
                 if (aa.menuName != "") {
-                    console.log(aa);
+                    // console.log(aa);
                     returnArray.push(aa);
                 }
             }
@@ -585,7 +585,7 @@ function DormitoryRest(data, date) {
                     dayMenuPrice,
                     date
                 );
-                console.log(aa);
+                // console.log(aa);
                 returnArray.push(aa);
             }
         }

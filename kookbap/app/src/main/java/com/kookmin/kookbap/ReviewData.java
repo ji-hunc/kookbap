@@ -41,6 +41,14 @@ public class ReviewData {
     @Expose
     private String image;
 
+    @SerializedName("reviewLikeTrueFalse")
+    @Expose
+    private int reviewLikeTrueFalse;
+
+    public int getReviewLikeTrueFalse() {
+        return reviewLikeTrueFalse;
+    }
+
     public int getReview_number() {
         return review_number;
     }

@@ -2,6 +2,9 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +18,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kookmin.kookbap.Retrofits.Result;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.MenuDataViewHolder> {
 
@@ -39,14 +54,50 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
     public void onBindViewHolder(@NonNull MenuDataAdapter2.MenuDataViewHolder holder, final int position) {
 
         holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenu());
-//        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
-        holder.foodImage.setImageResource(R.drawable.ic_spoon);
+        if (MenuDataArray.get(position).getImage() == null) {
+            holder.foodImage.setImageResource(R.drawable.ic_spoon);
+        } else {
+            // 외부이미지 이미지뷰에 적용해주는 클래스
+            class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
+                @Override
+                protected Bitmap doInBackground(String... strings) {
+                    Bitmap bmp = null;
+                    try {
+                        String img_url = strings[0]; //url of the image
+                        URL url = new URL(img_url);
+                        bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return bmp;
+                }
+
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                }
+
+
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    // doInBackground 에서 받아온 total 값 사용 장소
+                    holder.foodImage.setImageBitmap(result);
+                }
+            }
+            String url = "https://kookbap.run.goorm.io/images/" + MenuDataArray.get(position).getImage();
+            new DownloadFilesTask().execute(url); // 이미지뷰에 외부 이미지 적용
+        }
         holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
         holder.foodPrice.setText("₩ " + MenuDataArray.get(position).getPrice());
         holder.foodRating.setRating(MenuDataArray.get(position).getStar_avg());
         //반올림해서 소수점 한자리까지 화면에 보여줌
         holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
         holder.foodLikeCount.setText("좋아요 : " + Integer.toString(MenuDataArray.get(position).getTotal_like()));
+        if (MenuDataArray.get(position).isUserLikeTrueFalse() == 1) {
+            holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
+        }
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +124,35 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
             public void onClick(View view) {
                 holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
 
+                // TODO user_id 는 프리퍼런스에서 받아와야함
+                String user_id = "jihun";
+                // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
+                int card_id = MenuDataArray.get(position).getMenu_id();
+                boolean pushOrNot = holder.foodHeart.isSelected();
+                String type = "menu";
+                int menu_like_id = MenuDataArray.get(position).getMenu_like_id();
+
+                // 좋아요 레트로핏 통신
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, pushOrNot, type, menu_like_id, 0);
+                call.enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                        // 서버에서 응답을 받아옴
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            // 응답을 받아오지 못했을경우
+                        } else {
+                            assert response.body() != null;
+                        }
+                    }
+
+                    // 통신실패시
+                    @Override
+                    public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+
+                    }
+                });
             }
         });
     }

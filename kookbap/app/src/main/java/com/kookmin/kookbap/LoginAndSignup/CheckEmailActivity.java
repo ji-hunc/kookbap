@@ -1,5 +1,6 @@
 package com.kookmin.kookbap.LoginAndSignup;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,8 +33,10 @@ public class CheckEmailActivity extends AppCompatActivity {
         mUser = mAuth.getCurrentUser();
         mCheck_Email_btn = findViewById(R.id.fragment_checkEmail_check_btn);
 
-        SharedPreferences outo_login_prf = CheckEmailActivity.this.getSharedPreferences("outo_login_id", 0);
-        SharedPreferences.Editor editor = outo_login_prf.edit();
+        SharedPreferences myData = getSharedPreferences("userData", 0);
+        SharedPreferences.Editor editor = myData.edit();
+
+        Intent intent = getIntent();
 
         mCheck_Email_btn.setOnClickListener(new View.OnClickListener() { // 인증메일을 확인여부
             @Override
@@ -45,6 +48,7 @@ public class CheckEmailActivity extends AppCompatActivity {
                         if(isVerified){
                             Log.d("success","드디어!");
                             editor.putString("ID",mUser.getEmail());
+                            editor.putString("Name",intent.getStringExtra("name"));
                             editor.apply();
                             finish();
                         }
