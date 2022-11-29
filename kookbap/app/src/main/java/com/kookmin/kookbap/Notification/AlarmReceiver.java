@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.Notification;
 
 import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static android.app.PendingIntent.FLAG_MUTABLE;
@@ -14,6 +14,10 @@ import android.content.Intent;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
+
+import com.kookmin.kookbap.MainActivity;
+import com.kookmin.kookbap.R;
+import com.kookmin.kookbap.RecommendMenuFragment;
 
 public class AlarmReceiver extends BroadcastReceiver {
     public AlarmReceiver(){ }
