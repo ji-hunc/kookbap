@@ -95,6 +95,11 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:scrollbars="none" />
+            <ImageView
+                android:id="@+id/reviewLikeImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/like_selector" />
 
             <TextView
                 android:layout_gravity="center"

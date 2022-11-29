@@ -18,6 +18,8 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -115,7 +117,11 @@ public class FoodDetail extends AppCompatActivity {
         // 메뉴에 해당하는 리뷰들을 ArrayList 형식으로 가져옴. 각각의 리뷰객체들이 들어있음
          // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
 
-
+        LottieAnimationView animationView = findViewById(R.id.lottie);
+        animationView.setVisibility(View.VISIBLE);
+        animationView.setAnimation("loading.json");
+        animationView.setRepeatCount(LottieDrawable.INFINITE);
+        animationView.playAnimation();
 
         reviewSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -142,6 +148,8 @@ public class FoodDetail extends AppCompatActivity {
                         Log.e("Error", t.getMessage());
                     }
                 });
+                animationView.cancelAnimation();
+                animationView.setVisibility(View.GONE);
             }
 
             @Override

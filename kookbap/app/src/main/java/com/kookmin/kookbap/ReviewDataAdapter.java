@@ -20,6 +20,7 @@ import android.widget.RatingBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.os.Handler;
 
 
 import androidx.annotation.NonNull;
@@ -70,6 +71,27 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
         holder.reviewLikes.setText(Integer.toString(reviewDataArray.get(position).getReview_like()));
 
+
+        holder.reviewLikeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(holder.reviewLikeImage.isSelected())
+                {
+                    holder.reviewLikeImage.setSelected(false);
+                }
+                else
+                {
+                    holder.reviewLikeImage.setSelected(true);
+                }
+                holder.reviewLikeImage.setClickable(false);
+                new Handler().postDelayed(new Runnable(){
+                    @Override
+                    public void run(){
+                        holder.reviewLikeImage.setClickable(true);
+                    }
+                }, 1000);
+            }
+        });
 
         // TODO 메뉴 버튼을 눌렀을 때, 본인이면 신고/수정/삭제하기<->아니면 신고하기만, 현재는 다 가능
         holder.editMenuImageButton.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +201,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
 
     public class ReviewDataViewHolder extends RecyclerView.ViewHolder {
         TextView reviewContext, reviewReviewerName, reviewDate, reviewLikes;
-        ImageView reviewImage, likeImage, editMenuImageButton;
+        ImageView reviewImage, reviewLikeImage, editMenuImageButton;
         RatingBar reviewRating;
         WebView webView;
         //LinearLayout reviewCardLayout;
@@ -194,6 +216,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
             //reviewCardLayout = itemView.findViewById(R.id.reviewCardView);
             editMenuImageButton = itemView.findViewById(R.id.reviewEditMenuImageView);
             reviewLikes = itemView.findViewById(R.id.reviewLikes);
+            reviewLikeImage = itemView.findViewById(R.id.reviewLikeImageView);
         }
     }
 }
