@@ -218,7 +218,6 @@ router.post("/modify", parser, function (request, response) {
         message: "GOOD",
     });
 });
-
 // 리뷰 삭제
 router.post("/delete", function (request, response) {
     console.log(request.body);

@@ -46,7 +46,7 @@ public class FoodDetail extends AppCompatActivity {
         super.onRestart();
         Call<ArrayList<ReviewData>> call;
         // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
-        call = RetrofitClient.getApiService().getReviewData(menuName,"최신순");
+        call = RetrofitClient.getApiService().getReviewData(menuName,"최신순", "jihun");
         call.enqueue(new Callback<ArrayList<ReviewData>>() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
