@@ -2,6 +2,9 @@ package com.kookmin.kookbap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.MenuDataViewHolder> {
@@ -24,7 +31,6 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
     public MenuDataAdapter2(ArrayList<MenuData2> MenuDataArray, Context context) {
         this.MenuDataArray = MenuDataArray;
         this.context = context;
-//        Log.e("size", Integer.toString(MenuDataArray.size()));
     }
 
     @NonNull
@@ -38,14 +44,51 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
     @Override
     public void onBindViewHolder(@NonNull MenuDataAdapter2.MenuDataViewHolder holder, final int position) {
 
-//        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenuName());
-//        holder.foodImage.setImageResource(MenuDataArray.get(position).getImage());
-        holder.foodImage.setImageResource(R.drawable.ic_spoon);
+        holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenu());
+        if (MenuDataArray.get(position).getImage() == null) {
+            holder.foodImage.setImageResource(R.drawable.ic_spoon);
+        } else {
+            // 외부이미지 이미지뷰에 적용해주는 클래스
+            class DownloadFilesTask extends AsyncTask<String,Void, Bitmap> {
+                @Override
+                protected Bitmap doInBackground(String... strings) {
+                    Bitmap bmp = null;
+                    try {
+                        String img_url = strings[0]; //url of the image
+                        URL url = new URL(img_url);
+                        bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return bmp;
+                }
+
+                @Override
+                protected void onPreExecute() {
+                    super.onPreExecute();
+                }
+
+
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    // doInBackground 에서 받아온 total 값 사용 장소
+                    holder.foodImage.setImageBitmap(result);
+                }
+            }
+            String url = "https://kookbap.run.goorm.io/images/" + MenuDataArray.get(position).getImage();
+            new DownloadFilesTask().execute(url); // 이미지뷰에 외부 이미지 적용
+        }
         holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
         holder.foodPrice.setText("₩ " + MenuDataArray.get(position).getPrice());
         holder.foodRating.setRating(MenuDataArray.get(position).getStar_avg());
         //반올림해서 소수점 한자리까지 화면에 보여줌
         holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
+        holder.foodLikeCount.setText("좋아요 : " + Integer.toString(MenuDataArray.get(position).getTotal_like()));
+        if (MenuDataArray.get(position).isUserLikeTrueFalse() == 1) {
+            holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
+        }
 
         holder.cardLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +126,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
 
     public static class MenuDataViewHolder extends RecyclerView.ViewHolder {
 
-        TextView foodName, foodNameSide, foodPrice, foodRatingNum;
+        TextView foodName, foodNameSide, foodPrice, foodRatingNum, foodLikeCount;
         ImageView foodImage, foodHeart;
         RatingBar foodRating;
         LinearLayout cardLayout;
@@ -98,6 +141,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
             foodRating = itemView.findViewById(R.id.foodRatingBar);
             cardLayout = itemView.findViewById(R.id.cardLayout);
             foodRatingNum = itemView.findViewById(R.id.foodRatingNum);
+            foodLikeCount = itemView.findViewById(R.id.menuLikeCount);
         }
     }
 }

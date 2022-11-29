@@ -4,9 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class MenuData2 {
-    @SerializedName("menu_Id")
+    @SerializedName("menu_id")
     @Expose
-    private int menu_Id;
+    private int menu_id;
 
     @SerializedName("restaurant_name")
     @Expose
@@ -28,10 +28,6 @@ public class MenuData2 {
     @Expose
     private int total_like;
 
-    @SerializedName("menu_appearance_id")
-    @Expose
-    private int menu_appearance_id;
-
     @SerializedName("date")
     @Expose
     private String date;
@@ -40,32 +36,37 @@ public class MenuData2 {
     @Expose
     private int price;
 
-//    @SerializedName("reviewLikeTrueFalse")
-//    @Expose
-//    private boolean reviewLikeTrueFalse;
-//
-//    @SerializedName("subMenuName")
-//    @Expose
-//    private String subMenuName;
-//
-//    @SerializedName("image")
-//    @Expose
-//    private String image;
+    @SerializedName("subMenu")
+    @Expose
+    private String subMenu;
 
-//    public boolean isReviewLikeTrueFalse() {
-//        return reviewLikeTrueFalse;
-//    }
-//
-//    public String getSubMenuName() {
-//        return subMenuName;
-//    }
-//
-//    public String getImage() {
-//        return image;
-//    }
+    @SerializedName("menu_like_id")
+    @Expose
+    private int menu_like_id;
 
-    public int getMenu_Id() {
-        return menu_Id;
+    @SerializedName("image")
+    @Expose
+    private String image;
+
+    @SerializedName("Mliked_user_id")
+    @Expose
+    private String Mliked_user_id;
+
+    @SerializedName("userLikeTrueFalse")
+    @Expose
+    private int userLikeTrueFalse;
+
+
+    public String getSubMenu() {
+        return subMenu;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public int isUserLikeTrueFalse() {
+        return userLikeTrueFalse;
     }
 
     public int getPrice() {
@@ -73,7 +74,7 @@ public class MenuData2 {
     }
 
     public int getMenu_id() {
-        return menu_Id;
+        return menu_id;
     }
 
     public String getRestaurant_name() {
@@ -96,8 +97,12 @@ public class MenuData2 {
         return total_like;
     }
 
-    public int getMenu_appearance_id() {
-        return menu_appearance_id;
+    public int getMenu_like_id() {
+        return menu_like_id;
+    }
+
+    public String getMliked_user_id() {
+        return Mliked_user_id;
     }
 
     public String getDate() {

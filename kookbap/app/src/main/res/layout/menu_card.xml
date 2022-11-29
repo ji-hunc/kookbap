@@ -62,6 +62,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
                         android:text="반찬 이름 나열"
+                        android:maxLines="2"
                         android:textSize="13sp" />
 
                 <LinearLayout
@@ -114,6 +115,12 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:src="@drawable/heart_selector" />
+
+                <TextView
+                    android:id="@+id/menuLikeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="112"/>
 
             </LinearLayout>
         </LinearLayout>
