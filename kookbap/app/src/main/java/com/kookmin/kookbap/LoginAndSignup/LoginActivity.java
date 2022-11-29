@@ -23,7 +23,7 @@ import com.kookmin.kookbap.R;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    Boolean mCheck;
+    Boolean mCheck = false;
     Button mLogin_btn,mLogin_toGoogle_btn;
     EditText mEmail,mPassword;
     TextView mSingup;
