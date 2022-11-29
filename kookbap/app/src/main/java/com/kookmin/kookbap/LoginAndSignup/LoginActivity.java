@@ -42,60 +42,69 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance(); // 파이어베이스 연결
 
 
+        SharedPreferences prf = getSharedPreferences("outo_login_id", 0);
 
-        SharedPreferences prf = getSharedPreferences("outo_login_id",0);
-
-        if(prf.getBoolean("outoLogin",false)) { // 자동 로그인이 체크 되어있다면 바로 이동
-            if (prf.getString("ID","") != null) {
+        if (prf.getBoolean("outoLogin", false)) { // 자동 로그인이 체크 되어있다면 바로 이동
+            if (prf.getString("ID", "") != null) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         }
 
-        mOutologin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences.Editor editor = prf.edit();
-                if(mOutologin.isChecked()){
-                    mCheck = false;
-                    ((CheckedTextView) view).setChecked(false);
-                }
-                else {
-                    mCheck = true;
-                    ((CheckedTextView) view).setChecked(true);
-                }
+        String email = mEmail.getText().toString();
+        String password = mPassword.getText().toString();
+
+        if (email.equals("") || password.equals("")) {
+            if (email.equals("") && password.equals("")) {
+                Toast.makeText(LoginActivity.this, "모든 항목을 채워주십시오", Toast.LENGTH_SHORT).show();
+            } else if (email.equals("")) {
+                Toast.makeText(LoginActivity.this, "이메일을 입력하십시오", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LoginActivity.this, "비밀번호를 입력하십시오", Toast.LENGTH_SHORT).show();
             }
-        });
+        }
+        else {
+            mOutologin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences.Editor editor = prf.edit();
+                    if (mOutologin.isChecked()) {
+                        mCheck = false;
+                        ((CheckedTextView) view).setChecked(false);
+                    } else {
+                        mCheck = true;
+                        ((CheckedTextView) view).setChecked(true);
+                    }
+                }
+            });
 
 
-        mLogin_btn.setOnClickListener(new View.OnClickListener() { //로그인 버튼 누름
-            @Override
-            public void onClick(View view) {
-                String email = mEmail.getText().toString();
-                String password = mPassword.getText().toString();
+            mLogin_btn.setOnClickListener(new View.OnClickListener() { //로그인 버튼 누름
+                @Override
+                public void onClick(View view) {
+                    String email = mEmail.getText().toString();
+                    String password = mPassword.getText().toString();
 
-                    mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful())
-                            {
-                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id",0);
+                            if (task.isSuccessful()) {
+                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id", 0);
                                 SharedPreferences.Editor editor = prf.edit();
-                                editor.putBoolean("outoLogin",mCheck);
+                                editor.putBoolean("outoLogin", mCheck);
                                 editor.apply();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                                 finish();
-                            }
-                            else{
-                                Toast.makeText(LoginActivity.this,password,Toast.LENGTH_LONG).show(); // 실패시 출력
+                            } else {
+                                Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
                             }
                         }
                     });
 
-            }
-        });
-
+                }
+            });
+        }
         mSingup.setOnClickListener(new View.OnClickListener() {// 회원가입 버튼
             @Override
             public void onClick(View view) {
@@ -103,17 +112,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
 
-    /*public void onBackPressed() {
-        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d("can't send","reTry");
-                }
-            }
-        });
-        super.onBackPressed();
-    }*/
+    }
 }
