@@ -18,10 +18,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kookmin.kookbap.Retrofits.Result;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.MenuDataViewHolder> {
 
@@ -115,6 +124,35 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
             public void onClick(View view) {
                 holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
 
+                // TODO user_id 는 프리퍼런스에서 받아와야함
+                String user_id = "jihun";
+                // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
+                int card_id = MenuDataArray.get(position).getMenu_id();
+                boolean pushOrNot = holder.foodHeart.isSelected();
+                String type = "menu";
+                int menu_like_id = MenuDataArray.get(position).getMenu_like_id();
+
+                // 좋아요 레트로핏 통신
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, pushOrNot, type, menu_like_id, 0);
+                call.enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                        // 서버에서 응답을 받아옴
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            // 응답을 받아오지 못했을경우
+                        } else {
+                            assert response.body() != null;
+                        }
+                    }
+
+                    // 통신실패시
+                    @Override
+                    public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+
+                    }
+                });
             }
         });
     }

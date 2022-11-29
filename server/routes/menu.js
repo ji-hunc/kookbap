@@ -24,7 +24,7 @@ router.get("/:date", (req, res) => {
                 console.log(error);
             }
             res.json(results);
-            console.log(results);
+            // console.log(results);
         }
     );
 });
