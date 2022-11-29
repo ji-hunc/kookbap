@@ -54,16 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
 
-        if (email.equals("") || password.equals("")) {
-            if (email.equals("") && password.equals("")) {
-                Toast.makeText(LoginActivity.this, "모든 항목을 채워주십시오", Toast.LENGTH_SHORT).show();
-            } else if (email.equals("")) {
-                Toast.makeText(LoginActivity.this, "이메일을 입력하십시오", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(LoginActivity.this, "비밀번호를 입력하십시오", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else {
             mOutologin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -84,27 +74,36 @@ public class LoginActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     String email = mEmail.getText().toString();
                     String password = mPassword.getText().toString();
-
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id", 0);
-                                SharedPreferences.Editor editor = prf.edit();
-                                editor.putBoolean("outoLogin", mCheck);
-                                editor.apply();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
-                            }
+                    if (email.equals("") || password.equals("")) {
+                        if (email.equals("") && password.equals("")) {
+                            Toast.makeText(LoginActivity.this, "모든 항목을 채워주십시오", Toast.LENGTH_SHORT).show();
+                        } else if (email.equals("")) {
+                            Toast.makeText(LoginActivity.this, "이메일을 입력하십시오", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "비밀번호를 입력하십시오", Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                    else {
+                        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id", 0);
+                                    SharedPreferences.Editor editor = prf.edit();
+                                    editor.putBoolean("outoLogin", mCheck);
+                                    editor.apply();
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
+                                }
+                            }
+                        });
+                    }
 
                 }
             });
-        }
         mSingup.setOnClickListener(new View.OnClickListener() {// 회원가입 버튼
             @Override
             public void onClick(View view) {
