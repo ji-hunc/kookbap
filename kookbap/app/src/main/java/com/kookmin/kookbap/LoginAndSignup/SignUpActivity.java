@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kookmin.kookbap.R;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +32,8 @@ public class SignUpActivity extends AppCompatActivity {
     EditText mEmail,mPassword,mName;
     TextView mDatcom;
     Button mInput_btn;
+
+    UserData mUserData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,6 +99,11 @@ public class SignUpActivity extends AppCompatActivity {
                                 Log.d("send","sendEmail");
                                 Intent intent = new Intent(SignUpActivity.this, CheckEmailActivity.class);
                                 startActivity(intent);
+
+                                // TODO: 2022-11-29 이 activity가 끝나기 전에 데이터베이스에 연결하고 끝
+                                mUserData = new UserData(signup_email,mName.getText().toString());
+
+
                                 finish();
                             }
                         }
