@@ -97,7 +97,8 @@ public class FoodDetail extends AppCompatActivity {
                 String selectedWay = adapterView.getSelectedItem().toString();
                 Call<ArrayList<ReviewData>> call;
                 // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
-                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay);
+                //todo : 'jongbin'부분 userid 받아오게 변경
+                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jongbin");
                 call.enqueue(new Callback<ArrayList<ReviewData>>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override

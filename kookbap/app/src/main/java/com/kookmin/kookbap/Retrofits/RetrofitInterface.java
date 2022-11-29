@@ -44,7 +44,8 @@ public interface RetrofitInterface {
     @GET("/review/{menuName}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
     Call<ArrayList<ReviewData>> getReviewData(
             @Path("menuName") String menuName,
-            @Query("orderBy") String orderBy
+            @Query("orderBy") String orderBy,
+            @Query("userId") String userId
     );
 
 
