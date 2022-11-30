@@ -24,7 +24,7 @@ import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.SettingFragment;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-//    private Context context = SettingFragment.settingContext;
+    //    private Context context = SettingFragment.settingContext;
     private static final String TAG = "FirebaseMsgService";
     private String msg, title;
 
@@ -57,13 +57,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();
 
-//        Intent intent = new Intent(this, MainActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         builder.setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(android.R.drawable.presence_online);
-//                .setContentIntent(pendingIntent);
+                .setSmallIcon(R.drawable.ic_k_icon)
+                .setContentIntent(pendingIntent);
 
         Notification notification = builder.build();
 
