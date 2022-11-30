@@ -148,8 +148,8 @@ public class FoodDetail extends AppCompatActivity {
                         Log.e("Error", t.getMessage());
                     }
                 });
-                //animationView.cancelAnimation();
-                //animationView.setVisibility(View.GONE);
+                animationView.cancelAnimation();
+                animationView.setVisibility(View.GONE);
             }
 
             @Override
