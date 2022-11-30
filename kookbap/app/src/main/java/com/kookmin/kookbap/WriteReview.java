@@ -443,18 +443,18 @@ public class WriteReview extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Informed Mode", Toast.LENGTH_SHORT).show();
             menuNameTextview.setText(getIntent().getStringExtra("foodName"));
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this);
+            View dialogView = LayoutInflater.from(WriteReview.this).inflate(
+                    R.layout.loading_dialog,
+                    (ConstraintLayout)findViewById(R.id.layoutLoadingDialog));
+            builder.setView(dialogView);
+            LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
+            lottieAnimationView.setAnimation("loading.json");
 
             // 저장 버튼 눌렀을 때 서버 DB에 저장 요청(Informed Write)
             postButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this);
-                    View dialogView = LayoutInflater.from(WriteReview.this).inflate(
-                            R.layout.loading_dialog,
-                            (ConstraintLayout)findViewById(R.id.layoutLoadingDialog));
-                    builder.setView(dialogView);
-                    LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
-                    lottieAnimationView.setAnimation("loading.json");
                     lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
                     lottieAnimationView.playAnimation();
 
