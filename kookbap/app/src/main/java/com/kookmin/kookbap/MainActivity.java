@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
     // 프래그먼트 변경 메서드. mainActivity.Container 에서 사용가능. 다른 container에서 사용하고 싶으면 오버로딩하면됨.
     public void changeFragment(Fragment fragment){

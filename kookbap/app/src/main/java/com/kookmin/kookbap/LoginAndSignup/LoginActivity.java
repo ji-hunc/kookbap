@@ -23,11 +23,12 @@ import com.kookmin.kookbap.R;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    Boolean mCheck;
+    Boolean mCheck = false;
     Button mLogin_btn,mLogin_toGoogle_btn;
     EditText mEmail,mPassword;
     TextView mSingup;
     CheckedTextView mOutologin;
+    UserData muserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,25 +43,26 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance(); // 파이어베이스 연결
 
 
+        SharedPreferences prf = getSharedPreferences("userData", 0);
 
-        SharedPreferences prf = getSharedPreferences("outo_login_id",0);
-
-        if(prf.getBoolean("outoLogin",false)) { // 자동 로그인이 체크 되어있다면 바로 이동
-            if (prf.getString("ID","") != null) {
+        if (prf.getBoolean("userData", false)) { // 자동 로그인이 체크 되어있다면 바로 이동
+            if (prf.getString("ID", "") != null) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         }
 
+        String email = mEmail.getText().toString();
+        String password = mPassword.getText().toString();
+
         mOutologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences.Editor editor = prf.edit();
-                if(mOutologin.isChecked()){
+                if (mOutologin.isChecked()) {
                     mCheck = false;
                     ((CheckedTextView) view).setChecked(false);
-                }
-                else {
+                } else {
                     mCheck = true;
                     ((CheckedTextView) view).setChecked(true);
                 }
@@ -73,29 +75,42 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
-
-                    mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
+                if (email.equals("") || password.equals("")) {
+                    if (email.equals("") && password.equals("")) {
+                        Toast.makeText(LoginActivity.this, "모든 항목을 채워주십시오", Toast.LENGTH_SHORT).show();
+                    } else if (email.equals("")) {
+                        Toast.makeText(LoginActivity.this, "이메일을 입력하십시오", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "비밀번호를 입력하십시오", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() { //아이디 존재여부 확인
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful())
-                            {
-                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id",0);
+                            if (task.isSuccessful()) {
+                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id", 0);
                                 SharedPreferences.Editor editor = prf.edit();
-                                editor.putBoolean("outoLogin",mCheck);
+                                editor.putBoolean("outoLogin", mCheck);
                                 editor.apply();
+
+                                muserData = new UserData(prf.getString("ID","") , prf.getString("Name","")); // 유저 아이디와 이름을 프래그먼트로 들고오기
+
+                                String userId = muserData.getmUserAderss(); // 유저 아이디
+                                String userName = muserData.getmUserName(); // 유저 이름
+                                // TODO: 2022-11-29 이게 맞나 모르겠지만 일단 해놨습니다 데이터베이스 연결예정 
+
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                                 finish();
-                            }
-                            else{
-                                Toast.makeText(LoginActivity.this,password,Toast.LENGTH_LONG).show(); // 실패시 출력
+                            } else {
+                                Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
                             }
                         }
                     });
-
+                }
             }
         });
-
         mSingup.setOnClickListener(new View.OnClickListener() {// 회원가입 버튼
             @Override
             public void onClick(View view) {
@@ -103,16 +118,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
-    /*public void onBackPressed() {
-        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Log.d("can't send","reTry");
-                }
-            }
-        });
-        super.onBackPressed();
-    }*/
 }

@@ -2,23 +2,22 @@ package com.kookmin.kookbap;
 
 import static android.app.Activity.RESULT_OK;
 import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -26,13 +25,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,20 +39,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-import org.w3c.dom.Text;
+import com.kookmin.kookbap.Notification.AlarmReceiver;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -64,12 +50,15 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class SettingFragment extends Fragment {
+    public static Context settingContext;
     ImageView settingProfileImage;
     TextView settingName, settingCollegeNumber, textViewUserEmail, textViewAppVersion;
     LinearLayout settingMyReviews, settingLogout;
     Switch settingNotice;
     Button settingBtnNotice, testBtn;
     Boolean noticeOn = false;
+    SharedPreferences prfNotification;
+    SharedPreferences.Editor prfNotificationEditor;
     int cameraPermission, galleryPermission, noticePermission;
     private static final int SINGLE_PERMISSION = 1004;
     Bitmap imageBitmap, noticeBitmap;
@@ -88,7 +77,10 @@ public class SettingFragment extends Fragment {
         textViewUserEmail = view.findViewById(R.id.textViewUserEmail);
         textViewAppVersion = view.findViewById(R.id.textViewAppVersion);
         settingLogout = view.findViewById(R.id.settingLogout);
-
+        SharedPreferences getNotice = getActivity().getSharedPreferences("isNoticeOn", MODE_PRIVATE);
+        noticeOn = getNotice.getBoolean("isNoticeOn", false);
+        settingNotice.setChecked(noticeOn);
+        settingContext = getActivity().getApplicationContext();
         // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 등 설정, 유저 관리 구현하면 구현해야 함.
         settingProfileImage.setImageResource(R.drawable.ic_basic_profile);
         settingName.setText("김민제");
@@ -207,6 +199,20 @@ public class SettingFragment extends Fragment {
 //
 //
 //        });
+
+        //알림 설정 (by FCM)
+        settingNotice.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                noticeOn = settingNotice.isChecked();
+                prfNotification = getActivity().getSharedPreferences("isNoticeOn", MODE_PRIVATE);
+                prfNotificationEditor = prfNotification.edit();
+                prfNotificationEditor.putBoolean("isNoticeOn", noticeOn);
+                prfNotificationEditor.commit();
+            }
+        });
+
+
         NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(NOTIFICATION_SERVICE);
 
         alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -220,12 +226,22 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                // 로그아웃 기능 구현 필요
+                SharedPreferences prf = getActivity().getSharedPreferences("outo_login_id", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prf.edit();
+                editor.clear();
+                editor.apply();
+                PackageManager packageManager = getActivity().getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage(getActivity().getPackageName());
+                ComponentName componentName = intent.getComponent();
+                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                startActivity(mainIntent);
             }
         });
 
         return view;
     }
+
+
 
     private void setAlarm() {
         //AlarmReceiver에 값 전달
