@@ -113,6 +113,8 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
                 intent.putExtra("rating", MenuDataArray.get(position).getStar_avg());
                 intent.putExtra("ratingNum", String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
                 intent.putExtra("restaurantName", MenuDataArray.get(position).getRestaurant_name());
+                intent.putExtra("heartOn", holder.foodHeart.isSelected());
+                intent.putExtra("menu_like_id",  MenuDataArray.get(position).getMenu_like_id());
 
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }

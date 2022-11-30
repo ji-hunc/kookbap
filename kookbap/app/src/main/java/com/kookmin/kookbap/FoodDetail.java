@@ -21,7 +21,10 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -148,8 +151,8 @@ public class FoodDetail extends AppCompatActivity {
                         Log.e("Error", t.getMessage());
                     }
                 });
-                //animationView.cancelAnimation();
-                //animationView.setVisibility(View.GONE);
+                animationView.cancelAnimation();
+                animationView.setVisibility(View.GONE);
             }
 
             @Override
@@ -166,12 +169,44 @@ public class FoodDetail extends AppCompatActivity {
         foodDetailRating.setRating(getIntent().getFloatExtra("rating", 0));
         foodDetailRatingNum.setText(getIntent().getStringExtra("ratingNum"));
         foodDetailRestaurant.setText(getIntent().getStringExtra("restaurantName"));
+        foodDetailHeart.setSelected(getIntent().getBooleanExtra("heartOn", false));
+
 
 
         foodDetailHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 foodDetailHeart.setSelected(!foodDetailHeart.isSelected());
+
+                // TODO user_id 는 프리퍼런스에서 받아와야함
+                String user_id = "jihun";
+                // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
+                int card_id = getIntent().getIntExtra("menuId", 0);
+                boolean pushOrNot = !foodDetailHeart.isSelected();
+                String type = "menu";
+                int menu_like_id = getIntent().getIntExtra("menu_like_id", 0);
+
+                // 좋아요 레트로핏 통신
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, pushOrNot, type, menu_like_id, 0);
+                call.enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                        // 서버에서 응답을 받아옴
+                        if (response.isSuccessful() && response.body()   != null) {
+
+                            // 응답을 받아오지 못했을경우
+                        } else {
+                            assert response.body() != null;
+                        }
+                    }
+
+                    // 통신실패시
+                    @Override
+                    public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+
+                    }
+                });
             }
         });
 
