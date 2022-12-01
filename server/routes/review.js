@@ -94,14 +94,15 @@ router.post("/post", parser, function (request, response) {
     const { image } = request.files;
     image.mv(__dirname + "/../public/images/" + image.name);
     var imageUrl = request.files.image.name;
-
     const menuId = request.body.menuId;
+    var restaurant_name = request.body.restaurantName; //식당까지 같이 검사해야됨.
     if (menuId == 0) {
+        console.log("test_rest", restaurant_name);
         // GENERAL_WRITE시에는 menu_id를 서버에서 찾아야함
         // TODO menuId 찾아오는 부분
         // insert 쿼리까지 코드 중복해서 써야할 듯, 동기 비동기 때문에
         db.query(
-            `SELECT menu_Id FROM menu WHERE menu_name = '${request.body.menuName}';`,
+            `SELECT menu_Id FROM menu WHERE menu_name = '${request.body.menuName}' and restaurant_name ='${restaurant_name}';`,
             function (error, result) {
                 const menuId2 = result[0]["menu_Id"];
 
