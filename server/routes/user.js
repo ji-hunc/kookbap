@@ -46,6 +46,15 @@ router.post("/like", (req, res) => {
                     db.query("set SQL_SAFE_updates= 1;");
                     console.log("중복제거 완료");
                 }
+                db.query(
+                    `SELECT count(*) as total FROM Kookbob.menu_like where Mliked_menu_id = '${card_id}';`,
+                    function (error, results) {
+                        var updateTotal = results[0]["total"];
+                        db.query(
+                            `update menu set total_like = "${updateTotal}" where menu_Id ="${card_id}";`
+                        );
+                    }
+                );
             }
         );
     } else {
@@ -85,6 +94,15 @@ router.post("/like", (req, res) => {
                     db.query("set SQL_SAFE_updates= 1;");
                     console.log("중복제거 완료");
                 }
+                db.query(
+                    `SELECT count(*) as total FROM Kookbob.review_like where Rlike_review_no = '${review_id}';`,
+                    function (error, results) {
+                        var updateTotal = results[0]["total"];
+                        db.query(
+                            `update review set review_like = "${updateTotal}" where review_number ="${review_id}";`
+                        );
+                    }
+                );
             }
         );
     }
