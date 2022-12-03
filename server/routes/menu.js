@@ -8,7 +8,7 @@ router.get("/", (req, res) => {
     // res.json(menuJsonObject);
 });
 
-// 날짜별 메뉴 데이터 뿌려줌
+// 날짜별 메뉴 데이터 뿌려줌, 사용자 Id를 받아 사용자가 좋아요를 눌렀는지 검사. 가장 최신의 사진까지 함께 보냄
 router.get("/:date", (req, res) => {
     var userId = req.query.userId;
     db.query(

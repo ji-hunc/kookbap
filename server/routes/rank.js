@@ -27,7 +27,7 @@ router.get("/:section/:category", function (request, response) {
             querySentence = `select review_user_id as user_id, nickname, total from Kookbob.user U join (select review_user_id, count(*) as total from Kookbob.review group by review_user_id order by total desc limit ${limitRange}) R on U.user_id = R.review_user_id order by total desc`;
         }
     }
-
+    // json 형식으로 전달.
     db.query(querySentence, function (error, results) {
         response.json(results);
         console.log(results);
