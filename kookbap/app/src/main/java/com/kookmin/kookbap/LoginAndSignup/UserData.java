@@ -23,5 +23,4 @@ public class UserData {
     }
 
     public String getmUserAderss() {return mUserAderss; }
-
 }
