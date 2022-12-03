@@ -226,7 +226,7 @@ public class SettingFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-                SharedPreferences prf = getActivity().getSharedPreferences("outo_login_id", MODE_PRIVATE);
+                SharedPreferences prf = getActivity().getSharedPreferences("userData", MODE_PRIVATE);
                 SharedPreferences.Editor editor = prf.edit();
                 editor.clear();
                 editor.apply();
