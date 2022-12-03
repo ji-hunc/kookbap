@@ -18,12 +18,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kookmin.kookbap.R;
 
+import java.util.ArrayList;
+
 public class CheckEmailActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     Button mCheck_Email_btn;
     boolean isVerified = true;
 
+    ArrayList<UserData> mUserData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
