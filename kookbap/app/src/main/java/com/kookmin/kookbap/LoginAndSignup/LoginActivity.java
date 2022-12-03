@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id", 0);
+                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("userData", 0);
                                 SharedPreferences.Editor editor = prf.edit();
                                 editor.putBoolean("outoLogin", mCheck);
                                 editor.apply();
