@@ -48,7 +48,7 @@
             android:label="WriteReview"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginAndSignup.LoadingActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,7 +59,7 @@
         <activity android:name=".UserReviewsActivity" />
         <activity android:name=".LoginAndSignup.CheckEmailActivity"/>
         <activity
-            android:name=".LoginAndSignup.LoadingActivity"
+            android:name=".MainActivity"
             android:exported="false"/>
         <activity android:name=".LoginAndSignup.LoginActivity"/>
         <activity android:name=".LoginAndSignup.SignUpActivity"/>
