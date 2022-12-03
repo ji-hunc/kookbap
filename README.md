@@ -1,6 +1,8 @@
 # 국밥
 
 국민대학교 학식정보와 이에 대한 리뷰정보를 확인하고, 내가 좋아할 만한 메뉴를 추천받을 수 있는 서비스
+<br>
+⚠️ `클라이언트, 서버, 디비, 머신러닝에 관한 readme는 각각의 폴더에 있습니다. `⚠️
 
 </br>
 
@@ -22,12 +24,14 @@
 
 ## 🛠 개발 환경
 
+#### 📦 기술스택
+
 <img width="100" src="https://img.shields.io/badge/android%20API-31-brightgreen"> 
 <img width="116" src="https://img.shields.io/badge/android%20SDK-12.0-green">
 
 </br>
 
-#### 📦 Library
+#### 📦 라이브러리
 
 | 라이브러리  | Version | Tool  |
 | ----------- | :-----: | ----- |
@@ -42,7 +46,13 @@
 
 </br>
 
-#### 🗂 Foldering
+## 🔥 사용방법
+
+`npm i` 하십쇼!
+
+</br>
+
+#### 🗂 디렉터리 구조
 
 ```bash
 ├── kookBap
