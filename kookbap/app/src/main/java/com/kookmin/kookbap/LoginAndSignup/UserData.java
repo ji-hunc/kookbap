@@ -4,23 +4,23 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class UserData {
-
-    @SerializedName("user_Name")
+    @SerializedName("restaurant_name")
     @Expose
-    private String userName;
-
-    @SerializedName("user_Adress")
+    String mUserName;
+    @SerializedName("restaurant_name")
     @Expose
-    private String userAdress;
+    String  mUserAderss;
 
-    public UserData (String username , String useradress){
-        this.userAdress = useradress;
-        this.userName = username;
+
+    public UserData(String userAderss, String userName) {
+        this.mUserAderss = userAderss;
+        this.mUserName = userName;
     }
-    public String getUserName(){
-        return userName;
+
+
+    public String getmUserName() {
+        return mUserName;
     }
-    public String getUserAdress(){
-        return userAdress;
-    }
+
+    public String getmUserAderss() {return mUserAderss; }
 }

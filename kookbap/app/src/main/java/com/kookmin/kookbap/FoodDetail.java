@@ -18,8 +18,13 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -115,7 +120,11 @@ public class FoodDetail extends AppCompatActivity {
         // 메뉴에 해당하는 리뷰들을 ArrayList 형식으로 가져옴. 각각의 리뷰객체들이 들어있음
          // 원래 Retrofit 은 받아올 데이터 클래스를 정의해야 하지만, 완전 통으로 가져올 때는 따로 정의 없이 Object로 가져올 수 있음
 
-
+        LottieAnimationView animationView = findViewById(R.id.lottie);
+        animationView.setVisibility(View.VISIBLE);
+        animationView.setAnimation("loading.json");
+        animationView.setRepeatCount(LottieDrawable.INFINITE);
+        animationView.playAnimation();
 
         reviewSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -124,7 +133,7 @@ public class FoodDetail extends AppCompatActivity {
                 Call<ArrayList<ReviewData>> call;
                 // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
                 //todo : 'jongbin'부분 userid 받아오게 변경
-                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jongbin");
+                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jihun");
                 call.enqueue(new Callback<ArrayList<ReviewData>>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -142,6 +151,8 @@ public class FoodDetail extends AppCompatActivity {
                         Log.e("Error", t.getMessage());
                     }
                 });
+                animationView.cancelAnimation();
+                animationView.setVisibility(View.GONE);
             }
 
             @Override
@@ -158,12 +169,44 @@ public class FoodDetail extends AppCompatActivity {
         foodDetailRating.setRating(getIntent().getFloatExtra("rating", 0));
         foodDetailRatingNum.setText(getIntent().getStringExtra("ratingNum"));
         foodDetailRestaurant.setText(getIntent().getStringExtra("restaurantName"));
+        foodDetailHeart.setSelected(getIntent().getBooleanExtra("heartOn", false));
+
 
 
         foodDetailHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 foodDetailHeart.setSelected(!foodDetailHeart.isSelected());
+
+                // TODO user_id 는 프리퍼런스에서 받아와야함
+                String user_id = "jihun";
+                // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
+                int card_id = getIntent().getIntExtra("menuId", 0);
+                boolean pushOrNot = !foodDetailHeart.isSelected();
+                String type = "menu";
+                int menu_like_id = getIntent().getIntExtra("menu_like_id", 0);
+
+                // 좋아요 레트로핏 통신
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, pushOrNot, type, menu_like_id, 0);
+                call.enqueue(new Callback<Result>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                        // 서버에서 응답을 받아옴
+                        if (response.isSuccessful() && response.body()   != null) {
+
+                            // 응답을 받아오지 못했을경우
+                        } else {
+                            assert response.body() != null;
+                        }
+                    }
+
+                    // 통신실패시
+                    @Override
+                    public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+
+                    }
+                });
             }
         });
 
