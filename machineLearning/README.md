@@ -34,7 +34,7 @@
     - 가설함수
         - $H(i,x) = p_{i}·q_{x}$ (p = Menu Latent Vector, q = User Latent Vector)
     - 비용
-        - $cost(P,Q) = \sum_{(i,x)\in R}^{}$ $(r_{xi}-H(i,x))^2$
+        - $cost(P,Q) = \sum_{(i,x)\in R} (r_{xi}-H(i,x))^2$
     - 업데이트
         - $P = P - \alpha\frac{\partial cost(P,Q)}{\partial P}$
         - $Q = Q - \alpha\frac{\partial cost(P,Q)}{\partial Q}$
