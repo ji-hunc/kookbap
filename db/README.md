@@ -1,7 +1,7 @@
 # DB INFO
 
 `  MySQL`  
-`  version : 5.7.40-0ubuntu0.18.04.1`
+`  version : 5.7.40 -0ubuntu0.18.04.1`
 
 # DB구조
 
