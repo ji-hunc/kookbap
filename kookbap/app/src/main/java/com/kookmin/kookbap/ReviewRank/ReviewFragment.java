@@ -3,22 +3,29 @@ package com.kookmin.kookbap.ReviewRank;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.kookmin.kookbap.MainActivity;
-import com.kookmin.kookbap.MenuData;
-import com.kookmin.kookbap.MenuDataAdapter;
+import com.kookmin.kookbap.MenuData2;
+import com.kookmin.kookbap.MenuDataAdapter2;
 import com.kookmin.kookbap.R;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReviewFragment extends Fragment {
     MainActivity mainActivity;
@@ -27,20 +34,22 @@ public class ReviewFragment extends Fragment {
     SearchFragment searchFragment;
 
     // 더보기 버튼
-    LinearLayout bestReviewerShowMore, firstReviewShowMore, starRankShowMore, countRankShowMore;
+    LinearLayout bestReviewerShowMore, mostLikeMenuShowMore, starRankShowMore, countRankShowMore;
 
     //화면에 구성될 RecyclerView 용 메서드.
-    RecyclerView bestReviewerRecycler;
-    ArrayList<BestReviewerData> bestReviewerData;
-    RecyclerView firstReviewRecycler;
-    RecyclerView startRankRecycler;
-    ArrayList<MenuData> starRankReviewData;
-    RecyclerView lotOfReviewRecycler;
-
-    ArrayList<MenuData> lotOfReviewData;  //todo 차례로 데이터 불러오게 만들면 굳이 여러개의 arraylist를 필요가 있을까?
-
+    RecyclerView bestReviewerRecycler; //베스트리뷰어
     BestReviewerDataAdapter bestReviewerDataAdapter;
-    MenuDataAdapter menuDataAdapter;
+
+    RecyclerView mostLikeMenuRecycler; //좋아요많은 메뉴 순
+    MenuDataAdapter2 mostLikeMenuCallAdapter;
+
+    RecyclerView startRankRecycler; //별점높은순
+    MenuDataAdapter2 menuStarRankAdapter;
+
+    RecyclerView lotOfReviewRecycler;
+    MenuDataAdapter2 lotOfReviewAdapter;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,96 +73,134 @@ public class ReviewFragment extends Fragment {
 
         //더보기 구현
         bestReviewerShowMore = view.findViewById(R.id.bestReviewerShowMore);
-        firstReviewShowMore = view.findViewById(R.id.firstReviewShowMore);
+        mostLikeMenuShowMore = view.findViewById(R.id.mostLikeMenuShowMore);
         starRankShowMore = view.findViewById(R.id.starRankShowMore);
         countRankShowMore= view.findViewById(R.id.countRankShowMore);
 
-        bestReviewerShowMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadShowMore("bestReviewer");
-            }
-        });
-        firstReviewShowMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadShowMore("firstReviewer");
-            }
-        });
-        starRankShowMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadShowMore("starRank");
-            }
-        });
-        countRankShowMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadShowMore("countRank");
-            }
-        });
+
+        //더보기 버튼 눌렀을때 동작하는 함수바꾸기
+        setShowMoreCreateView(bestReviewerShowMore,"bestReviewer");
+        setShowMoreCreateView(mostLikeMenuShowMore,"mostLikeMenu");
+        setShowMoreCreateView(starRankShowMore,"starRank");
+        setShowMoreCreateView(countRankShowMore,"countRank");
 
 
+        //항목별 리사이클러뷰
+        bestReviewerRecycler = view.findViewById(R.id.bestReviewerRecycler); //베스트 리뷰어 항목
+        mostLikeMenuRecycler = view.findViewById(R.id.mostLikeMenuRecycler); //좋아요 많은순 항목
+        startRankRecycler = view.findViewById(R.id.starRankRecycler); //별점높은순 항목
+        lotOfReviewRecycler = view.findViewById(R.id.countRankRecycler); //리뷰 많은 순 항목
 
-        // 데이터 형식 정하면 바꿀 곳, test를 위해 임시작업.
-        bestReviewerRecycler = view.findViewById(R.id.bestReviewerRecycler);
-        bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+        //베트스 리뷰어 항목
+        Call<ArrayList<UserRankData>> rankDataCall;
+        rankDataCall = RetrofitClient.getApiService().getUserReviewRankData(3);
+        rankDataCall.enqueue(new Callback<ArrayList<UserRankData>>() {
             @Override
-            public boolean canScrollVertically(){
-                return false;
-            }
-        });
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code()==200){
+                    ArrayList<UserRankData> bestReviewerData=(ArrayList<UserRankData>) response.body();
+                    bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, getActivity().getApplicationContext());
+                    bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
+                    bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+                        @Override
+                        public boolean canScrollVertically(){
+                            return false;
+                        } //스크롤 방지
+                    });
+                }else{}
+                    }
 
-        firstReviewRecycler = view.findViewById(R.id.firstReviewRecycler);
-        firstReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
             @Override
-            public boolean canScrollVertically(){
-                return false;
-            }
-        });
-        startRankRecycler = view.findViewById(R.id.starRankRecycler);
-        startRankRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
-            @Override
-            public boolean canScrollVertically(){
-                return false;
-            }
-        });
-        lotOfReviewRecycler = view.findViewById(R.id.countRankRecycler);
-        lotOfReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
-            @Override
-            public boolean canScrollVertically(){
-                return false;
+            public void onFailure(Call<ArrayList<UserRankData>> call, Throwable t) {
+                Log.d("tag","fail");
             }
         });
 
+        //좋아요 많은 순 항목
+        Call<ArrayList<MenuData2>> mostLikeMenuCall;
+        mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData("total_like",3);
+        mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code()==200){
+                    ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
+                    mostLikeMenuCallAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
+                    mostLikeMenuRecycler.setAdapter(mostLikeMenuCallAdapter);
+                    mostLikeMenuRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+                        @Override
+                        public boolean canScrollVertically(){
+                            return false;
+                        } //스크롤 방지
+                    });
+                }else{
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            }
+        });
 
-        bestReviewerData = new ArrayList<>();
-        starRankReviewData = new ArrayList<>();
-        // 임시데이터 생성
-        for( int i =0; i<3; i++){
-            String name = i +"등";
-            int rank = i;
-            starRankReviewData.add(new MenuData( name, "아직 작성된 리뷰가 없습니다.", "unknown", "delicious", R.drawable.ic_setting, (float) (Math.random()*5), 0));
-            bestReviewerData.add(new BestReviewerData( rank,"uzznknown",(10-i)*100));
-        }
+        //별점높은 순 항목
+        Call<ArrayList<MenuData2>> starRankCall;
+        starRankCall = RetrofitClient.getApiService().getMenuReviewRankData("star_avg",3);
+        starRankCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code()==200){
+                    ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
+                    menuStarRankAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
+                    startRankRecycler.setAdapter(menuStarRankAdapter);
+                    startRankRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+                        @Override
+                        public boolean canScrollVertically(){
+                            return false;
+                        } //스크롤 방지
+                    });
+                }else{
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            }
+        });
 
-        bestReviewerDataAdapter = new BestReviewerDataAdapter();
-        bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
-        bestReviewerDataAdapter.setBestReviewerData(bestReviewerData);
+        //리뷰 많은 순 항목 (항목 다른걸로 바까야될듯)
+        Call<ArrayList<MenuData2>> lotOfReviewCall;
+        lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("count_review",3);
+        lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code()==200){
+                    ArrayList<MenuData2> lotOfReviewCallData=(ArrayList<MenuData2>) response.body();
+                    lotOfReviewAdapter = new MenuDataAdapter2(lotOfReviewCallData, getActivity().getApplicationContext());
+                    lotOfReviewRecycler.setAdapter(lotOfReviewAdapter);
+                    lotOfReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
+                        @Override
+                        public boolean canScrollVertically(){
+                            return false;
+                        }
+                    });
+                }else{
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            }
+        });
 
-        menuDataAdapter = new MenuDataAdapter(starRankReviewData, getActivity().getApplicationContext());
-        firstReviewRecycler.setAdapter(menuDataAdapter);
-        startRankRecycler.setAdapter(menuDataAdapter);
-        lotOfReviewRecycler.setAdapter(menuDataAdapter);
-
-        //테스트를 위해 같은 데이터로 구현 => 추후 수정예정.
         return view;
     }
 
-    //더보기 버튼 눌렀을때 activity 생성 refactoring
-    public void loadShowMore(String data){
-        Intent intent = new Intent(mainActivity.getApplicationContext(),ReviewTabActivity.class);
-        intent.putExtra("targetData",data);
-        startActivity(intent);
+
+    public void setShowMoreCreateView(View v, String data){
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainActivity.getApplicationContext(), ShowMoreRankActivity.class);
+                intent.putExtra("targetData",data);
+                startActivity(intent);;
+            }
+        });
     }
+
 }

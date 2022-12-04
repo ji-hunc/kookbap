@@ -1,15 +1,37 @@
 package com.kookmin.kookbap;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class MenuData {
+    @SerializedName("menu_id")
+    @Expose
+    private String menu_id;
+
+    @SerializedName("menu_name")
+    @Expose
     String menuName;
+
     String subMenuName;
+
+    @SerializedName("price")
+    @Expose
     String price;
+
     String reviewText;
+
+    @SerializedName("restaurant_name")
+    @Expose
+    String restaurantName;
     int image;
+    @SerializedName("star_avg")
+    @Expose
     float stars;
+    @SerializedName("total_like")
+    @Expose
     int heart;
 
-    public MenuData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart) {
+    public MenuData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart, String restaurantName) {
         this.menuName = menuName;
         this.subMenuName = subMenuName;
         this.price = price;
@@ -17,6 +39,7 @@ public class MenuData {
         this.image = image;
         this.stars = stars;
         this.heart = heart;
+        this.restaurantName = restaurantName;
     }
 
     public MenuData(String a, String subMenuName, int i, String delicious, int ic_setting, float stars, int heart) {
@@ -77,4 +100,15 @@ public class MenuData {
     public void setSubMenuName(String subMenuName) {
         this.subMenuName = subMenuName;
     }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public String getMenu_id() {
+        return menu_id;
+    }
+
+
+
 }

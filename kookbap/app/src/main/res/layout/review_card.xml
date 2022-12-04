@@ -58,6 +58,7 @@
                         android:theme="@style/RatingBar" />
 
                     <TextView
+                        android:layout_marginLeft="15dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
@@ -74,9 +75,10 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:padding="5dp"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_review_menu"
+                    android:src="@drawable/ic_more"
                     android:id="@+id/reviewEditMenuImageView"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +95,11 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:scrollbars="none" />
+            <ImageView
+                android:id="@+id/reviewLikeImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:srcCompat="@drawable/like_selector" />
 
             <TextView
                 android:layout_gravity="center"
