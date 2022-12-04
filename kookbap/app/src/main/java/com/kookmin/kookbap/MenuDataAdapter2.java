@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,6 +126,14 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
             @Override
             public void onClick(View view) {
                 holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
+
+                holder.foodHeart.setClickable(false);
+                new Handler().postDelayed(new Runnable(){
+                    @Override
+                    public void run(){
+                        holder.foodHeart.setClickable(true);
+                    }
+                }, 1000);
 
                 // TODO user_id 는 프리퍼런스에서 받아와야함
                 String user_id = "jihun";

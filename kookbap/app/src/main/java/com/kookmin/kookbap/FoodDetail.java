@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -180,6 +181,14 @@ public class FoodDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 foodDetailHeart.setSelected(!foodDetailHeart.isSelected());
+
+                foodDetailHeart.setClickable(false);
+                new Handler().postDelayed(new Runnable(){
+                    @Override
+                    public void run(){
+                        foodDetailHeart.setClickable(true);
+                    }
+                }, 1000);
 
                 // TODO user_id 는 프리퍼런스에서 받아와야함
                 String user_id = "jihun";
