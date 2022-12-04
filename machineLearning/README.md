@@ -32,7 +32,7 @@
     위 표를 보면 예측된 평점과 실제 평점의 차이가 얼마 나지 않음을 확인할 수 있다. 또한 각 유저가 평가하지 않은 메뉴들의 평점을 예측할 수 있다.
   - 가설, 비용, 정규화
     - 가설함수
-        - $H(i,x) = p_{i}·q_{x}$ (p = Menu Latent Vector, q = User Latent Vector)
+        - $H(i,x) = p_{i}·q_{x} (p = Menu Latent Vector, q = User Latent Vector)$ 
     - 비용
         - $cost(P,Q) = \sum_{(i,x)\in R} (r_{xi}-H(i,x))^2$
     - 업데이트
