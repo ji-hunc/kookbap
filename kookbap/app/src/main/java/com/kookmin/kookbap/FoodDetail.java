@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -141,6 +142,8 @@ public class FoodDetail extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) {
+                        animationView.cancelAnimation();
+                        animationView.setVisibility(View.GONE);
                         if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
                             ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
                             reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList,userID);
@@ -151,11 +154,12 @@ public class FoodDetail extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                        animationView.cancelAnimation();
+                        animationView.setVisibility(View.GONE);
                         Log.e("Error", t.getMessage());
                     }
                 });
-                animationView.cancelAnimation();
-                animationView.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -180,6 +184,15 @@ public class FoodDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 foodDetailHeart.setSelected(!foodDetailHeart.isSelected());
+
+                foodDetailHeart.setClickable(false);
+                new Handler().postDelayed(new Runnable(){
+                    @Override
+                    public void run(){
+                        foodDetailHeart.setClickable(true);
+                    }
+                }, 1000);
+
                 // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
                 int card_id = getIntent().getIntExtra("menuId", 0);
                 boolean pushOrNot = !foodDetailHeart.isSelected();

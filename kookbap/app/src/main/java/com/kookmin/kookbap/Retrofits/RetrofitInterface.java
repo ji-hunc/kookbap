@@ -127,7 +127,8 @@ public interface RetrofitInterface {
             //review_like or total_review
             @Path("category") String category,
             //데이터 갯수 제한
-            @Query("endR") int endR
+            @Query("endR") int endR,
+            @Query("userId") String userId
 
     );
 

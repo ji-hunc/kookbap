@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.MenuDataAdapter2;
 import com.kookmin.kookbap.R;
@@ -35,11 +36,14 @@ public class ShowMoreRankActivity extends AppCompatActivity {
 
     BestReviewerDataAdapter bestReviewerDataAdapter;
     Context context = this;
+    String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_tab);
+
+        userID = UserData.getUserData(this).getUserId();
         targetData=getIntent().getStringExtra("targetData"); //intent값 받아오기
 
         //상단 제목 지정
@@ -81,7 +85,7 @@ public class ShowMoreRankActivity extends AppCompatActivity {
     // menu에 관련된 Rank 데이터를 가져오고, recyclerview에 붙여주는 함수.
     public void getPasteDataAboutMenu(String menuDataParameter, int SHOW_NUM, RecyclerView recyclerView, Context context){
         Call<ArrayList<MenuData2>> mostLikeMenuCall;
-        mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData(menuDataParameter,SHOW_NUM);
+        mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData(menuDataParameter,SHOW_NUM,userID);
         mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
