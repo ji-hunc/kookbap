@@ -43,3 +43,6 @@
         - $H(i,x) = \mu + bi_{i}+bu_{x}+p_{i}·q_{x}$
         - $cost(P,Q)=\sum_{(i, x)\in R}(r_{xi}-H(i,x))^{2}+\lambda_{1}\sum_{i}\left\\|p_{i}\right\\|\_{2}^{2}+\lambda_{2}\sum_{x}\left\\|q_{x}\right\\|\_{2}^{2}+\lambda_{3}\left\\|bi\right\\|\_{2}^{2}+\lambda_{4}\left\\|bu\right\\|\_{2}^{2}$
 
+  - MSE
+    -MSE의 값은 다음과 같다.
+    (https://user-images.githubusercontent.com/55120784/205488925-6246da03-13dc-4899-886e-22e738d68562.png)

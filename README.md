@@ -31,7 +31,7 @@
 
 #### 📦 기술스택
 
-<img width="125" src="https://img.shields.io/badge/android%20API-31-brightgreen"> <img width="145" src="https://img.shields.io/badge/android%20SDK-12.0-green"> <img width="116" src="https://img.shields.io/badge/node-18.12.0-yellow"> <img width="113" src="https://img.shields.io/badge/mysql-8.0.31-blue">
+<img width="125" src="https://img.shields.io/badge/android%20API-31-brightgreen"> <img width="145" src="https://img.shields.io/badge/android%20SDK-12.0-green"> <img width="116" src="https://img.shields.io/badge/node-18.12.0-yellow"> <img width="113" src="https://img.shields.io/badge/mysql-%205.7.40-blue">
 
 #### 구조
 
