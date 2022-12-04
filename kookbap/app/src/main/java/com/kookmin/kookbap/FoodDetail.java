@@ -138,6 +138,8 @@ public class FoodDetail extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) {
+                        animationView.cancelAnimation();
+                        animationView.setVisibility(View.GONE);
                         if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
                             ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
                             reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList);
@@ -148,11 +150,12 @@ public class FoodDetail extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                        animationView.cancelAnimation();
+                        animationView.setVisibility(View.GONE);
                         Log.e("Error", t.getMessage());
                     }
                 });
-                animationView.cancelAnimation();
-                animationView.setVisibility(View.GONE);
+
             }
 
             @Override
