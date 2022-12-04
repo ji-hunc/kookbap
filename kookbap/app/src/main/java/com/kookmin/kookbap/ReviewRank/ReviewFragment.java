@@ -127,8 +127,8 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code()==200){
-                    ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
-                    mostLikeMenuCallAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
+                    ArrayList<MenuData2> mostLikeCallData=(ArrayList<MenuData2>) response.body();
+                    mostLikeMenuCallAdapter = new MenuDataAdapter2(mostLikeCallData, getActivity().getApplicationContext());
                     mostLikeMenuRecycler.setAdapter(mostLikeMenuCallAdapter);
                     mostLikeMenuRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
@@ -153,13 +153,16 @@ public class ReviewFragment extends Fragment {
                 if (response.code()==200){
                     ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
                     menuStarRankAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
-                    startRankRecycler.setAdapter(menuStarRankAdapter);
                     startRankRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
                         public boolean canScrollVertically(){
                             return false;
                         } //스크롤 방지
+
                     });
+
+                    startRankRecycler.setAdapter(menuStarRankAdapter);
+
                 }else{
                 }
             }

@@ -65,6 +65,8 @@ public class SettingFragment extends Fragment {
     Uri uri;
     AlarmManager alarmManager;
     String from = "2022-11-27 21:13:00"; //임의로 날짜와 시간을 지정
+    String userName, userEmail;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -81,10 +83,13 @@ public class SettingFragment extends Fragment {
         noticeOn = getNotice.getBoolean("isNoticeOn", false);
         settingNotice.setChecked(noticeOn);
         settingContext = getActivity().getApplicationContext();
-        // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 등 설정, 유저 관리 구현하면 구현해야 함.
+        // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 등 설정
+        SharedPreferences userPrf = getActivity().getSharedPreferences("userData", MODE_PRIVATE);
+        userName = userPrf.getString("ID", "");
+        userEmail = userPrf.getString("Email", "");
         settingProfileImage.setImageResource(R.drawable.ic_basic_profile);
-        settingName.setText("김민제");
-        settingCollegeNumber.setText("학번: 20191557");
+        settingName.setText("ID: " + userName);
+        settingCollegeNumber.setText(userEmail);
         textViewUserEmail.setText("kevinmj12@kookmin.ac.kr");
 
         //
