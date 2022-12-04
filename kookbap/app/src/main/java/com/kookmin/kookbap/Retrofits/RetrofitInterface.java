@@ -2,6 +2,7 @@ package com.kookmin.kookbap.Retrofits;
 
 import android.util.Log;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.UserRankData;
@@ -126,7 +127,8 @@ public interface RetrofitInterface {
             //review_like or total_review
             @Path("category") String category,
             //데이터 갯수 제한
-            @Query("endR") int endR
+            @Query("endR") int endR,
+            @Query("userId") String userId
 
     );
 
@@ -154,6 +156,14 @@ public interface RetrofitInterface {
             @Field("menu_like_id") int menu_like_id,
             @Field("review_like_id") int review_like_id
     );
+
+    @FormUrlEncoded
+    @POST("/user/signUp")
+    Call<Result> postUserInfo(
+      @Field("userEmail") String userEmail,
+      @Field("userNickName") String userNickName
+    );
+
 
 //    @Multipart
 ////    @FormUrlEncoded

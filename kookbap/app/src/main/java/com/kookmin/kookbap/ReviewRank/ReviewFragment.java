@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MainActivity;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.MenuDataAdapter2;
@@ -49,6 +50,8 @@ public class ReviewFragment extends Fragment {
     RecyclerView lotOfReviewRecycler;
     MenuDataAdapter2 lotOfReviewAdapter;
 
+    String userID;
+
 
 
     @Override
@@ -57,6 +60,7 @@ public class ReviewFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_review, container, false);
 
         mainActivity = (MainActivity) getActivity();
+        userID = UserData.getUserData(mainActivity).getUserId();
 
         //search버튼 눌렀을때 searchFragment로 이동, 트랜잭션으로 관리.
         searchLayout = view.findViewById(R.id.searchLayout);
@@ -93,7 +97,7 @@ public class ReviewFragment extends Fragment {
 
         //베트스 리뷰어 항목
         Call<ArrayList<UserRankData>> rankDataCall;
-        rankDataCall = RetrofitClient.getApiService().getUserReviewRankData(3);
+        rankDataCall = RetrofitClient.getApiService().getUserReviewRankData(4);
         rankDataCall.enqueue(new Callback<ArrayList<UserRankData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -118,7 +122,7 @@ public class ReviewFragment extends Fragment {
 
         //좋아요 많은 순 항목
         Call<ArrayList<MenuData2>> mostLikeMenuCall;
-        mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData("total_like",3);
+        mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData("total_like",3,userID);
         mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -142,7 +146,7 @@ public class ReviewFragment extends Fragment {
 
         //별점높은 순 항목
         Call<ArrayList<MenuData2>> starRankCall;
-        starRankCall = RetrofitClient.getApiService().getMenuReviewRankData("star_avg",3);
+        starRankCall = RetrofitClient.getApiService().getMenuReviewRankData("star_avg",3,userID);
         starRankCall.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -166,7 +170,7 @@ public class ReviewFragment extends Fragment {
 
         //리뷰 많은 순 항목 (항목 다른걸로 바까야될듯)
         Call<ArrayList<MenuData2>> lotOfReviewCall;
-        lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("count_review",3);
+        lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("count_review",3,userID);
         lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {

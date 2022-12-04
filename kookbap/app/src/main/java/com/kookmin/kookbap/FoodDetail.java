@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -42,7 +45,7 @@ public class FoodDetail extends AppCompatActivity {
 
     RecyclerView reviewRecyclerView;
     ReviewDataAdapter reviewDataAdapter;
-
+    String userID;
 
     @Override
     protected void onRestart() {
@@ -58,7 +61,7 @@ public class FoodDetail extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
                     ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
-                    reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList);
+                    reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList, userID);
                     reviewRecyclerView.setAdapter(reviewDataAdapter);
                 } else {
                 }
@@ -73,6 +76,8 @@ public class FoodDetail extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //username 받아옴
+        userID = UserData.getUserData(this).getUserId();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_detail);
 
@@ -132,15 +137,16 @@ public class FoodDetail extends AppCompatActivity {
                 String selectedWay = adapterView.getSelectedItem().toString();
                 Call<ArrayList<ReviewData>> call;
                 // selectedWay를 함수 파라미터로 전달해서 db에서 정렬 후 받아옴.
-                //todo : 'jongbin'부분 userid 받아오게 변경
-                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay,"jihun");
+                call = RetrofitClient.getApiService().getReviewData(menuName,selectedWay, userID);
                 call.enqueue(new Callback<ArrayList<ReviewData>>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(@NonNull Call call, @NonNull Response response) {
+                        animationView.cancelAnimation();
+                        animationView.setVisibility(View.GONE);
                         if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
                             ArrayList<ReviewData> reviewDataArrayList = (ArrayList<ReviewData>) response.body();
-                            reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList);
+                            reviewDataAdapter = new ReviewDataAdapter(reviewDataArrayList,userID);
                             reviewRecyclerView.setAdapter(reviewDataAdapter);
                         } else {
                         }
@@ -148,11 +154,12 @@ public class FoodDetail extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                        animationView.cancelAnimation();
+                        animationView.setVisibility(View.GONE);
                         Log.e("Error", t.getMessage());
                     }
                 });
-                animationView.cancelAnimation();
-                animationView.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -178,8 +185,14 @@ public class FoodDetail extends AppCompatActivity {
             public void onClick(View view) {
                 foodDetailHeart.setSelected(!foodDetailHeart.isSelected());
 
-                // TODO user_id 는 프리퍼런스에서 받아와야함
-                String user_id = "jihun";
+                foodDetailHeart.setClickable(false);
+                new Handler().postDelayed(new Runnable(){
+                    @Override
+                    public void run(){
+                        foodDetailHeart.setClickable(true);
+                    }
+                }, 1000);
+
                 // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
                 int card_id = getIntent().getIntExtra("menuId", 0);
                 boolean pushOrNot = !foodDetailHeart.isSelected();
@@ -187,7 +200,7 @@ public class FoodDetail extends AppCompatActivity {
                 int menu_like_id = getIntent().getIntExtra("menu_like_id", 0);
 
                 // 좋아요 레트로핏 통신
-                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, pushOrNot, type, menu_like_id, 0);
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(userID, card_id, pushOrNot, type, menu_like_id, 0);
                 call.enqueue(new Callback<Result>() {
                     @Override
                     public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
