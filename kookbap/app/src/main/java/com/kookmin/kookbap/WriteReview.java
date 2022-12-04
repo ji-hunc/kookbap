@@ -482,17 +482,17 @@ public class WriteReview extends AppCompatActivity {
                                         // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
                                         if (success) {
                                             Log.e("LOGLOG", "success1");
-                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                                             Log.e("서버에서 받아온내용", message);
                                         } else {
                                             Log.e("LOGLOG", "success2");
-                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                         }
                                         // 응답을 받아오지 못했을경우
                                     } else {
                                         assert response.body() != null;
-                                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                         Log.e("LOGLOG", "success3");
                                     }
                                 }
@@ -500,7 +500,7 @@ public class WriteReview extends AppCompatActivity {
                                 // 통신실패시
                                 @Override
                                 public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-                                    Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                     Log.e("LOGLOG", "success4");
 
                                 }
@@ -520,7 +520,7 @@ public class WriteReview extends AppCompatActivity {
         else if (reviewWriteSignal == INFORMED_WRITE) {
             selectAbleLayout.setVisibility(View.GONE);
             fixedLayout.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(), "Informed Mode", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Informed Mode", Toast.LENGTH_SHORT).show();
             menuNameTextview.setText(getIntent().getStringExtra("foodName"));
 
             AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this);
@@ -595,18 +595,18 @@ public class WriteReview extends AppCompatActivity {
                                     // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
                                     if (success) {
                                         Log.e("LOGLOG", "success1");
-                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                         finish();
 
                                         Log.e("서버에서 받아온내용", message);
                                     } else {
                                         Log.e("LOGLOG", "success2");
-                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                     }
                                     // 응답을 받아오지 못했을경우
                                 } else {
                                     assert response.body() != null;
-                                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     Log.e("LOGLOG", "success3");
                                 }
 
@@ -615,7 +615,7 @@ public class WriteReview extends AppCompatActivity {
                             // 통신실패시
                             @Override
                             public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-                                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 Log.e("LOGLOG", "success4");
 
                             }
@@ -630,7 +630,7 @@ public class WriteReview extends AppCompatActivity {
         } else if (reviewWriteSignal == MODIFY_WRITE) {
             selectAbleLayout.setVisibility(View.GONE);
             fixedLayout.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(), "modify mode", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "modify mode", Toast.LENGTH_SHORT).show();
             menuNameTextview.setText(getIntent().getStringExtra("foodName"));
 
             int reviewNumberOrigin = getIntent().getIntExtra("review_number", 0);
@@ -731,17 +731,18 @@ public class WriteReview extends AppCompatActivity {
                                         // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
                                         if (success) {
                                             Log.e("LOGLOG", "success1");
-                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                            finish();
 
                                             Log.e("서버에서 받아온내용", message);
                                         } else {
                                             Log.e("LOGLOG", "success2");
-                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                         }
                                         // 응답을 받아오지 못했을경우
                                     } else {
                                         assert response.body() != null;
-                                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                         Log.e("LOGLOG", "success3");
                                     }
                                 }
@@ -749,12 +750,11 @@ public class WriteReview extends AppCompatActivity {
                                 // 통신실패시
                                 @Override
                                 public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-                                    Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                     Log.e("LOGLOG", "success4");
 
                                 }
                             });
-                            finish();
                         } else {
                             Toast.makeText(WriteReview.this, "변경사항이 없습니다.", Toast.LENGTH_SHORT).show();
                         }
