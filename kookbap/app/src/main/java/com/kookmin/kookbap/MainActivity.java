@@ -2,6 +2,7 @@ package com.kookmin.kookbap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -63,5 +64,10 @@ public class MainActivity extends AppCompatActivity {
     public void changeFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        ActivityCompat.finishAffinity(this);
+        System.exit(0);
+    }
 }
