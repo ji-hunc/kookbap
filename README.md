@@ -2,7 +2,11 @@
 
 국민대학교 학식정보와 이에 대한 리뷰정보를 확인하고, 내가 좋아할 만한 메뉴를 추천받을 수 있는 서비스
 <br>
+
 ⚠️ `클라이언트, 서버, 디비, 머신러닝에 관한 readme는 각각의 폴더에 있습니다. `⚠️
+| 클라이언트 | 서버 | DB | 머신러닝 |
+| :-------: | :------: | :------: | :------: |
+| [README.md](https://github.com/ji-hunc/kookbap/tree/main/kookbap) | [README.md](https://github.com/ji-hunc/kookbap/tree/main/server) | [README.md](https://github.com/ji-hunc/kookbap/tree/main/db) | [README.md](https://github.com/ji-hunc/kookbap/tree/main/machineLearning) |
 
 </br>
 
@@ -26,8 +30,7 @@
 
 #### 📦 기술스택
 
-<img width="100" src="https://img.shields.io/badge/android%20API-31-brightgreen"> 
-<img width="116" src="https://img.shields.io/badge/android%20SDK-12.0-green">
+<img width="100" src="https://img.shields.io/badge/android%20API-31-brightgreen"> <img width="116" src="https://img.shields.io/badge/android%20SDK-12.0-green">
 
 </br>
 
