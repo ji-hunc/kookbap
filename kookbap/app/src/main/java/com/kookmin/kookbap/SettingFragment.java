@@ -1,21 +1,23 @@
 package com.kookmin.kookbap;
 
 import static android.app.Activity.RESULT_OK;
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
+import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -23,13 +25,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,32 +39,32 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-import org.w3c.dom.Text;
+import com.kookmin.kookbap.Notification.AlarmReceiver;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class SettingFragment extends Fragment {
+    public static Context settingContext;
     ImageView settingProfileImage;
-    TextView settingName, settingCollegeNumber, nodeTest;
-    LinearLayout settingMyReviews;
+    TextView settingName, settingCollegeNumber, textViewUserEmail, textViewAppVersion;
+    LinearLayout settingMyReviews, settingLogout;
     Switch settingNotice;
-    Button settingBtnNotice;
+    Button settingBtnNotice, testBtn;
     Boolean noticeOn = false;
+    SharedPreferences prfNotification;
+    SharedPreferences.Editor prfNotificationEditor;
     int cameraPermission, galleryPermission, noticePermission;
     private static final int SINGLE_PERMISSION = 1004;
     Bitmap imageBitmap, noticeBitmap;
     Uri uri;
+    AlarmManager alarmManager;
+    String from = "2022-11-27 21:13:00"; //임의로 날짜와 시간을 지정
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
@@ -74,12 +73,24 @@ public class SettingFragment extends Fragment {
         settingCollegeNumber = view.findViewById(R.id.settingCollegeNumber);
         settingMyReviews = view.findViewById(R.id.settingMyReviews);
         settingNotice = view.findViewById(R.id.settingNotice);
-        settingBtnNotice = view.findViewById(R.id.settingBtnNotice);
-
-        // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 설정
+//        settingBtnNotice = view.findViewById(R.id.settingBtnNotice);
+        textViewUserEmail = view.findViewById(R.id.textViewUserEmail);
+        textViewAppVersion = view.findViewById(R.id.textViewAppVersion);
+        settingLogout = view.findViewById(R.id.settingLogout);
+        SharedPreferences getNotice = getActivity().getSharedPreferences("isNoticeOn", MODE_PRIVATE);
+        noticeOn = getNotice.getBoolean("isNoticeOn", false);
+        settingNotice.setChecked(noticeOn);
+        settingContext = getActivity().getApplicationContext();
+        // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 등 설정, 유저 관리 구현하면 구현해야 함.
         settingProfileImage.setImageResource(R.drawable.ic_basic_profile);
         settingName.setText("김민제");
         settingCollegeNumber.setText("학번: 20191557");
+        textViewUserEmail.setText("kevinmj12@kookmin.ac.kr");
+
+        //
+
+        textViewAppVersion.setText("1.1.0");
+
 
 
         // 프로필 사진을 눌렀을 때 사진 변경
@@ -139,38 +150,37 @@ public class SettingFragment extends Fragment {
         });
 
         // 알림 설정
-        settingBtnNotice.setOnClickListener(new View.OnClickListener(){
-            @RequiresApi(api = Build.VERSION_CODES.S)
-            @Override
-            public void onClick(View view){
-                if (settingNotice.isChecked()){
-                    noticeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_basic_profile);
-
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
+//        settingBtnNotice.setOnClickListener(new View.OnClickListener(){
+//            @RequiresApi(api = Build.VERSION_CODES.S)
+//            @Override
+//            public void onClick(View view){
+//                if (settingNotice.isChecked()){
+//                    noticeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_basic_profile);
 //
-
-                    // 알림 발생시키는 다른 방식인데 SDK버전 확인 필요
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        NotificationChannel channel = new NotificationChannel("channel1", "hello", NotificationManager.IMPORTANCE_HIGH);
-                        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                        notificationManager.createNotificationChannel(channel);
-                        NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
-                        notification.setContentTitle("테스트");
-                        notification.setContentText("테스트 알림입니다");
-                        notification.setDefaults(Notification.DEFAULT_SOUND);
-                        notification.setSmallIcon(R.drawable.ic_basic_profile);
-
-                        PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
-
-                        notification.setContentIntent(pendingIntent);
-                        notification.setAutoCancel(true);
-
-                        notificationManager.notify(0, notification.build());
-                    }
-                }
-            }
-
-
+//                    Intent intent = new Intent(getActivity(), MainActivity.class);
+////
+//
+//                    // 알림 발생시키는 다른 방식인데 SDK버전 확인 필요
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//                        NotificationChannel channel = new NotificationChannel("channel1", "hello", NotificationManager.IMPORTANCE_HIGH);
+//                        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+//                        notificationManager.createNotificationChannel(channel);
+//                        NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
+//                        notification.setContentTitle("KookBob");
+//                        notification.setContentText("jihun님, 오늘의 추천 메뉴 확인하세요!");
+//                        notification.setDefaults(Notification.DEFAULT_SOUND);
+//                        notification.setSmallIcon(R.drawable.ic_basic_profile);
+//
+//                        PendingIntent pendingIntent = PendingIntent.getActivity(view.getContext(), 0, intent, PendingIntent.FLAG_MUTABLE);
+//
+//                        notification.setContentIntent(pendingIntent);
+//                        notification.setAutoCancel(true);
+//
+//                        notificationManager.notify(0, notification.build());
+//                    }
+//                }
+//            }
+//
 //
 //                    알림 발생시키는 다른 방식(7.0 이상에서는 작동 안됨)
 //                    NotificationCompat.Builder notification = new NotificationCompat.Builder(requireContext(), "channel1");
@@ -182,16 +192,80 @@ public class SettingFragment extends Fragment {
 //                    notification.setContentIntent(pendingIntent);
 //                    PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //                    PendingIntent를 통해 알림 터치 시 MainActivity로 이동할 수 있는데, 아직 모르겠음.
-
-
+//
+//
 //                    NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 //                    notificationManager.notify(0, notification.build());
+//
+//
+//        });
+
+        //알림 설정 (by FCM)
+        settingNotice.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                noticeOn = settingNotice.isChecked();
+                prfNotification = getActivity().getSharedPreferences("isNoticeOn", MODE_PRIVATE);
+                prfNotificationEditor = prfNotification.edit();
+                prfNotificationEditor.putBoolean("isNoticeOn", noticeOn);
+                prfNotificationEditor.commit();
+            }
+        });
 
 
+        NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(NOTIFICATION_SERVICE);
+
+        alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        Calendar mCalendar = new GregorianCalendar();
+//        setAlarm();
+
+
+
+        settingLogout.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                SharedPreferences prf = getActivity().getSharedPreferences("userData", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prf.edit();
+                editor.clear();
+                editor.apply();
+                PackageManager packageManager = getActivity().getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage(getActivity().getPackageName());
+                ComponentName componentName = intent.getComponent();
+                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                startActivity(mainIntent);
+            }
         });
 
         return view;
     }
+
+
+
+    private void setAlarm() {
+        //AlarmReceiver에 값 전달
+        Intent receiverIntent = new Intent(getActivity().getApplicationContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 0, receiverIntent, FLAG_IMMUTABLE);
+
+
+
+        //날짜 포맷을 바꿔주는 소스코드
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datetime = null;
+        try {
+            datetime = dateFormat.parse(from);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datetime);
+
+
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(),pendingIntent);
+    }
+
 
     // 권한 요청 이후 권한 결과
     @Override

@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.kookmin.kookbap">
+    package="com.kookmin.kookbap" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_ddukbaegi"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_ddukbaegi"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kookbap"
-        tools:targetApi="31">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31" >
+        <service
+            android:name=".Notification.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".Notification.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <activity
-            android:name=".ReviewTabActivity"
+            android:name=".ReviewRank.ShowMoreRankActivity"
             android:exported="false" />
         <activity
             android:name=".FoodDetail"
@@ -30,8 +48,8 @@
             android:label="WriteReview"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".LoginAndSignup.LoadingActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,6 +57,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserReviewsActivity" />
+        <activity android:name=".LoginAndSignup.CheckEmailActivity"/>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"/>
+        <activity android:name=".LoginAndSignup.LoginActivity"/>
+        <activity android:name=".LoginAndSignup.SignUpActivity"/>
     </application>
 
 </manifest>

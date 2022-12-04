@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "177221043520",
+    "project_id": "kookbapprototype",
+    "storage_bucket": "kookbapprototype.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177221043520:android:3fa61bc29026952ae426a5",
+        "android_client_info": {
+          "package_name": "com.kookmin.kookbap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177221043520-egp64q9095gs11f948l4g4b5aa2gppig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1bn0h0Zsa6YjS8xSkNtFMcT5mToSMEIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177221043520-egp64q9095gs11f948l4g4b5aa2gppig.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

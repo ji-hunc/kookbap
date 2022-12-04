@@ -1,51 +1,68 @@
 package com.kookmin.kookbap;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+
+import com.kookmin.kookbap.LoginAndSignup.UserData;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class UserReviewsActivity extends AppCompatActivity {
 
-    ArrayList<ReviewData> userReviewsData;
+    ArrayList<ReviewData> reviewsThatIWrote;
     RecyclerView userReviewsRecyclerView;
     ReviewDataAdapter userReviewsDataAdapter;
+    TextView totalReviewCount;
+    String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_reviews);
 
-        userReviewsRecyclerView = (RecyclerView) findViewById(R.id.userReviewsRecyclerView);
-        userReviewsData = new ArrayList<ReviewData>();
-        userReviewsDataAdapter = new ReviewDataAdapter(userReviewsData);
+        userID = UserData.getUserData(this).getUserId(); // 프리퍼런스에서 Id 받아옴
+        userReviewsRecyclerView = findViewById(R.id.userReviewsRecyclerView);
+        totalReviewCount = findViewById(R.id.totalReviewCount);
+
+        // 유저가 작성한 리뷰 서버에서 받아옴
+        Call<ArrayList<ReviewData>> call;
+        call = RetrofitClient.getApiService().getUserReviewData(userID);
+        call.enqueue(new Callback<ArrayList<ReviewData>>() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
+                    ArrayList<ReviewData> reviewsThatIWrote = (ArrayList<ReviewData>) response.body();
+                    userReviewsDataAdapter = new ReviewDataAdapter(reviewsThatIWrote,userID);
+                    userReviewsRecyclerView.setAdapter(userReviewsDataAdapter);
+                    totalReviewCount.setText("작성한 리뷰: " + Integer.toString(reviewsThatIWrote.size()) + "개");
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull Throwable t) {
+                Log.e("Error", t.getMessage());
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         userReviewsRecyclerView.setLayoutManager(linearLayoutManager);
         userReviewsRecyclerView.setAdapter(userReviewsDataAdapter);
-
-        loadUserReviewsData();
     }
-
-    // 서버에서 유저의 데이터 받아오는 것 구현해야 함.
-    public void loadUserReviewsData(){
-//        userReviewsData.add(new MenuData("chicken", "subChicken", "17,000", "delicious", R.drawable.ic_review, 4.5f, 0));
-        ArrayList<String> exReviewComment = new ArrayList<String>();
-        ArrayList<String> exTag = new ArrayList<String>();
-        exReviewComment.add("맛있겠다"); exReviewComment.add("와");
-        exTag.add("빵"); exTag.add("부드러워요");
-
-        // TODO 2022-11-12 리뷰데이터 테스트를 위해 유저가 작성한 리뷰데이터는 일단 없앰
-//        userReviewsData.add(new ReviewData2("맛있어요", "빵", "복지관", "kevinmj12", exReviewComment, exTag, R.drawable.test_bread_picture, 4, 2));
-        userReviewsData.add(new ReviewData());
-
-        userReviewsDataAdapter.notifyDataSetChanged();
-    }
-
 }
 
