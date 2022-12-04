@@ -3,6 +3,7 @@ package com.kookmin.kookbap.LoginAndSignup;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -19,6 +20,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kookmin.kookbap.MainActivity;
 import com.kookmin.kookbap.R;
+import com.kookmin.kookbap.Retrofits.Result;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
+
+import org.jetbrains.annotations.NotNull;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText mEmail,mPassword;
     TextView mSingup;
     CheckedTextView mOutologin;
-    UserData muserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +59,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-
-        String email = mEmail.getText().toString();
-        String password = mPassword.getText().toString();
-
         mOutologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,14 +96,11 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferences prf = LoginActivity.this.getSharedPreferences("userData", 0);
                                 SharedPreferences.Editor editor = prf.edit();
                                 editor.putBoolean("outoLogin", mCheck);
-                                editor.apply();
+                                editor.putString("Email", email); //로그인 시 email Preference에 저장
+                                editor.putString("ID", email.split("@")[0]); //로그인 시 id preference에 저장
+                                editor.commit();
 
-                                muserData = new UserData(prf.getString("ID","") , prf.getString("Name","")); // 유저 아이디와 이름을 프래그먼트로 들고오기
-
-                                String userId = muserData.getmUserAderss(); // 유저 아이디
-                                String userName = muserData.getmUserName(); // 유저 이름
-                                // TODO: 2022-11-29 이게 맞나 모르겠지만 일단 해놨습니다 데이터베이스 연결예정 
-
+                                // TODO: 2022-11-29 이게 맞나 모르겠지만 일단 해놨습니다 데이터베이스 연결예정
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                                 finish();

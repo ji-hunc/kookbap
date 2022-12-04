@@ -49,17 +49,17 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="10dp"
             />
+
         <EditText
             android:id="@+id/Singup_name"
             android:layout_width="160dp"
             android:layout_height="40dp"
-            android:maxLines="1"
-            android:hint="닉네임 설정"
-            android:inputType="text"
             android:layout_below="@id/Singup_password"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="10dp"
-            />
+            android:hint="닉네임 설정"
+            android:inputType="text"
+            android:maxLines="1" />
         <Button
             android:id="@+id/fragment_signupActivity_input_btn"
             android:layout_width="wrap_content"
