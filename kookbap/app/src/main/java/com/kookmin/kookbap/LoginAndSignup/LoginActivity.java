@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences prf = getSharedPreferences("userData", 0);
 
-        if (prf.getBoolean("userData", false)) { // 자동 로그인이 체크 되어있다면 바로 이동
+        if (prf.getBoolean("outoLogin", false)) { // 자동 로그인이 체크 되어있다면 바로 이동
             if (prf.getString("ID", "") != null) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("outo_login_id", 0);
+                                SharedPreferences prf = LoginActivity.this.getSharedPreferences("userData", 0);
                                 SharedPreferences.Editor editor = prf.edit();
                                 editor.putBoolean("outoLogin", mCheck);
                                 editor.apply();
