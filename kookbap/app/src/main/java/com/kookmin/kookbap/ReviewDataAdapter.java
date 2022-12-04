@@ -60,8 +60,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.reviewContext.setText(reviewDataArray.get(position).getDescription());
         // TODO image는 임시로 heart
 //        holder.reviewImage.setImageResource(R.drawable.ic_filled_heart);
-        String url = "https://kookbap.run.goorm.io/images/" + reviewDataArray.get(position).getImage();
-//        String url = "http://10.0.2.2:3000/images/" + reviewDataArray.get(position).getImage();
+        String url = URLConnector.URL + "images/" + reviewDataArray.get(position).getImage();
         holder.webView.loadUrl(url);
         holder.webView.setFocusable(false);
         holder.webView.getSettings().setUseWideViewPort(true);

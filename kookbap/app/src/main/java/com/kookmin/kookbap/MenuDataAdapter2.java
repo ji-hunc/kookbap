@@ -86,7 +86,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
                     holder.foodImage.setImageBitmap(result);
                 }
             }
-            String url = "https://kookbap.run.goorm.io/images/" + MenuDataArray.get(position).getImage();
+            String url = URLConnector.URL + "images/" + MenuDataArray.get(position).getImage();
             new DownloadFilesTask().execute(url); // 이미지뷰에 외부 이미지 적용
         }
         holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
