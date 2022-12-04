@@ -156,6 +156,9 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                                        // UI 에서 우선적으로 지우는 코드
+                                        notifyItemRemoved(position);
+
                                         // DB에서 reivew 테이블의 키로 쓰일 review_number를 인텐트로 받아옴
                                         int reviewNumber = reviewDataArray.get(position).getReview_number();
                                         int menuId = reviewDataArray.get(position).getReview_menu_id_reviewd();
@@ -175,7 +178,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                                     // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
                                                     if (success) {
                                                         Log.e("LOGLOG", "success1");
-                                                        Toast.makeText(view.getContext(),"정상적으로 삭제되었습니다.",Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(view.getContext(),"삭제되었습니다.",Toast.LENGTH_SHORT).show();
                                                         Log.e("서버에서 받아온내용", message);
                                                     } else {
                                                         Log.e("LOGLOG", "success2");

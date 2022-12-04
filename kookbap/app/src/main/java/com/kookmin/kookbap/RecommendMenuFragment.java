@@ -1,5 +1,8 @@
 package com.kookmin.kookbap;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,13 +34,18 @@ public class RecommendMenuFragment extends Fragment {
     ArrayList<MenuData> menuData;
     MenuDataAdapter2 menuDataAdapter2;
     TextView testTextView;
-    String userName = "jihun"; // 유저 구현 시 변경 필요
+    String userName;
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recommend_menu, container, false);
+
+        
+        SharedPreferences userPrf = getActivity().getSharedPreferences("userData", MODE_PRIVATE);
+        userName = userPrf.getString("ID", "");
 
         recommendMenuRecyclerView = view.findViewById(R.id.recommendMenuRecyclerView);
         testTextView = view.findViewById(R.id.testTextView);
