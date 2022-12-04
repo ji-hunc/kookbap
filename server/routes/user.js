@@ -113,4 +113,20 @@ router.post("/like", (req, res) => {
     });
 });
 
+router.post("/signUp", (req, res) => {
+    var user_id = req.body.userEmail.split("@")[0];
+    var user_Email = req.body.userEmail;
+    var user_NickName = req.body.userNickName;
+    console.log(user_id);
+    console.log(user_Email);
+    console.log(user_NickName);
+    db.query(
+        `INSERT INTO user (user_id, nickname, E_mail) VALUES ('${user_id}','${user_NickName}','${user_Email}');`
+    );
+    res.json({
+        success: true,
+        message: "good",
+    });
+});
+
 module.exports = router;

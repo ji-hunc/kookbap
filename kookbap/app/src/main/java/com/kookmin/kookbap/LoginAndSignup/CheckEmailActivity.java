@@ -17,8 +17,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kookmin.kookbap.R;
+import com.kookmin.kookbap.Retrofits.Result;
+import com.kookmin.kookbap.Retrofits.RetrofitClient;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CheckEmailActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -26,7 +34,6 @@ public class CheckEmailActivity extends AppCompatActivity {
     Button mCheck_Email_btn;
     boolean isVerified = true;
 
-    ArrayList<UserData> mUserData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,10 +42,6 @@ public class CheckEmailActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
         mCheck_Email_btn = findViewById(R.id.fragment_checkEmail_check_btn);
-
-        SharedPreferences myData = getSharedPreferences("userData", 0);
-        SharedPreferences.Editor editor = myData.edit();
-
         Intent intent = getIntent();
 
         mCheck_Email_btn.setOnClickListener(new View.OnClickListener() { // 인증메일을 확인여부
@@ -50,9 +53,26 @@ public class CheckEmailActivity extends AppCompatActivity {
                         isVerified = mUser.isEmailVerified();
                         if(isVerified){
                             Log.d("success","드디어!");
-                            editor.putString("ID",mUser.getEmail());
-                            editor.putString("Name",intent.getStringExtra("name"));
-                            editor.apply();
+                            Call<Result> call = RetrofitClient.getApiService().postUserInfo(mUser.getEmail(),intent.getStringExtra("name"));
+                            call.enqueue(new Callback<Result>() {
+                                @Override
+                                public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+
+                                    // 서버에서 응답을 받아옴
+                                    if (response.isSuccessful() && response.body()   != null) {
+
+                                        // 응답을 받아오지 못했을경우
+                                    } else {
+                                        assert response.body() != null;
+                                    }
+                                }
+
+                                // 통신실패시
+                                @Override
+                                public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+
+                                }
+                            });
                             finish();
                         }
                         else{

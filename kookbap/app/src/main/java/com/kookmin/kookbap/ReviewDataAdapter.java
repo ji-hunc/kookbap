@@ -26,6 +26,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -39,10 +40,11 @@ import retrofit2.Response;
 
 public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.ReviewDataViewHolder>{
     ArrayList<ReviewData> reviewDataArray;
-    Context context;
+    String userID;
 
-    public ReviewDataAdapter(ArrayList<ReviewData> reviewDataArray) {
+    public ReviewDataAdapter(ArrayList<ReviewData> reviewDataArray, String userID) {
         this.reviewDataArray = reviewDataArray;
+        this.userID = userID;
         // reviewDataArray 에는 ReviewData 객체가 여러개 들어있음
     }
 
@@ -79,14 +81,12 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
             @Override
             public void onClick(View view) {
 
-                // TODO user_id 는 프리퍼런스에서 받아와야함
-                String user_id = "jihun";
                 // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
                 int card_id = reviewDataArray.get(position).getReview_number();
                 String type = "review";
 
                 // 좋아요 레트로핏 통신
-                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, true, type, 0, 0);
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(userID, card_id, true, type, 0, 0);
                 call.enqueue(new Callback<Result>() {
                     @Override
                     public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
