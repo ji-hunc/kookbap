@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -36,10 +37,12 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
 
     ArrayList<MenuData2> MenuDataArray;
     Context context;
+    String userID;
 
     public MenuDataAdapter2(ArrayList<MenuData2> MenuDataArray, Context context) {
         this.MenuDataArray = MenuDataArray;
         this.context = context;
+        this.userID = UserData.getUserData(context).getUserId();
     }
 
     @NonNull
@@ -52,7 +55,6 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
 
     @Override
     public void onBindViewHolder(@NonNull MenuDataAdapter2.MenuDataViewHolder holder, final int position) {
-
         holder.foodNameSide.setText(MenuDataArray.get(position).getSubMenu());
         if (MenuDataArray.get(position).getImage() == null) {
             holder.foodImage.setImageResource(R.drawable.ic_spoon);
@@ -86,7 +88,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
                     holder.foodImage.setImageBitmap(result);
                 }
             }
-            String url = "https://kookbap.run.goorm.io/images/" + MenuDataArray.get(position).getImage();
+            String url = URLConnector.URL + "images/" + MenuDataArray.get(position).getImage();
             new DownloadFilesTask().execute(url); // 이미지뷰에 외부 이미지 적용
         }
         holder.foodName.setText(MenuDataArray.get(position).getMenu_name());
@@ -125,9 +127,6 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
             @Override
             public void onClick(View view) {
                 holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
-
-                // TODO user_id 는 프리퍼런스에서 받아와야함
-                String user_id = "jihun";
                 // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
                 int card_id = MenuDataArray.get(position).getMenu_id();
                 boolean pushOrNot = holder.foodHeart.isSelected();
@@ -135,7 +134,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
                 int menu_like_id = MenuDataArray.get(position).getMenu_like_id();
 
                 // 좋아요 레트로핏 통신
-                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, pushOrNot, type, menu_like_id, 0);
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(userID, card_id, pushOrNot, type, menu_like_id, 0);
                 call.enqueue(new Callback<Result>() {
                     @Override
                     public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {

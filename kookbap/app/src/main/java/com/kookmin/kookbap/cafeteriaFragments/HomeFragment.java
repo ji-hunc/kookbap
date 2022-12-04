@@ -1,6 +1,7 @@
 package com.kookmin.kookbap.cafeteriaFragments;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
@@ -43,12 +45,12 @@ public class HomeFragment extends Fragment {
     String date, nowYear, nowMonth, nowDate;
 
     ArrayList<MenuData2> todayMenus;
-    JSONObject jsonObject;
+    String userID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        userID = UserData.getUserData(getContext()).getUserId(); // 유저 id 가져오기
         // 날짜 변수에 오늘 날짜 초기화 및 날짜텍스트뷰에 날짜 초기화
         dateTextView = view.findViewById(R.id.dateTextView);
         Calendar calendar = Calendar.getInstance();
@@ -81,8 +83,7 @@ public class HomeFragment extends Fragment {
                         // 날짜를 선택하고 확인을 누르면, 어댑터가 그 날짜에 해당하는 것들로 다시 뿌려줌
                         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
                         Call<ArrayList<MenuData2>> call;
-                        //todo : 'jongbin'부분 userid 받아오게 변경
-                        call = RetrofitClient.getApiService().getMenuDataEachDate(date,"jihun"); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
+                        call = RetrofitClient.getApiService().getMenuDataEachDate(date,userID); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
                         call.enqueue(new Callback<ArrayList<MenuData2>>() {
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -139,8 +140,7 @@ public class HomeFragment extends Fragment {
 
         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
         Call<ArrayList<MenuData2>> call;
-        //todo : 'jongbin'부분 userid 받아오게 변경
-        call = RetrofitClient.getApiService().getMenuDataEachDate(date,"jihun"); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
+        call = RetrofitClient.getApiService().getMenuDataEachDate(date,userID); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
         call.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
