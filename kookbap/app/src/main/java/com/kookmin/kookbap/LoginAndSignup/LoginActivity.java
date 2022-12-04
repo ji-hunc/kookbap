@@ -103,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
                                 // TODO: 2022-11-29 이게 맞나 모르겠지만 일단 해놨습니다 데이터베이스 연결예정
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
-                                finish();
                             } else {
                                 Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
                             }
