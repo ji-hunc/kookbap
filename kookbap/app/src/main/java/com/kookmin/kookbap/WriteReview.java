@@ -40,6 +40,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -110,10 +112,15 @@ public class WriteReview extends AppCompatActivity {
 
     private static final int SINGLE_PERMISSION = 1004;
 
+
+    String userID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_review);
+
+        userID = UserData.getUserData(this).getUserId(); // 프리퍼런스에서 Id 받아옴
 
         menuSpinner = findViewById(R.id.menuSpinner);
         cafeteriaSpinner = findViewById(R.id.cafeteriaSpinner);
@@ -198,8 +205,7 @@ public class WriteReview extends AppCompatActivity {
             isFilledImage = false;
 
             Call<ArrayList<MenuData2>> call;
-            // TODO userId 프리퍼런스에서 가져와야함 현재는 상수
-            call = RetrofitClient.getApiService().getMenuDataEachDate(date, "jihun");
+            call = RetrofitClient.getApiService().getMenuDataEachDate(date, userID);
             call.enqueue(new Callback<ArrayList<MenuData2>>() {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -262,8 +268,7 @@ public class WriteReview extends AppCompatActivity {
                             menuSpinner.setSelection(0);
 
                             Call<ArrayList<MenuData2>> call;
-                            // TODO userId 프리퍼런스에서 가져와야함 현재는 상수
-                            call = RetrofitClient.getApiService().getMenuDataEachDate(date, "jihun");
+                            call = RetrofitClient.getApiService().getMenuDataEachDate(date, userID);
                             call.enqueue(new Callback<ArrayList<MenuData2>>() {
                                 @Override
                                 public void onResponse(@NonNull Call call, @NonNull Response response) {
@@ -446,9 +451,9 @@ public class WriteReview extends AppCompatActivity {
 
 
                             RequestBody menuId = RequestBody.create(MultipartBody.FORM, String.valueOf(getIntent().getIntExtra("menuId", 0)));
-                            RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
+                            RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, userID);
                             RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuSpinner.getSelectedItem().toString());
-                            RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
+                            RequestBody writeDate = RequestBody.create(MultipartBody.FORM, userID);
                             RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(ratingBar.getRating()));
                             RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
                             RequestBody description = RequestBody.create(MultipartBody.FORM, editTextReview.getText().toString());
@@ -464,7 +469,6 @@ public class WriteReview extends AppCompatActivity {
                             map.put("description", description);
                             map.put("restaurantName", restaurantName);
 
-                            // TODO 유저 아이디("jihun" 아직 상수) 유저관리로 변수로 받아야함
                             Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
                             call.enqueue(new Callback<Result>() {
                                 @Override
@@ -560,9 +564,9 @@ public class WriteReview extends AppCompatActivity {
 
 
                         RequestBody menuId = RequestBody.create(MultipartBody.FORM, String.valueOf(getIntent().getIntExtra("menuId", 0)));
-                        RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
+                        RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, userID);
                         RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTextview.getText().toString());
-                        RequestBody writeDate = RequestBody.create(MultipartBody.FORM, "jihun");
+                        RequestBody writeDate = RequestBody.create(MultipartBody.FORM, userID);
                         RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(ratingBar.getRating()));
                         RequestBody reviewLike = RequestBody.create(MultipartBody.FORM, String.valueOf(0));
                         RequestBody description = RequestBody.create(MultipartBody.FORM, editTextReview.getText().toString());
@@ -578,7 +582,6 @@ public class WriteReview extends AppCompatActivity {
                         map.put("description", description);
                         map.put("restaurantName", restaurantName);
 
-                        // TODO 유저 아이디("jihun" 아직 상수) 유저관리로 변수로 받아야함
                         Call<Result> call = RetrofitClient.getApiService().uploadFileWithPartMap(map, body);
                         call.enqueue(new Callback<Result>() {
                             @Override
@@ -699,7 +702,7 @@ public class WriteReview extends AppCompatActivity {
                             MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image_from_client.png", requestFile);
 
                             RequestBody menuId = RequestBody.create(MultipartBody.FORM, String.valueOf(getIntent().getIntExtra("menuId", 0)));
-                            RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, "jihun");
+                            RequestBody reviewUserId = RequestBody.create(MultipartBody.FORM, userID);
                             RequestBody menuName = RequestBody.create(MultipartBody.FORM, menuNameTextview.getText().toString());
                             RequestBody reviewNumber = RequestBody.create(MultipartBody.FORM, String.valueOf(reviewNumberOrigin));
                             RequestBody star = RequestBody.create(MultipartBody.FORM, String.valueOf(ratingBar.getRating()));
@@ -715,7 +718,7 @@ public class WriteReview extends AppCompatActivity {
                             map.put("description", description);
                             map.put("isUploadNewImage", isUploadNewImage);
 
-                            // TODO 유저 아이디("jihun" 아직 상수) 유저관리로 변수로 받아야함
+
                             Call<Result> call = RetrofitClient.getApiService().modifyReview(map, body);
                             call.enqueue(new Callback<Result>() {
                                 @Override

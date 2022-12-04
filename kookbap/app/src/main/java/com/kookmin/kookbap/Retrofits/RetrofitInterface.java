@@ -2,6 +2,7 @@ package com.kookmin.kookbap.Retrofits;
 
 import android.util.Log;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.UserRankData;
@@ -154,6 +155,14 @@ public interface RetrofitInterface {
             @Field("menu_like_id") int menu_like_id,
             @Field("review_like_id") int review_like_id
     );
+
+    @FormUrlEncoded
+    @POST("/user/signUp")
+    Call<Result> postUserInfo(
+      @Field("userEmail") String userEmail,
+      @Field("userNickName") String userNickName
+    );
+
 
 //    @Multipart
 ////    @FormUrlEncoded
