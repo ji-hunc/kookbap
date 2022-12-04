@@ -53,6 +53,7 @@ request(options, async function (error, response, body) {
 //     (new Date(E_DATE) - new Date(S_DATE)) / (1000 * 60 * 60 * 24)
 // );
 
+// 업데이트 메서드
 function totalUpdate() {
     var day = new Date(S_DATE);
     for (var j = 0; j < PROGRASS_DATE + 1; j++) {
