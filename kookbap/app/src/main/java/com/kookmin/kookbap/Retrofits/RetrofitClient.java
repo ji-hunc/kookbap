@@ -2,13 +2,13 @@ package com.kookmin.kookbap.Retrofits;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kookmin.kookbap.URLConnector;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-//    private static final String BASE_URL = "http://10.0.2.2:3000/";
-    private static final String BASE_URL = "http://kookbap.run.goorm.io/";
+    private static final String BASE_URL = URLConnector.URL;
 
 
     public static RetrofitInterface getApiService() {

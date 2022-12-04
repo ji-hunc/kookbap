@@ -97,6 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 Log.d("send","sendEmail");
                                 Intent intent = new Intent(SignUpActivity.this, CheckEmailActivity.class);
                                 intent.putExtra("name", mName.getText().toString());
+
                                 startActivity(intent);
                                 finish();
                             }
