@@ -67,7 +67,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.webView.setFocusable(false);
         holder.webView.getSettings().setUseWideViewPort(true);
         holder.webView.getSettings().setLoadWithOverviewMode(true);
-        holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
+        holder.reviewReviewerName.setText(reviewDataArray.get(position).getNickname());
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
         holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
         holder.reviewLikes.setText(Integer.toString(reviewDataArray.get(position).getReview_like()));

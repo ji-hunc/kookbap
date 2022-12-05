@@ -2,11 +2,15 @@ package com.kookmin.kookbap.LoginAndSignup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,15 +25,16 @@ public class UserData {
     @Expose
     String nickname;
 
-    @SerializedName("E-mail")
+    @SerializedName("E_mail")
     @Expose
     String  E_mail;
 
     private static UserData userData;
 
 
-    public UserData(String userId){
+    public UserData(String userId, String Email){
         this.userId = userId;
+        this.E_mail = Email;
         this.nickname = "unknown";
     }
 
@@ -37,7 +42,23 @@ public class UserData {
         if (userData ==null){
             SharedPreferences userDataPref = context.getSharedPreferences("userData",0);
             String prefUserId = userDataPref.getString("ID","");
-            userData = new UserData(prefUserId);
+            String prefUserEmail = userDataPref.getString("Email","");
+            userData = new UserData(prefUserId, prefUserEmail);
+
+            // 앱 실행 시 프래그먼트에 저장된 user_id를 통해서 db에서 닉네임, 이메일을 받아옴.
+            Call <ArrayList<UserData>> callUserData = RetrofitClient.getApiService().getUserInfo(prefUserId);
+            callUserData.enqueue(new Callback<ArrayList<UserData>>() {
+                @Override
+                public void onResponse(Call<ArrayList<UserData>> call, Response<ArrayList<UserData>> response) {
+                    userData = response.body().get(0);
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<UserData>> call, Throwable t) {
+
+                }
+            });
+
         }
         return userData;
     }
