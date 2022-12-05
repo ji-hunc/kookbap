@@ -18,13 +18,14 @@
         android:layout_height="wrap_content"
         android:hint="ID"
         app:endIconMode="clear_text"
-        app:helperText="국민대 메일로 로그인해주세요"
+        app:helperText="국민대 메일로 입력해주세요"
         app:errorEnabled="true"
         app:suffixText="\@kookmin.ac.kr"
         style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
         >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/Singup_email"
+            android:nextFocusDown="@id/Singup_password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textEmailAddress"
@@ -35,7 +36,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="Pw"
+        android:hint="password"
         app:endIconMode="clear_text"
         app:helperText="특수문자를 하나 이상 포함해주세요"
         app:errorEnabled="true"
@@ -53,7 +54,7 @@
     <EditText
         android:textSize="16sp"
         android:id="@+id/Singup_name"
-        android:layout_width="300dp"
+        android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_below="@id/Singup_password"
         android:hint="닉네임"
@@ -61,7 +62,7 @@
         android:maxLines="1" />
     <Button
         android:id="@+id/fragment_signupActivity_input_btn"
-        android:layout_width="300dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/Singup_name"
         android:layout_alignParentRight="true"

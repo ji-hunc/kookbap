@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kookmin.kookbap.MainActivity;
@@ -33,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     Boolean mCheck = false;
-    Button mLogin_btn,mLogin_toGoogle_btn;
-    EditText mEmail,mPassword;
+    Button mLogin_btn;
+    TextInputEditText mEmail,mPassword;
     TextView mSingup;
     CheckedTextView mOutologin;
 
@@ -45,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
 
         mLogin_btn = findViewById(R.id.login_btn);
         mSingup = findViewById(R.id.lognin_singup);
-        mEmail = findViewById(R.id.login_Email);
-        mPassword = findViewById(R.id.login_Password);
+        mEmail = findViewById(R.id.login_Email_edit);
+        mPassword = findViewById(R.id.login_Password_edit);
         mOutologin = findViewById(R.id.login_outo_Login);
         mAuth = FirebaseAuth.getInstance(); // 파이어베이스 연결
 
