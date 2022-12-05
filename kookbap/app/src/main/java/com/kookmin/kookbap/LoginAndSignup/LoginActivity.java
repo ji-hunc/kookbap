@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-        
+
         mLogin_btn.setOnClickListener(new View.OnClickListener() { //로그인 버튼 누름
             @Override
             public void onClick(View view) {
