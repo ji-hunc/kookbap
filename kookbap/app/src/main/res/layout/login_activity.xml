@@ -1,75 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/login_Email"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="XXXXX@XXXXX.com"
-        android:maxLines="1"
-        android:layout_centerInParent="true"
-        android:inputType="textEmailAddress"
-        />
-    <EditText
-        android:id="@+id/login_Password"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:hint="PassWord"
-        android:maxLines="1"
-        android:layout_below="@id/login_Email"
-        android:layout_centerHorizontal="true"
-        android:inputType="textPassword"
-        />
-    <CheckedTextView
-        android:id="@+id/login_outo_Login"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:layout_below="@id/login_Password"
-        android:text="자동로그인"
-        android:textSize="23dp"
-        android:checked="false"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-        android:layout_marginLeft="110dp"/>
-
-    <Button
-        android:id="@+id/login_btn"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/login_outo_Login"
-        android:layout_centerHorizontal="true"
-        android:text="로그인"
-        />
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/login_toGoogle_btn"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/login_btn"
-        android:layout_centerHorizontal="true"
-        />
-    <TextView
-        android:id="@+id/login_Question"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/login_toGoogle_btn"
-        android:layout_marginLeft="110dp"
-        android:text="아이디가 없으신가요?"
-        android:layout_marginTop="10dp"
-        />
+        android:src="@drawable/ic_ddukbaegi_icon"/>
 
-    <TextView
-        android:id="@+id/lognin_singup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="회원가입"
-        android:textColor="#ffff0000"
-        android:layout_below="@id/login_toGoogle_btn"
-        android:layout_toRightOf="@id/login_Question"
-        android:layout_marginTop="10dp"
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</RelativeLayout>
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal">-->
+
+            <EditText
+                android:id="@+id/login_Email"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:hint="yourID@kookmin.ac.kr"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <TextView-->
+<!--                android:text="\@kookmin.ac.kr"-->
+<!--                android:layout_width="120dp"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--        </LinearLayout>-->
+
+        <EditText
+            android:layout_marginTop="5dp"
+            android:id="@+id/login_Password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_Email"
+            android:layout_centerHorizontal="true"
+            android:hint="password"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_Email" />
+
+        <CheckedTextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/login_outo_Login"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_below="@id/login_Password"
+            android:layout_gravity="right"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="false"
+            android:gravity="right"
+            android:text="자동로그인"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/login_Password"
+            app:layout_constraintTop_toBottomOf="@+id/login_Password" />
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/login_btn"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_outo_Login"
+            android:layout_centerHorizontal="true"
+            android:text="로그인"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_outo_Login" />
+
+        <TextView
+            android:id="@+id/login_Question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아이디가 없으신가요?"
+            app:layout_constraintStart_toStartOf="@+id/login_btn"
+            app:layout_constraintTop_toBottomOf="@+id/login_btn" />
+
+        <TextView
+            android:id="@+id/lognin_singup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/login_Question"
+            android:text="회원가입"
+            android:textColor="#ffff0000"
+            app:layout_constraintEnd_toEndOf="@+id/login_btn"
+            app:layout_constraintTop_toBottomOf="@+id/login_btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

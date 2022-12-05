@@ -97,7 +97,7 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
         holder.foodRating.setRating(MenuDataArray.get(position).getStar_avg());
         //반올림해서 소수점 한자리까지 화면에 보여줌
         holder.foodRatingNum.setText(String.format("%.1f",MenuDataArray.get(position).getStar_avg()));
-        holder.foodLikeCount.setText("좋아요 : " + Integer.toString(MenuDataArray.get(position).getTotal_like()));
+        holder.foodLikeCount.setText(Integer.toString(MenuDataArray.get(position).getTotal_like()));
         if (MenuDataArray.get(position).isUserLikeTrueFalse() == 1) {
             holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
         }
@@ -127,9 +127,17 @@ public class MenuDataAdapter2 extends RecyclerView.Adapter<MenuDataAdapter2.Menu
         holder.foodHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
+                if (holder.foodHeart.isSelected()) {
+                    holder.foodLikeCount.setText(Integer.toString(Integer.parseInt(holder.foodLikeCount.getText().toString())-1));
+                    holder.foodHeart.setSelected(false);
+                }
+                else {
+                    holder.foodLikeCount.setText(Integer.toString(Integer.parseInt(holder.foodLikeCount.getText().toString())+1));
+                    holder.foodHeart.setSelected(true);
+                }
+//                holder.foodHeart.setSelected(!holder.foodHeart.isSelected());
 
-                holder.foodHeart.setClickable(false);
+//                holder.foodHeart.setClickable(false);
                 new Handler().postDelayed(new Runnable(){
                     @Override
                     public void run(){
