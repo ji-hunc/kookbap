@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         mLogin_btn.setOnClickListener(new View.OnClickListener() { //로그인 버튼 누름
             @Override
             public void onClick(View view) {
-                String email = mEmail.getText().toString();
+                String email = mEmail.getText().toString() + "@kookmin.ac.kr";
                 String password = mPassword.getText().toString();
                 if (email.equals("") || password.equals("")) {
                     if (email.equals("") && password.equals("")) {
