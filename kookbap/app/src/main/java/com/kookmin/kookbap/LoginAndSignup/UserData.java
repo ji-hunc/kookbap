@@ -50,7 +50,11 @@ public class UserData {
             callUserData.enqueue(new Callback<ArrayList<UserData>>() {
                 @Override
                 public void onResponse(Call<ArrayList<UserData>> call, Response<ArrayList<UserData>> response) {
-                    userData = response.body().get(0);
+                    if (response.code() == 200) {
+                        userData = response.body().get(0);
+                    } else {
+
+                    }
                 }
 
                 @Override
