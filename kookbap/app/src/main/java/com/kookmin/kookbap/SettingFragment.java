@@ -39,6 +39,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.Notification.AlarmReceiver;
 
 import java.io.FileNotFoundException;
@@ -65,7 +66,7 @@ public class SettingFragment extends Fragment {
     Uri uri;
     AlarmManager alarmManager;
     String from = "2022-11-27 21:13:00"; //임의로 날짜와 시간을 지정
-    String userName, userEmail;
+    String userNickName, userEmail;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,14 +84,15 @@ public class SettingFragment extends Fragment {
         noticeOn = getNotice.getBoolean("isNoticeOn", false);
         settingNotice.setChecked(noticeOn);
         settingContext = getActivity().getApplicationContext();
+
+
         // 로그인한 유저 정보를 받아와 프로필 사진, 이름, 학번 등 설정
-        SharedPreferences userPrf = getActivity().getSharedPreferences("userData", MODE_PRIVATE);
-        userName = userPrf.getString("ID", "");
-        userEmail = userPrf.getString("Email", "");
+        userNickName = UserData.getUserData(settingContext).getNickname();
+        userEmail = UserData.getUserData(settingContext).getUserE_mail();
         settingProfileImage.setImageResource(R.drawable.ic_basic_profile);
-        settingName.setText("ID: " + userName);
+        settingName.setText(userNickName);
         settingCollegeNumber.setText(userEmail);
-        textViewUserEmail.setText("kevinmj12@kookmin.ac.kr");
+        textViewUserEmail.setText(userEmail);
 
         //
 

@@ -73,11 +73,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         mLogin_btn.setOnClickListener(new View.OnClickListener() { //로그인 버튼 누름
             @Override
             public void onClick(View view) {
-                String email = mEmail.getText().toString();
+                String email = mEmail.getText().toString() + "@kookmin.ac.kr";
                 String password = mPassword.getText().toString();
                 if (email.equals("") || password.equals("")) {
                     if (email.equals("") && password.equals("")) {
@@ -104,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class); // 확인완료 -> 메인뷰로 이동
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(LoginActivity.this, password, Toast.LENGTH_LONG).show(); // 실패시 출력
+                                Toast.makeText(LoginActivity.this, "비밀번호가 틀렸습니다.", Toast.LENGTH_LONG).show(); // 실패시 출력
                             }
                         }
                     });

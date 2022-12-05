@@ -1,6 +1,9 @@
 package com.kookmin.kookbap.ReviewRank;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,13 +17,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MainActivity;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.MenuDataAdapter2;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
+import com.kookmin.kookbap.WriteReview;
 
 import java.util.ArrayList;
 
@@ -52,11 +58,29 @@ public class ReviewFragment extends Fragment {
 
     String userID;
 
-
+    boolean a , b, c, d;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View dialogView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.loading_dialog,
+                null);
+        builder.setView(dialogView);
+        LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
+        lottieAnimationView.setAnimation("loading.json");
+        AlertDialog alertDialog =  builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        lottieAnimationView.playAnimation();
+        ((TextView)dialogView.findViewById(R.id.loadingDialogText)).setText("불러오는 중...");
+        alertDialog.show();
+
+
+        a = b = c = d = false;
+
         View view =inflater.inflate(R.layout.fragment_review, container, false);
 
         mainActivity = (MainActivity) getActivity();
@@ -101,6 +125,7 @@ public class ReviewFragment extends Fragment {
         rankDataCall.enqueue(new Callback<ArrayList<UserRankData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                a = true;
                 if (response.code()==200){
                     ArrayList<UserRankData> bestReviewerData=(ArrayList<UserRankData>) response.body();
                     bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, getActivity().getApplicationContext());
@@ -112,10 +137,15 @@ public class ReviewFragment extends Fragment {
                         } //스크롤 방지
                     });
                 }else{}
-                    }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
+            }
 
             @Override
             public void onFailure(Call<ArrayList<UserRankData>> call, Throwable t) {
+                a = true;
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
                 Log.d("tag","fail");
             }
         });
@@ -126,6 +156,7 @@ public class ReviewFragment extends Fragment {
         mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                b = true;
                 if (response.code()==200){
                     ArrayList<MenuData2> mostLikeCallData=(ArrayList<MenuData2>) response.body();
                     mostLikeMenuCallAdapter = new MenuDataAdapter2(mostLikeCallData, getActivity().getApplicationContext());
@@ -138,9 +169,14 @@ public class ReviewFragment extends Fragment {
                     });
                 }else{
                 }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
             @Override
             public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+                b = true;
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
         });
 
@@ -150,6 +186,7 @@ public class ReviewFragment extends Fragment {
         starRankCall.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                c = true;
                 if (response.code()==200){
                     ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
                     menuStarRankAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
@@ -165,9 +202,12 @@ public class ReviewFragment extends Fragment {
 
                 }else{
                 }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
             @Override
             public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+                c = true;
             }
         });
 
@@ -177,6 +217,7 @@ public class ReviewFragment extends Fragment {
         lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData2>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                d = true;
                 if (response.code()==200){
                     ArrayList<MenuData2> lotOfReviewCallData=(ArrayList<MenuData2>) response.body();
                     lotOfReviewAdapter = new MenuDataAdapter2(lotOfReviewCallData, getActivity().getApplicationContext());
@@ -189,9 +230,12 @@ public class ReviewFragment extends Fragment {
                     });
                 }else{
                 }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
             @Override
             public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+                d = true;
             }
         });
 

@@ -1,7 +1,10 @@
 package com.kookmin.kookbap.cafeteriaFragments;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,12 +19,14 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MenuData2;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
+import com.kookmin.kookbap.WriteReview;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +54,21 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View dialogView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.loading_dialog,
+                null);
+        builder.setView(dialogView);
+        LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
+        lottieAnimationView.setAnimation("loading.json");
+        AlertDialog alertDialog =  builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        lottieAnimationView.playAnimation();
+        ((TextView)dialogView.findViewById(R.id.loadingDialogText)).setText("불러오는 중...");
+        alertDialog.show();
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         userID = UserData.getUserData(getContext()).getUserId(); // 유저 id 가져오기
         // 날짜 변수에 오늘 날짜 초기화 및 날짜텍스트뷰에 날짜 초기화
@@ -152,11 +172,13 @@ public class HomeFragment extends Fragment {
                     viewPager2.setAdapter(cafeteriaViewPagerAdapter);
                 } else {
                 }
+                alertDialog.dismiss();
             }
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
                 Log.e("Error", t.getMessage());
+                alertDialog.dismiss();
             }
         });
 

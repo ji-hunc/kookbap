@@ -164,6 +164,11 @@ public interface RetrofitInterface {
       @Field("userNickName") String userNickName
     );
 
+    @GET("/user/getUserInfo")
+    Call<ArrayList<UserData>> getUserInfo(
+            @Query("user_id") String user_Id
+    );
+
 
 //    @Multipart
 ////    @FormUrlEncoded

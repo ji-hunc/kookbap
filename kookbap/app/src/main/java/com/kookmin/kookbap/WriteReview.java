@@ -141,6 +141,16 @@ public class WriteReview extends AppCompatActivity {
         * signal: 3 -> MODIFY_WRITE    리뷰카드의 수정하기를 눌러서 진입한 경우: 메뉴이름, 이미지, 별점, 리뷰내용을 초기화하고 날짜, 식당을 없앰
         ***************************************************************************************************************************/
         int reviewWriteSignal = getIntent().getIntExtra("signal", 0);
+        AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this);
+        View dialogView = LayoutInflater.from(WriteReview.this).inflate(
+                R.layout.loading_dialog,
+                null);
+        builder.setView(dialogView);
+        LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
+        lottieAnimationView.setAnimation("loading.json");
+        AlertDialog alertDialog =  builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         //사진 등록
         foodImage.setOnClickListener(new View.OnClickListener() {
@@ -432,6 +442,10 @@ public class WriteReview extends AppCompatActivity {
                         // 채우지 않은 항목이 있거나, 이미지가 없을 경우
                         if (!(cafeteriaSpinner.getSelectedItem().toString().equals("식당") || menuSpinner.getSelectedItem().toString().equals("메뉴"))) {
 
+                            lottieAnimationView.playAnimation();
+                            ((TextView)dialogView.findViewById(R.id.loadingDialogText)).setText("리뷰 저장 중...");
+                            alertDialog.show();
+
                             File newFile = new File(getApplicationContext().getFilesDir(), "test.png");
                             FileOutputStream fileOutputStream = null;
                             try {
@@ -473,6 +487,7 @@ public class WriteReview extends AppCompatActivity {
                             call.enqueue(new Callback<Result>() {
                                 @Override
                                 public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+                                    alertDialog.dismiss();
 
                                     // 서버에서 응답을 받아옴
                                     if (response.isSuccessful() && response.body() != null) {
@@ -500,6 +515,7 @@ public class WriteReview extends AppCompatActivity {
                                 // 통신실패시
                                 @Override
                                 public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+                                    alertDialog.dismiss();
 //                                    Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                     Log.e("LOGLOG", "success4");
 
@@ -523,27 +539,16 @@ public class WriteReview extends AppCompatActivity {
 //            Toast.makeText(getApplicationContext(), "Informed Mode", Toast.LENGTH_SHORT).show();
             menuNameTextview.setText(getIntent().getStringExtra("foodName"));
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this);
-            View dialogView = LayoutInflater.from(WriteReview.this).inflate(
-                    R.layout.loading_dialog,
-                    (ConstraintLayout)findViewById(R.id.layoutLoadingDialog));
-            builder.setView(dialogView);
-            LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
-            lottieAnimationView.setAnimation("loading.json");
-
             // 저장 버튼 눌렀을 때 서버 DB에 저장 요청(Informed Write)
             postButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    lottieAnimationView.setRepeatCount(LottieDrawable.INFINITE);
-                    lottieAnimationView.playAnimation();
-
-                    AlertDialog alertDialog =  builder.create();
-                    alertDialog.setCancelable(false);
-                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    alertDialog.show();
-
                     if (!(editTextReview.getText().toString().equals("") || !isFilledImage)) {
+
+                        lottieAnimationView.playAnimation();
+                        ((TextView)dialogView.findViewById(R.id.loadingDialogText)).setText("리뷰 저장 중...");
+                        alertDialog.show();
+
                         // 채우지 않은 항목이 있거나, 이미지가 없을 경우
                         File newFile = new File(getApplicationContext().getFilesDir(), "test.png");
                         FileOutputStream fileOutputStream = null;
@@ -615,6 +620,7 @@ public class WriteReview extends AppCompatActivity {
                             // 통신실패시
                             @Override
                             public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+                                alertDialog.dismiss();
 //                                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                 Log.e("LOGLOG", "success4");
 
@@ -679,8 +685,12 @@ public class WriteReview extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (!(editTextReview.getText().toString().equals(""))) {
+
                         // 리뷰 내용을 채웠을 때
                         if (isFilledImage || !(editTextReview.getText().toString().equals(oldDescription)) || ratingBar.getRating() != oldStar) {
+                            lottieAnimationView.playAnimation();
+                            ((TextView)dialogView.findViewById(R.id.loadingDialogText)).setText("리뷰 수정 중...");
+                            alertDialog.show();
                             // 변경사항이 있을 때
                             File newFile = new File(getApplicationContext().getFilesDir(), "test.png");
                             if (isFilledImage) { // 이미지를 변경하였을 때
@@ -722,6 +732,7 @@ public class WriteReview extends AppCompatActivity {
                             call.enqueue(new Callback<Result>() {
                                 @Override
                                 public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
+                                    alertDialog.dismiss();
 
                                     // 서버에서 응답을 받아옴
                                     if (response.isSuccessful() && response.body() != null) {
@@ -750,6 +761,7 @@ public class WriteReview extends AppCompatActivity {
                                 // 통신실패시
                                 @Override
                                 public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+                                    alertDialog.dismiss();
 //                                    Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                     Log.e("LOGLOG", "success4");
 

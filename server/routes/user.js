@@ -129,4 +129,14 @@ router.post("/signUp", (req, res) => {
     });
 });
 
+router.get("/getUserInfo", (req, res) => {
+    var user_id = req.query.user_id;
+    db.query(
+        `select * from user where user_id = '${user_id}'`,
+        function (error, result) {
+            res.json(result);
+        }
+    );
+});
+
 module.exports = router;

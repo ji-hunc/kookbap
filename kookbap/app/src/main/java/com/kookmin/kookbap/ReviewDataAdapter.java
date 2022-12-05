@@ -67,7 +67,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.webView.setFocusable(false);
         holder.webView.getSettings().setUseWideViewPort(true);
         holder.webView.getSettings().setLoadWithOverviewMode(true);
-        holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
+        holder.reviewReviewerName.setText(reviewDataArray.get(position).getNickname());
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
         holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
         holder.reviewLikes.setText(Integer.toString(reviewDataArray.get(position).getReview_like()));
@@ -107,13 +107,12 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                     }
                 });
 
-
-                if(holder.reviewLikeImage.isSelected())
-                {
+                if (holder.reviewLikeImage.isSelected()) {
+                    holder.reviewLikes.setText(Integer.toString(Integer.parseInt(holder.reviewLikes.getText().toString())-1));
                     holder.reviewLikeImage.setSelected(false);
                 }
-                else
-                {
+                else {
+                    holder.reviewLikes.setText(Integer.toString(Integer.parseInt(holder.reviewLikes.getText().toString())+1));
                     holder.reviewLikeImage.setSelected(true);
                 }
                 holder.reviewLikeImage.setClickable(false);
