@@ -107,13 +107,11 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                     }
                 });
 
-                if(holder.reviewLikeImage.isSelected())
-                {
+                if (holder.reviewLikeImage.isSelected()) {
                     holder.reviewLikes.setText(Integer.toString(Integer.parseInt(holder.reviewLikes.getText().toString())-1));
                     holder.reviewLikeImage.setSelected(false);
                 }
-                else
-                {
+                else {
                     holder.reviewLikes.setText(Integer.toString(Integer.parseInt(holder.reviewLikes.getText().toString())+1));
                     holder.reviewLikeImage.setSelected(true);
                 }
