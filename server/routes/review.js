@@ -26,11 +26,15 @@ router.get("/:menuName", function (request, response) {
             break;
     }
 
+    //
+    // `SELECT *, if (Rlike_user_id = "${userId}", true,false) as reviewLikeTrueFalse \
+    //     FROM Kookbob.review R left join (select * from review_like where Rlike_user_id = "${userId}") L on \
+    //     R.review_number = L.Rlike_review_no where menu_name = '${request.params.menuName}' order by ${orderBy};`
     db.query(
         //todo : 이거 menuName이 아니라 menu id 여야함.
-        `SELECT *, if (Rlike_user_id = "${userId}", true,false) as reviewLikeTrueFalse \
-        FROM Kookbob.review R left join (select * from review_like where Rlike_user_id = "${userId}") L on \
-        R.review_number = L.Rlike_review_no where menu_name = '${request.params.menuName}' order by ${orderBy};`,
+        `SELECT *, if (Rlike_user_id = "${userId}", true,false) as reviewLikeTrueFalse , (select nickname from user where review_user_id = user_id) as nickname \
+        FROM Kookbob.review R left join (select * from review_like where Rlike_user_id = "${userId}")L on \
+        R.review_number = L.Rlike_review_no where menu_name = "${request.params.menuName}" order by ${orderBy};`,
         function (error, results) {
             console.log(request.params.menuName);
             response.json(results);
