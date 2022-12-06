@@ -9,7 +9,7 @@
 
 -   관계형 DB를 사용
 -   메뉴가 삭제되면 리뷰,좋아요 전체 날라감
--   유저가 탈퇴해도 리뷰는 남아있게 설정
+-   유저가 탈퇴하면 관련 리뷰 전체 삭제
 -   ## user
     -   user_id : 유저 고유 아이디 `PK`
     -   nickname : 유저 닉네임
@@ -33,7 +33,7 @@
     -   name : 식당 이름 `PK`
 -   ## review
     -   review_number : 리뷰 고유번호 `PK`
-    -   review_user_id : 리뷰쓴 유저 아이디 `FK` `SETNULL`
+    -   review_user_id : 리뷰쓴 유저 아이디 `FK` `CASECADE`
     -   review_menu_id_reviewd : 리뷰 메뉴 아이디 `FK` `CASECADE`
     -   menu_name : 메뉴이름
     -   write_date : 쓴 날자

@@ -129,6 +129,7 @@ router.post("/signUp", (req, res) => {
     });
 });
 
+//유저정보 가져오는 함수
 router.get("/getUserInfo", (req, res) => {
     var user_id = req.query.user_id;
     db.query(
