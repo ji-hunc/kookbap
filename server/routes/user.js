@@ -99,7 +99,7 @@ router.post("/like", (req, res) => {
                     function (error, results) {
                         var updateTotal = results[0]["total"];
                         db.query(
-                            `update review set review_like = "${updateTotal}" where review_number ="${review_id}";`
+                            `update review set review_like = "${updateTotal}" where review_number = "${review_id}";`
                         );
                     }
                 );
