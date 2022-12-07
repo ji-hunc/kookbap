@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
@@ -67,6 +68,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.webView.setFocusable(false);
         holder.webView.getSettings().setUseWideViewPort(true);
         holder.webView.getSettings().setLoadWithOverviewMode(true);
+        //사용자가 탈퇴하면 id 부분이 null값으로 날라옴. nick name이 null 일때 '탈퇴한 사용자' 띄워줌.
         if (reviewDataArray.get(position).getNickname()==null){
             holder.reviewReviewerName.setText("탈퇴한 사용자");
         }else{
@@ -80,8 +82,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         if (reviewDataArray.get(position).getReviewLikeTrueFalse() == 1) {
             holder.reviewLikeImage.setSelected(true);
         }
-
-
+        
         holder.reviewLikeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,13 +130,17 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                 }, 1000);
             }
         });
-
-        // TODO 메뉴 버튼을 눌렀을 때, 본인이면 신고/수정/삭제하기<->아니면 신고하기만, 현재는 다 가능
         holder.editMenuImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.review_own_edit_menu, popupMenu.getMenu());
+
+                //사용자 본인의 리뷰가 아닐경우 삭제하기, 신고하기 비활성화.
+                if (!UserData.getUserData(view.getContext()).getUserId().equals(reviewDataArray.get(position).getReview_user_id())){
+                    popupMenu.getMenu().getItem(0).setVisible(false);
+                    popupMenu.getMenu().getItem(1).setVisible(false);
+                }
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
