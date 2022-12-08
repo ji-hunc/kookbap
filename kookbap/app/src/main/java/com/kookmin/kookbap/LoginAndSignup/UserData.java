@@ -2,12 +2,9 @@ package com.kookmin.kookbap.LoginAndSignup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.kookmin.kookbap.MenuData2;
-import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
 import java.util.ArrayList;

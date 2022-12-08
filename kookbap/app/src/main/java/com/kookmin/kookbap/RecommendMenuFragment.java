@@ -30,9 +30,9 @@ public class RecommendMenuFragment extends Fragment {
     JSONObject jsonObject;
     RecyclerView recommendMenuRecyclerView;
     MenuDataFromServer data;
-    ArrayList<MenuData2> testRecommendMenuData;
+    ArrayList<MenuData> testRecommendMenuData;
     ArrayList<MenuData> menuData;
-    MenuDataAdapter2 menuDataAdapter2;
+    MenuDataAdapter menuDataAdapter;
     TextView testTextView;
     String userName;
 
@@ -51,19 +51,19 @@ public class RecommendMenuFragment extends Fragment {
         testTextView = view.findViewById(R.id.testTextView);
         testTextView.setText("추천 메뉴 분석중...");
 
-        Call<ArrayList<MenuData2>> call;
+        Call<ArrayList<MenuData>> call;
         call = RetrofitClient.getApiService().getRecommendMenuData(userName);
-        call.enqueue(new Callback<ArrayList<MenuData2>>() {
+        call.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                    testRecommendMenuData = (ArrayList<MenuData2>) response.body();
+                    testRecommendMenuData = (ArrayList<MenuData>) response.body();
 
                     testTextView.setText(userName+" 님, 이 메뉴는 어떠세요?");
 
-                    menuDataAdapter2 = new MenuDataAdapter2(testRecommendMenuData, view.getContext());
+                    menuDataAdapter = new MenuDataAdapter(testRecommendMenuData, view.getContext());
                     recommendMenuRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                    recommendMenuRecyclerView.setAdapter(menuDataAdapter2);
+                    recommendMenuRecyclerView.setAdapter(menuDataAdapter);
 
                 } else {
                     testTextView.setText("추천 메뉴 분석 실패");

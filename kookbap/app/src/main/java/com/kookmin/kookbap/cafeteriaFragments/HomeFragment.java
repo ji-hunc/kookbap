@@ -2,7 +2,6 @@ package com.kookmin.kookbap.cafeteriaFragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,15 +20,10 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
 import com.kookmin.kookbap.LoginAndSignup.UserData;
-import com.kookmin.kookbap.MenuData2;
+import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
-import com.kookmin.kookbap.WriteReview;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +43,7 @@ public class HomeFragment extends Fragment {
 
     String date, nowYear, nowMonth, nowDate;
 
-    ArrayList<MenuData2> todayMenus;
+    ArrayList<MenuData> todayMenus;
     String userID;
 
     @Override
@@ -102,13 +96,13 @@ public class HomeFragment extends Fragment {
 
                         // 날짜를 선택하고 확인을 누르면, 어댑터가 그 날짜에 해당하는 것들로 다시 뿌려줌
                         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
-                        Call<ArrayList<MenuData2>> call;
+                        Call<ArrayList<MenuData>> call;
                         call = RetrofitClient.getApiService().getMenuDataEachDate(date,userID); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
-                        call.enqueue(new Callback<ArrayList<MenuData2>>() {
+                        call.enqueue(new Callback<ArrayList<MenuData>>() {
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) {
                                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                                    todayMenus = (ArrayList<MenuData2>) response.body();
+                                    todayMenus = (ArrayList<MenuData>) response.body();
 
                                     // menu 띄워주는 adapter에 받아온 날짜별 ArrayList를 넘김
                                     cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), todayMenus, date);
@@ -159,13 +153,13 @@ public class HomeFragment extends Fragment {
 //        });
 
         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
-        Call<ArrayList<MenuData2>> call;
+        Call<ArrayList<MenuData>> call;
         call = RetrofitClient.getApiService().getMenuDataEachDate(date,userID); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
-        call.enqueue(new Callback<ArrayList<MenuData2>>() {
+        call.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                    todayMenus = (ArrayList<MenuData2>) response.body();
+                    todayMenus = (ArrayList<MenuData>) response.body();
 
                     // menu 띄워주는 adapter에 받아온 날짜별 ArrayList를 넘김
                     cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), todayMenus, date);

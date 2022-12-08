@@ -1,12 +1,10 @@
 package com.kookmin.kookbap.Retrofits;
 
-import android.util.Log;
-
 import com.kookmin.kookbap.LoginAndSignup.UserData;
-import com.kookmin.kookbap.MenuData2;
+import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.ReviewData;
 import com.kookmin.kookbap.ReviewRank.UserRankData;
-import com.kookmin.kookbap.MenuDataFromServer;
+
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Map;
@@ -57,7 +55,7 @@ public interface RetrofitInterface {
     // http://10.0.2.2:3000/review/김치찌개
     // 쿼리로 어떻게 정렬할 것인지를 받아옴
     @GET("/menu/{date}") // 주소를 /review/:menu_name 으로 쿼리 넣어서
-    Call<ArrayList<MenuData2>> getMenuDataEachDate(
+    Call<ArrayList<MenuData>> getMenuDataEachDate(
             @Path("date") String date,
             @Query("userId") String userId
     );
@@ -67,7 +65,7 @@ public interface RetrofitInterface {
     // http://kookbap.run.goorm.io/recommendMenu/jihun
     // http://10.0.2.2:3000/recommendMenu/jihun"
     @GET("/recommendMenu/{userName}")
-    Call<ArrayList<MenuData2>> getRecommendMenuData(
+    Call<ArrayList<MenuData>> getRecommendMenuData(
             @Path("userName") String userName
     );
 
@@ -123,7 +121,7 @@ public interface RetrofitInterface {
 
 
     @GET("/rank/menu/{category}")
-    Call<ArrayList<MenuData2>> getMenuReviewRankData(
+    Call<ArrayList<MenuData>> getMenuReviewRankData(
             //review_like or total_review
             @Path("category") String category,
             //데이터 갯수 제한
@@ -134,7 +132,7 @@ public interface RetrofitInterface {
 
     //제네릭타입으로 만들어서 리팩토링할때 쓸 주소
     @GET("/rank/{section}}/{category}")
-    Call<ArrayList<MenuData2>> getRankData(
+    Call<ArrayList<MenuData>> getRankData(
             //
             @Path("section") String section,
             //review_like or total_review

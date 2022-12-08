@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kookmin.kookbap.LoginAndSignup.UserData;
-import com.kookmin.kookbap.MenuData2;
-import com.kookmin.kookbap.MenuDataAdapter2;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -84,21 +84,21 @@ public class ShowMoreRankActivity extends AppCompatActivity {
 
     // menu에 관련된 Rank 데이터를 가져오고, recyclerview에 붙여주는 함수.
     public void getPasteDataAboutMenu(String menuDataParameter, int SHOW_NUM, RecyclerView recyclerView, Context context){
-        Call<ArrayList<MenuData2>> mostLikeMenuCall;
+        Call<ArrayList<MenuData>> mostLikeMenuCall;
         mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData(menuDataParameter,SHOW_NUM,userID);
-        mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+        mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code()==200){
-                    ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
-                    MenuDataAdapter2 menuDataAdapter = new MenuDataAdapter2(starRankCallData, context);
+                    ArrayList<MenuData> starRankCallData=(ArrayList<MenuData>) response.body();
+                    MenuDataAdapter menuDataAdapter = new MenuDataAdapter(starRankCallData, context);
                     recyclerView.setAdapter(menuDataAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 }else{
                 }
             }
             @Override
-            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MenuData>> call, Throwable t) {
             }
         });
     }

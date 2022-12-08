@@ -22,11 +22,10 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MainActivity;
-import com.kookmin.kookbap.MenuData2;
-import com.kookmin.kookbap.MenuDataAdapter2;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
-import com.kookmin.kookbap.WriteReview;
 
 import java.util.ArrayList;
 
@@ -48,13 +47,13 @@ public class ReviewFragment extends Fragment {
     BestReviewerDataAdapter bestReviewerDataAdapter;
 
     RecyclerView mostLikeMenuRecycler; //좋아요많은 메뉴 순
-    MenuDataAdapter2 mostLikeMenuCallAdapter;
+    MenuDataAdapter mostLikeMenuCallAdapter;
 
     RecyclerView startRankRecycler; //별점높은순
-    MenuDataAdapter2 menuStarRankAdapter;
+    MenuDataAdapter menuStarRankAdapter;
 
     RecyclerView lotOfReviewRecycler;
-    MenuDataAdapter2 lotOfReviewAdapter;
+    MenuDataAdapter lotOfReviewAdapter;
 
     String userID;
 
@@ -151,15 +150,15 @@ public class ReviewFragment extends Fragment {
         });
 
         //좋아요 많은 순 항목
-        Call<ArrayList<MenuData2>> mostLikeMenuCall;
+        Call<ArrayList<MenuData>> mostLikeMenuCall;
         mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData("total_like",3,userID);
-        mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+        mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 b = true;
                 if (response.code()==200){
-                    ArrayList<MenuData2> mostLikeCallData=(ArrayList<MenuData2>) response.body();
-                    mostLikeMenuCallAdapter = new MenuDataAdapter2(mostLikeCallData, getActivity().getApplicationContext());
+                    ArrayList<MenuData> mostLikeCallData=(ArrayList<MenuData>) response.body();
+                    mostLikeMenuCallAdapter = new MenuDataAdapter(mostLikeCallData, getActivity().getApplicationContext());
                     mostLikeMenuRecycler.setAdapter(mostLikeMenuCallAdapter);
                     mostLikeMenuRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
@@ -173,7 +172,7 @@ public class ReviewFragment extends Fragment {
                     alertDialog.dismiss();
             }
             @Override
-            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MenuData>> call, Throwable t) {
                 b = true;
                 if(a&&b&&c&&d)
                     alertDialog.dismiss();
@@ -181,15 +180,15 @@ public class ReviewFragment extends Fragment {
         });
 
         //별점높은 순 항목
-        Call<ArrayList<MenuData2>> starRankCall;
+        Call<ArrayList<MenuData>> starRankCall;
         starRankCall = RetrofitClient.getApiService().getMenuReviewRankData("star_avg",3,userID);
-        starRankCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+        starRankCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 c = true;
                 if (response.code()==200){
-                    ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
-                    menuStarRankAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
+                    ArrayList<MenuData> starRankCallData=(ArrayList<MenuData>) response.body();
+                    menuStarRankAdapter = new MenuDataAdapter(starRankCallData, getActivity().getApplicationContext());
                     startRankRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
                         public boolean canScrollVertically(){
@@ -206,21 +205,21 @@ public class ReviewFragment extends Fragment {
                     alertDialog.dismiss();
             }
             @Override
-            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MenuData>> call, Throwable t) {
                 c = true;
             }
         });
 
         //리뷰 많은 순 항목 (항목 다른걸로 바까야될듯)
-        Call<ArrayList<MenuData2>> lotOfReviewCall;
+        Call<ArrayList<MenuData>> lotOfReviewCall;
         lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("count_review",3,userID);
-        lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+        lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 d = true;
                 if (response.code()==200){
-                    ArrayList<MenuData2> lotOfReviewCallData=(ArrayList<MenuData2>) response.body();
-                    lotOfReviewAdapter = new MenuDataAdapter2(lotOfReviewCallData, getActivity().getApplicationContext());
+                    ArrayList<MenuData> lotOfReviewCallData=(ArrayList<MenuData>) response.body();
+                    lotOfReviewAdapter = new MenuDataAdapter(lotOfReviewCallData, getActivity().getApplicationContext());
                     lotOfReviewRecycler.setAdapter(lotOfReviewAdapter);
                     lotOfReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
@@ -234,7 +233,7 @@ public class ReviewFragment extends Fragment {
                     alertDialog.dismiss();
             }
             @Override
-            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MenuData>> call, Throwable t) {
                 d = true;
             }
         });
