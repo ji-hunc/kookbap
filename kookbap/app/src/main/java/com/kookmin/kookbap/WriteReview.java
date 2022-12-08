@@ -3,7 +3,6 @@ package com.kookmin.kookbap;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -38,29 +36,21 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.kookmin.kookbap.LoginAndSignup.UserData;
-import com.kookmin.kookbap.cafeteriaFragments.CafeteriaViewPagerAdapter;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieDrawable;
-import com.google.gson.Gson;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
-import com.kookmin.kookbap.cafeteriaFragments.MenuDataParser;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -91,7 +81,7 @@ public class WriteReview extends AppCompatActivity {
 
 
     boolean isFilledImage;
-    ArrayList<MenuData2> todayMenus;
+    ArrayList<MenuData> todayMenus;
     String[] cafeteriaNames = {"식당", "한울식당", "학생식당", "교직원식당", "K-BOB+", "청향 한식당", "청향 양식당", "생활관식당"};
     String[] menus;
     ArrayList<ArrayList<String>> menuArrayListsss = new ArrayList<>();
@@ -214,13 +204,13 @@ public class WriteReview extends AppCompatActivity {
             date = nowYear + "-" + nowMonth + "-" + nowDate; // 오늘 날짜가 url에 포함됨. 일단 하드 코딩
             isFilledImage = false;
 
-            Call<ArrayList<MenuData2>> call;
+            Call<ArrayList<MenuData>> call;
             call = RetrofitClient.getApiService().getMenuDataEachDate(date, userID);
-            call.enqueue(new Callback<ArrayList<MenuData2>>() {
+            call.enqueue(new Callback<ArrayList<MenuData>>() {
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) {
                     if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                        todayMenus = (ArrayList<MenuData2>) response.body();// 식당 스피너 조건별로 메뉴 스피너 값 변경
+                        todayMenus = (ArrayList<MenuData>) response.body();// 식당 스피너 조건별로 메뉴 스피너 값 변경
                         String cafeteriaName;
                         for (int j=0; j<todayMenus.size(); j++) {
                             cafeteriaName = todayMenus.get(j).getRestaurant_name();
@@ -277,9 +267,9 @@ public class WriteReview extends AppCompatActivity {
                             menuSpinner.setAdapter(adapterMenu);
                             menuSpinner.setSelection(0);
 
-                            Call<ArrayList<MenuData2>> call;
+                            Call<ArrayList<MenuData>> call;
                             call = RetrofitClient.getApiService().getMenuDataEachDate(date, userID);
-                            call.enqueue(new Callback<ArrayList<MenuData2>>() {
+                            call.enqueue(new Callback<ArrayList<MenuData>>() {
                                 @Override
                                 public void onResponse(@NonNull Call call, @NonNull Response response) {
                                     if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
@@ -290,7 +280,7 @@ public class WriteReview extends AppCompatActivity {
                                         menuChungHyangKorean.clear();
                                         menuChungHyangWestern.clear();
                                         menuDormitory.clear();
-                                        todayMenus = (ArrayList<MenuData2>) response.body();String cafeteriaName;
+                                        todayMenus = (ArrayList<MenuData>) response.body();String cafeteriaName;
                                         for (int j=0; j<todayMenus.size(); j++) {
                                             cafeteriaName = todayMenus.get(j).getRestaurant_name();
                                             switch (cafeteriaName) {

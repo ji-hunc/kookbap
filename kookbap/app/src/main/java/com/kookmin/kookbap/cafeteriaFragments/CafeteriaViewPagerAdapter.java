@@ -1,31 +1,27 @@
 package com.kookmin.kookbap.cafeteriaFragments;
 
-import android.view.Menu;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.kookmin.kookbap.MenuData2;
-
-import org.json.JSONObject;
+import com.kookmin.kookbap.MenuData;
 
 import java.util.ArrayList;
 
 public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
-    private final ArrayList<MenuData2> todayMenus;
+    private final ArrayList<MenuData> todayMenus;
 
-    private final ArrayList<MenuData2> menuHanul = new ArrayList<>();
-    private final ArrayList<MenuData2> menuStudent = new ArrayList<>();
-    private final ArrayList<MenuData2> menuProfessor = new ArrayList<>();
-    private final ArrayList<MenuData2> menuKbob = new ArrayList<>();
-    private final ArrayList<MenuData2> menuChungHyangKorean = new ArrayList<>();
-    private final ArrayList<MenuData2> menuChungHyangWestern = new ArrayList<>();
-    private final ArrayList<MenuData2> menuDormitory = new ArrayList<>();
+    private final ArrayList<MenuData> menuHanul = new ArrayList<>();
+    private final ArrayList<MenuData> menuStudent = new ArrayList<>();
+    private final ArrayList<MenuData> menuProfessor = new ArrayList<>();
+    private final ArrayList<MenuData> menuKbob = new ArrayList<>();
+    private final ArrayList<MenuData> menuChungHyangKorean = new ArrayList<>();
+    private final ArrayList<MenuData> menuChungHyangWestern = new ArrayList<>();
+    private final ArrayList<MenuData> menuDormitory = new ArrayList<>();
     String date;
 
-    public CafeteriaViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, ArrayList<MenuData2> todayMenus, String date) {
+    public CafeteriaViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, ArrayList<MenuData> todayMenus, String date) {
         super(fragmentActivity);
         this.todayMenus = todayMenus;
         this.date = date;
