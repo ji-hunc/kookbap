@@ -44,7 +44,7 @@ public class ReviewFragment extends Fragment {
 
     //화면에 구성될 RecyclerView 용 메서드.
     RecyclerView bestReviewerRecycler; //베스트리뷰어
-    BestReviewerDataAdapter bestReviewerDataAdapter;
+    UserRankDataAdapter userRankDataAdapter;
 
     RecyclerView mostLikeMenuRecycler; //좋아요많은 메뉴 순
     MenuDataAdapter mostLikeMenuCallAdapter;
@@ -127,8 +127,8 @@ public class ReviewFragment extends Fragment {
                 a = true;
                 if (response.code()==200){
                     ArrayList<UserRankData> bestReviewerData=(ArrayList<UserRankData>) response.body();
-                    bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, getActivity().getApplicationContext());
-                    bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
+                    userRankDataAdapter = new UserRankDataAdapter(bestReviewerData, getActivity().getApplicationContext());
+                    bestReviewerRecycler.setAdapter(userRankDataAdapter);
                     bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
                         public boolean canScrollVertically(){
