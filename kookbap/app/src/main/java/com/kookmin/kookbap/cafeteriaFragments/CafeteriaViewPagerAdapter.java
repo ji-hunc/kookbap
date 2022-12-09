@@ -18,7 +18,6 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
     private final ArrayList<MenuData> menuKbob = new ArrayList<>();
     private final ArrayList<MenuData> menuChungHyangKorean = new ArrayList<>();
     private final ArrayList<MenuData> menuChungHyangWestern = new ArrayList<>();
-    private final ArrayList<MenuData> menuDormitory = new ArrayList<>();
     String date;
 
     public CafeteriaViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, ArrayList<MenuData> todayMenus, String date) {
@@ -68,8 +67,6 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
                 return new CafeteriaChungHyangKorean(menuChungHyangKorean, date);
             case 5:
                 return new CafeteriaChungHyangWestern(menuChungHyangWestern, date);
-            case 6:
-                return new CafeteriaDormitory(menuDormitory, date);
             default:
                 return new CafeteriaHanul(todayMenus, date);
         }
@@ -77,6 +74,6 @@ public class CafeteriaViewPagerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 7;
+        return 6;
     }
 }
