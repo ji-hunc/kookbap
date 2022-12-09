@@ -2,7 +2,8 @@ package com.kookmin.kookbap;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import static com.kookmin.kookbap.SettingFragment.settingContext;
+
+import static com.kookmin.kookbap.Setting.SettingFragment.settingContext;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

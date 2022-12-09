@@ -45,4 +45,4 @@
 
   - MSE
     -MSE의 값은 다음과 같다.
-    (https://user-images.githubusercontent.com/55120784/205488925-6246da03-13dc-4899-886e-22e738d68562.png)
+  <img src = "https://user-images.githubusercontent.com/55120784/205488925-6246da03-13dc-4899-886e-22e738d68562.png" width ="700">
