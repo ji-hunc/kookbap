@@ -1,135 +1,144 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-// db ¿¬°á
+// db ì—°ê²°
 var db = require("../dbConnector");
 
+// recommendMenu.js ì—ì„œ latentFactorMachineLearning.pyë¥¼ ì‹¤í–‰í•˜ì—¬ ê²°ê³¼ê°’ì„ ë°›ì•„ì™€ ì €ì¥í•˜ê¸°
+// child-processëª¨ë“ˆì˜ spawn ì·¨ë“
+const spawn = require("child_process").spawn;
 
-// recommendMenu.js ¿¡¼­ latentFactorMachineLearning.py¸¦ ½ÇÇàÇÏ¿© °á°ú°ªÀ» ¹Ş¾Æ¿Í ÀúÀåÇÏ±â
-// child-process¸ğµâÀÇ spawn Ãëµæ
-const spawn = require('child_process').spawn;
+// spawnì„ í†µí•´ "python latentFactorMachineLearning.py" ëª…ë ¹ì–´ ì‹¤í–‰
+const result = spawn("python3", [
+    "/workspace/Kookbap_server/recommendMenu/latentFactorMachineLearning.py",
+]);
 
-// spawnÀ» ÅëÇØ "python latentFactorMachineLearning.py" ¸í·É¾î ½ÇÇà
-const result = spawn('python3', ['/workspace/Kookbap_server/recommendMenu/latentFactorMachineLearning.py']);
-
-// stdoutÀÇ 'data'ÀÌº¥Æ®¸®½º³Ê·Î ½ÇÇà°á°ú¸¦ ¹Ş¾Æ recommendMenuId¿¡ StringÇü½ÄÀ¸·Î ÀúÀå ÀÌÈÄ recommendMenuIdArr¿¡ recommendMenuId¸¦ splitÇÏ¿© 2Â÷¿ø ¹è¿­·Î ÀúÀå
+// stdoutì˜ 'data'ì´ë²¤íŠ¸ë¦¬ìŠ¤ë„ˆë¡œ ì‹¤í–‰ê²°ê³¼ë¥¼ ë°›ì•„ recommendMenuIdì— Stringí˜•ì‹ìœ¼ë¡œ ì €ì¥ ì´í›„ recommendMenuIdArrì— recommendMenuIdë¥¼ splití•˜ì—¬ 2ì°¨ì› ë°°ì—´ë¡œ ì €ì¥
 var recommendMenuId;
 var recommendMenuIdArr = [];
-result.stdout.on('data', function (data) {
-	recommendMenuId = data.toString().substring(2, data.toString().length - 3);
-	recommendMenuIdArr = recommendMenuId.split("], [");
+result.stdout.on("data", function (data) {
+    recommendMenuId = data.toString().substring(2, data.toString().length - 3);
+    recommendMenuIdArr = recommendMenuId.split("], [");
 });
 
-// ¿¡·¯ ¹ß»ı ½Ã, stderrÀÇ 'data'ÀÌº¥Æ®¸®½º³Ê·Î ½ÇÇà°á°ú¸¦ ¹Ş´Â´Ù.
-result.stderr.on('data', function (data) {
-	console.log(data.toString());
+// ì—ëŸ¬ ë°œìƒ ì‹œ, stderrì˜ 'data'ì´ë²¤íŠ¸ë¦¬ìŠ¤ë„ˆë¡œ ì‹¤í–‰ê²°ê³¼ë¥¼ ë°›ëŠ”ë‹¤.
+result.stderr.on("data", function (data) {
+    console.log(data.toString());
 });
 
-// ´ëÇÑ¹Î±¹ ½Ã°£ ±¸ÇÏ´Â ÄÚµåµé·Î ¼­¹ö ½Ã°£ÀÌ ÇÑ±¹ ½Ã°£°ú ¸ÂÁö ¾Ê¾Æ ±¸ÇöÇÔ
-// 1. ÇöÀç ½Ã°£(Locale)
+// ëŒ€í•œë¯¼êµ­ ì‹œê°„ êµ¬í•˜ëŠ” ì½”ë“œë“¤ë¡œ ì„œë²„ ì‹œê°„ì´ í•œêµ­ ì‹œê°„ê³¼ ë§ì§€ ì•Šì•„ êµ¬í˜„í•¨
+// 1. í˜„ì¬ ì‹œê°„(Locale)
 const curr = new Date();
-console.log("ÇöÀç½Ã°£(Locale) : " + curr + '<br>');
+console.log("í˜„ì¬ì‹œê°„(Locale) : " + curr + "<br>");
 
-// 2. UTC ½Ã°£ °è»ê
-const utc =
-	curr.getTime() +
-	(curr.getTimezoneOffset() * 60 * 1000);
+// 2. UTC ì‹œê°„ ê³„ì‚°
+const utc = curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
 
-// 3. UTC to KST (UTC + 9½Ã°£)
-const KR_TIME_DIFF = 9 * 60 * 60 * 1000;  //ÇÑ±¹ ½Ã°£(KST)Àº UTC½Ã°£º¸´Ù 9½Ã°£ ´õ ºü¸£¹Ç·Î 9½Ã°£À» ¹Ğ¸®ÃÊ ´ÜÀ§·Î º¯È¯.
-const kr_curr = new Date(utc + (KR_TIME_DIFF));  //UTC ½Ã°£À» ÇÑ±¹ ½Ã°£À¸·Î º¯È¯ÇÏ±â À§ÇØ utc ¹Ğ¸®ÃÊ °ª¿¡ 9½Ã°£À» ´õÇÔ.
+// 3. UTC to KST (UTC + 9ì‹œê°„)
+const KR_TIME_DIFF = 9 * 60 * 60 * 1000; //í•œêµ­ ì‹œê°„(KST)ì€ UTCì‹œê°„ë³´ë‹¤ 9ì‹œê°„ ë” ë¹ ë¥´ë¯€ë¡œ 9ì‹œê°„ì„ ë°€ë¦¬ì´ˆ ë‹¨ìœ„ë¡œ ë³€í™˜.
+const kr_curr = new Date(utc + KR_TIME_DIFF); //UTC ì‹œê°„ì„ í•œêµ­ ì‹œê°„ìœ¼ë¡œ ë³€í™˜í•˜ê¸° ìœ„í•´ utc ë°€ë¦¬ì´ˆ ê°’ì— 9ì‹œê°„ì„ ë”í•¨.
 
 var year = kr_curr.getFullYear();
-var month = ('0' + (kr_curr.getMonth() + 1)).slice(-2);
-var day = ('0' + kr_curr.getDate()).slice(-2);
-var dateString = year + '-' + month + '-' + day;
+var month = ("0" + (kr_curr.getMonth() + 1)).slice(-2);
+var day = ("0" + kr_curr.getDate()).slice(-2);
+var dateString = year + "-" + month + "-" + day;
 var DATE = 4;
 
-
 // Response
-router.get('/:userName', function (request, response) {
-	try {
-		// userNameÀ» ¹Ş¾Æ¿Í DBÀÇ user Å×ÀÌºí¿¡¼­ userId¸¦ °¡Á®¿È
-		db.query(`SELECT user_num, user_id FROM user WHERE user_id = '${request.params.userName}';`, function (error, results1) {
-			// userNameÀÌ kookbap¿¡ °¡ÀÔµÇÁö ¾Ê´Ù¸é null°ªÀ» Àü¼Û
-			if (results1[0] == undefined) {
-				response.json();
-				return;
-			}
-			var userId = results1[0]['user_id'];
-			// ½Ã°£ »õ·Î°íÄ§
-			// 1. ÇöÀç ½Ã°£(Locale)
-			const curr = new Date();
-			console.log("ÇöÀç½Ã°£(Locale) : " + curr + '<br>');
+router.get("/:userName", function (request, response) {
+    try {
+        // userNameì„ ë°›ì•„ì™€ DBì˜ user í…Œì´ë¸”ì—ì„œ userIdë¥¼ ê°€ì ¸ì˜´
+        db.query(
+            `SELECT user_num, user_id FROM user WHERE user_id = '${request.params.userName}';`,
+            function (error, results1) {
+                // userNameì´ kookbapì— ê°€ì…ë˜ì§€ ì•Šë‹¤ë©´ nullê°’ì„ ì „ì†¡
+                if (results1[0] == undefined) {
+                    response.json();
+                    return;
+                }
+                var userId = results1[0]["user_id"];
+                // ì‹œê°„ ìƒˆë¡œê³ ì¹¨
+                // 1. í˜„ì¬ ì‹œê°„(Locale)
+                const curr = new Date();
+                console.log("í˜„ì¬ì‹œê°„(Locale) : " + curr + "<br>");
 
-			// 2. UTC ½Ã°£ °è»ê
-			const utc =
-				curr.getTime() +
-				(curr.getTimezoneOffset() * 60 * 1000);
+                // 2. UTC ì‹œê°„ ê³„ì‚°
+                const utc =
+                    curr.getTime() + curr.getTimezoneOffset() * 60 * 1000;
 
-			// 3. UTC to KST (UTC + 9½Ã°£)
-			const KR_TIME_DIFF = 9 * 60 * 60 * 1000;  //ÇÑ±¹ ½Ã°£(KST)Àº UTC½Ã°£º¸´Ù 9½Ã°£ ´õ ºü¸£¹Ç·Î 9½Ã°£À» ¹Ğ¸®ÃÊ ´ÜÀ§·Î º¯È¯.
-			const kr_curr = new Date(utc + (KR_TIME_DIFF));  //UTC ½Ã°£À» ÇÑ±¹ ½Ã°£À¸·Î º¯È¯ÇÏ±â À§ÇØ utc ¹Ğ¸®ÃÊ °ª¿¡ 9½Ã°£À» ´õÇÔ.
+                // 3. UTC to KST (UTC + 9ì‹œê°„)
+                const KR_TIME_DIFF = 9 * 60 * 60 * 1000; //í•œêµ­ ì‹œê°„(KST)ì€ UTCì‹œê°„ë³´ë‹¤ 9ì‹œê°„ ë” ë¹ ë¥´ë¯€ë¡œ 9ì‹œê°„ì„ ë°€ë¦¬ì´ˆ ë‹¨ìœ„ë¡œ ë³€í™˜.
+                const kr_curr = new Date(utc + KR_TIME_DIFF); //UTC ì‹œê°„ì„ í•œêµ­ ì‹œê°„ìœ¼ë¡œ ë³€í™˜í•˜ê¸° ìœ„í•´ utc ë°€ë¦¬ì´ˆ ê°’ì— 9ì‹œê°„ì„ ë”í•¨.
 
-			var year = kr_curr.getFullYear();
-			var month = ('0' + (kr_curr.getMonth() + 1)).slice(-2);
-			var day = ('0' + kr_curr.getDate()).slice(-2);
-			var dateString = year + '-' + month + '-' + day;
+                var year = kr_curr.getFullYear();
+                var month = ("0" + (kr_curr.getMonth() + 1)).slice(-2);
+                var day = ("0" + kr_curr.getDate()).slice(-2);
+                var dateString = year + "-" + month + "-" + day;
 
+                // í•˜ë£¨ì— í•œ ë²ˆì”© latentFactorMachineLearning.pyë¥¼ ì¬ì‹¤í–‰í•˜ì—¬ ì—…ë°ì´íŠ¸í•´ì¤Œ
+                if (DATE != day) {
+                    DATE = day;
+                    // recommendMenu.js ì—ì„œ latentFactorMachineLearning.pyë¥¼ ì‹¤í–‰í•˜ì—¬ ê²°ê³¼ê°’ì„ ë°›ì•„ì™€ ì €ì¥í•˜ê¸°
+                    // child-processëª¨ë“ˆì˜ spawn ì·¨ë“
+                    const spawn = require("child_process").spawn;
 
-			// ÇÏ·ç¿¡ ÇÑ ¹ø¾¿ latentFactorMachineLearning.py¸¦ Àç½ÇÇàÇÏ¿© ¾÷µ¥ÀÌÆ®ÇØÁÜ
-			if (DATE != day) {
-				DATE = day;
-				// recommendMenu.js ¿¡¼­ latentFactorMachineLearning.py¸¦ ½ÇÇàÇÏ¿© °á°ú°ªÀ» ¹Ş¾Æ¿Í ÀúÀåÇÏ±â
-				// child-process¸ğµâÀÇ spawn Ãëµæ
-				const spawn = require('child_process').spawn;
+                    // spawnì„ í†µí•´ "python latentFactorMachineLearning.py" ëª…ë ¹ì–´ ì‹¤í–‰
+                    const result = spawn("python3", [
+                        "/workspace/Kookbap_server/recommendMenu/latentFactorMachineLearning.py",
+                    ]);
 
-				// spawnÀ» ÅëÇØ "python latentFactorMachineLearning.py" ¸í·É¾î ½ÇÇà
-				const result = spawn('python3', ['/workspace/Kookbap_server/recommendMenu/latentFactorMachineLearning.py']);
+                    // stdoutì˜ 'data'ì´ë²¤íŠ¸ë¦¬ìŠ¤ë„ˆë¡œ ì‹¤í–‰ê²°ê³¼ë¥¼ ë°›ì•„ recommendMenuIdì— Stringí˜•ì‹ìœ¼ë¡œ ì €ì¥ ì´í›„ recommendMenuIdArrì— recommendMenuIdë¥¼ splití•˜ì—¬ 2ì°¨ì› ë°°ì—´ë¡œ ì €ì¥
+                    result.stdout.on("data", function (data) {
+                        recommendMenuId = data
+                            .toString()
+                            .substring(2, data.toString().length - 3);
+                        recommendMenuIdArr = recommendMenuId.split("], [");
+                    });
 
-				// stdoutÀÇ 'data'ÀÌº¥Æ®¸®½º³Ê·Î ½ÇÇà°á°ú¸¦ ¹Ş¾Æ recommendMenuId¿¡ StringÇü½ÄÀ¸·Î ÀúÀå ÀÌÈÄ recommendMenuIdArr¿¡ recommendMenuId¸¦ splitÇÏ¿© 2Â÷¿ø ¹è¿­·Î ÀúÀå
-				result.stdout.on('data', function (data) {
-					recommendMenuId = data.toString().substring(2, data.toString().length - 3);
-					recommendMenuIdArr = recommendMenuId.split("], [");
-				});
+                    // ì—ëŸ¬ ë°œìƒ ì‹œ, stderrì˜ 'data'ì´ë²¤íŠ¸ë¦¬ìŠ¤ë„ˆë¡œ ì‹¤í–‰ê²°ê³¼ë¥¼ ë°›ëŠ”ë‹¤.
+                    result.stderr.on("data", function (data) {
+                        console.log(data.toString());
+                    });
+                }
+                var userRecommendMenuArr = [];
 
-				// ¿¡·¯ ¹ß»ı ½Ã, stderrÀÇ 'data'ÀÌº¥Æ®¸®½º³Ê·Î ½ÇÇà°á°ú¸¦ ¹Ş´Â´Ù.
-				result.stderr.on('data', function (data) {
-					console.log(data.toString());
-				});
-			}
-			var userRecommendMenuArr = [];
-
-			// À¯ÀúÀÇ ¿À´ÃÀÇ ÃßÃµ ¸Ş´º¸¦ arr·Î ÀúÀå
-			if (recommendMenuIdArr[Number(results1[0]['user_num'])] != undefined) {
-				userRecommendMenuArr = (recommendMenuIdArr[Number(results1[0]['user_num'])].split(","));
-			}
-			/**/
-			// ¿À´ÃÀÇ ÃßÃµ ¸Ş´º Áß »óÀ§ 5°³¸¸ ºÒ·¯¿È
-			db.query(`SELECT m.menu_id as menu_id, restaurant_name, menu_name, count_review, star_avg, total_like, date, price, \
+                // ìœ ì €ì˜ ì˜¤ëŠ˜ì˜ ì¶”ì²œ ë©”ë‰´ë¥¼ arrë¡œ ì €ì¥
+                if (
+                    recommendMenuIdArr[Number(results1[0]["user_num"])] !=
+                    undefined
+                ) {
+                    userRecommendMenuArr =
+                        recommendMenuIdArr[
+                            Number(results1[0]["user_num"])
+                        ].split(",");
+                }
+                /**/
+                // ì˜¤ëŠ˜ì˜ ì¶”ì²œ ë©”ë‰´ ì¤‘ ìƒìœ„ 5ê°œë§Œ ë¶ˆëŸ¬ì˜´
+                db.query(
+                    `SELECT m.menu_id as menu_id, restaurant_name, menu_name, count_review, star_avg, total_like, date, price, \
 		subMenu, menu_like_id, image, Mliked_user_id, if (Mliked_user_id = '${userId}', true, false) as userLikeTrueFalse \
 		FROM (menu m INNER JOIN (select menu_id, date, price, subMenu from menu_appearance where date = '${dateString}') a ON m.menu_id = a.menu_id) \
 		left join (select * from menu_like where Mliked_user_id= '${userId}') l on m.menu_id = l.Mliked_menu_id \
 		left join (SELECT review_menu_id_reviewd, image FROM Kookbob.review R where (R.review_menu_id_reviewd, R.write_date) in (SELECT review_menu_id_reviewd, max(write_date) \
-		FROM Kookbob.review group by review_menu_id_reviewd)) i on m.menu_id = i.review_menu_id_reviewd WHERE date = '${dateString}' AND m.menu_id='${(userRecommendMenuArr[0])}'
-            OR date = '${dateString}' AND m.menu_id='${(userRecommendMenuArr[1])}'
-            OR date = '${dateString}' AND m.menu_id='${(userRecommendMenuArr[2])}'
-            OR date = '${dateString}' AND m.menu_id='${(userRecommendMenuArr[3])}'
-            OR date = '${dateString}' AND m.menu_id='${(userRecommendMenuArr[4])}';`, function (error, results2) {
-				if (error) {
-					console.log(error);
-				}
-				// °á°ú°ª Àü¼Û
-				console.log(results2);
-				response.json(results2);
-			});
-		});
-
-	}
-	catch (e) {
-		response.json("error");
-	}
+		FROM Kookbob.review group by review_menu_id_reviewd)) i on m.menu_id = i.review_menu_id_reviewd WHERE date = '${dateString}' AND m.menu_id='${userRecommendMenuArr[0]}'
+            OR date = '${dateString}' AND m.menu_id='${userRecommendMenuArr[1]}'
+            OR date = '${dateString}' AND m.menu_id='${userRecommendMenuArr[2]}'
+            OR date = '${dateString}' AND m.menu_id='${userRecommendMenuArr[3]}'
+            OR date = '${dateString}' AND m.menu_id='${userRecommendMenuArr[4]}';`,
+                    function (error, results2) {
+                        if (error) {
+                            console.log(error);
+                        }
+                        // ê²°ê³¼ê°’ ì „ì†¡
+                        console.log(results2);
+                        response.json(results2);
+                    }
+                );
+            }
+        );
+    } catch (e) {
+        response.json("error");
+    }
 });
 
 module.exports = router;
-
