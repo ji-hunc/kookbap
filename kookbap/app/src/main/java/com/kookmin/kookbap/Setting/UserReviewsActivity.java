@@ -1,4 +1,4 @@
-package com.kookmin.kookbap;
+package com.kookmin.kookbap.Setting;
 
 
 import androidx.annotation.NonNull;
@@ -13,7 +13,10 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.kookmin.kookbap.LoginAndSignup.UserData;
+import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
+import com.kookmin.kookbap.ReviewData;
+import com.kookmin.kookbap.ReviewDataAdapter;
 
 import java.util.ArrayList;
 
