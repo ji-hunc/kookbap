@@ -6,109 +6,106 @@ import com.google.gson.annotations.SerializedName;
 public class MenuData {
     @SerializedName("menu_id")
     @Expose
-    private String menu_id;
-
-    @SerializedName("menu_name")
-    @Expose
-    String menuName;
-
-    String subMenuName;
-
-    @SerializedName("price")
-    @Expose
-    String price;
-
-    String reviewText;
+    private int menu_id;
 
     @SerializedName("restaurant_name")
     @Expose
-    String restaurantName;
-    int image;
+    private String restaurant_name;
+
+    @SerializedName("menu_name")
+    @Expose
+    private String menu_name;
+
+    @SerializedName("count_review")
+    @Expose
+    private int count_review;
+
     @SerializedName("star_avg")
     @Expose
-    float stars;
+    private float star_avg;
+
     @SerializedName("total_like")
     @Expose
-    int heart;
+    private int total_like;
 
-    public MenuData(String menuName, String subMenuName, String price, String reviewText, int image, float stars, int heart, String restaurantName) {
-        this.menuName = menuName;
-        this.subMenuName = subMenuName;
-        this.price = price;
-        this.reviewText = reviewText;
-        this.image = image;
-        this.stars = stars;
-        this.heart = heart;
-        this.restaurantName = restaurantName;
+    @SerializedName("date")
+    @Expose
+    private String date;
+
+    @SerializedName("price")
+    @Expose
+    private int price;
+
+    @SerializedName("subMenu")
+    @Expose
+    private String subMenu;
+
+    @SerializedName("menu_like_id")
+    @Expose
+    private int menu_like_id;
+
+    @SerializedName("image")
+    @Expose
+    private String image;
+
+    @SerializedName("Mliked_user_id")
+    @Expose
+    private String Mliked_user_id;
+
+    @SerializedName("userLikeTrueFalse")
+    @Expose
+    private int userLikeTrueFalse;
+
+
+    public String getSubMenu() {
+        return subMenu;
     }
 
-    public MenuData(String a, String subMenuName, int i, String delicious, int ic_setting, float stars, int heart) {
-    }
-
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getReviewText() {
-        return reviewText;
-    }
-
-    public void setReviewText(String reviewText) {
-        this.reviewText = reviewText;
-    }
-
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public int isUserLikeTrueFalse() {
+        return userLikeTrueFalse;
     }
 
-    public float getStars() {
-        return stars;
+    public int getPrice() {
+        return price;
     }
 
-    public void setStars(float stars) {
-        this.stars = stars;
-    }
-
-    public int getHeart() {
-        return heart;
-    }
-
-    public void setHeart(int heart) {
-        this.heart = heart;
-    }
-
-    public String getSubMenuName() {
-        return subMenuName;
-    }
-
-    public void setSubMenuName(String subMenuName) {
-        this.subMenuName = subMenuName;
-    }
-
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-
-    public String getMenu_id() {
+    public int getMenu_id() {
         return menu_id;
     }
 
+    public String getRestaurant_name() {
+        return restaurant_name;
+    }
 
+    public String getMenu_name() {
+        return menu_name;
+    }
 
+    public int getCount_review() {
+        return count_review;
+    }
+
+    public float getStar_avg() {
+        return star_avg;
+    }
+
+    public int getTotal_like() {
+        return total_like;
+    }
+
+    public int getMenu_like_id() {
+        return menu_like_id;
+    }
+
+    public String getMliked_user_id() {
+        return Mliked_user_id;
+    }
+
+    public String getDate() {
+        return date;
+    }
 }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingFragment"
+    tools:context=".Setting.SettingFragment"
     android:orientation="vertical"
     android:padding="30dp">
 
@@ -20,6 +20,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/settingName"
@@ -35,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:textSize="25dp"/>
+                android:textSize="15dp"/>
 
         </LinearLayout>
     </LinearLayout>

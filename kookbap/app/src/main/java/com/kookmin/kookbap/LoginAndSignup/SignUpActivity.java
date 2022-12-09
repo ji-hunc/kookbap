@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +29,8 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
-    EditText mEmail,mPassword,mName;
+    EditText mName;
+    TextInputEditText mEmail,mPassword;
     TextView mDatcom;
     Button mInput_btn;
 
@@ -42,7 +44,6 @@ public class SignUpActivity extends AppCompatActivity {
         mEmail = findViewById(R.id.Singup_email);
         mPassword = findViewById(R.id.Singup_password);
         mName = findViewById(R.id.Singup_name);
-        mDatcom = findViewById(R.id.Singup_datcom);
         mInput_btn = findViewById(R.id.fragment_signupActivity_input_btn);
 
         SharedPreferences outo_login_prf = SignUpActivity.this.getSharedPreferences("outo_login_id",0);
@@ -50,15 +51,13 @@ public class SignUpActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = outo_login_prf.edit();
 
 
-        mDatcom.setText("@kookmin.ac.kr"); // 레이아웃에서는 @가 안써져서 코드로 기입
-
         // TODO: 2022-11-17  나중에 데이터 베이스 연동 하고 중복검사 실행
 
         // 회원 가입
         mInput_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String signup_email = mEmail.getText().toString() + mDatcom.getText().toString();
+                String signup_email = mEmail.getText().toString() + "@kookmin.ac.kr";
                 String signup_password = mPassword.getText().toString();
                 if(check_validation(signup_password)) {
                     onSignup(signup_email,signup_password);
@@ -97,6 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 Log.d("send","sendEmail");
                                 Intent intent = new Intent(SignUpActivity.this, CheckEmailActivity.class);
                                 intent.putExtra("name", mName.getText().toString());
+
                                 startActivity(intent);
                                 finish();
                             }

@@ -1,15 +1,10 @@
 package com.kookmin.kookbap.cafeteriaFragments;
 
 import android.util.Log;
-import android.widget.Toast;
-
-import com.kookmin.kookbap.MenuData;
-import com.kookmin.kookbap.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 

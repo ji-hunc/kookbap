@@ -1,72 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-    <RelativeLayout
-        android:id="@+id/fragment_signupActivity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+    <ImageView
+        android:layout_marginTop="100dp"
+        android:id="@+id/Singup_img"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/ic_ddukbaegi_icon"
+        android:layout_centerHorizontal="true"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="ID"
+        app:endIconMode="clear_text"
+        app:helperText="국민대 메일로 입력해주세요"
+        app:errorEnabled="true"
+        app:suffixText="\@kookmin.ac.kr"
+        style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
         >
-        <ImageView
-            android:id="@+id/Singup_img"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:src="@drawable/ic_baseline_do_disturb_24"
-            android:layout_centerHorizontal="true"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/Singup_email"
+            android:nextFocusDown="@id/Singup_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:textEditSidePasteWindowLayout="@id/Singup_email"
             />
-        <LinearLayout
-            android:id="@+id/Singup_email_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="horizontal"
-            android:layout_marginTop="50dp"
-            >
-            <EditText
-                android:id="@+id/Singup_email"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:maxLines="1"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:layout_marginLeft="50dp"
-                />
-            <TextView
-                android:id="@+id/Singup_datcom"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                />
-        </LinearLayout>
-        <EditText
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="password"
+        app:endIconMode="clear_text"
+        app:helperText="특수문자를 하나 이상 포함해주세요"
+        app:errorEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
+        >
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/Singup_password"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
-            android:maxLines="1"
-            android:hint="특수문자를 적어도 하나이상 사용해주세요"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:inputType="textPassword"
-            android:layout_below="@id/Singup_email_layout"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
-            />
-        <EditText
-            android:id="@+id/Singup_name"
-            android:layout_width="160dp"
-            android:layout_height="40dp"
             android:maxLines="1"
-            android:hint="닉네임 설정"
-            android:inputType="text"
-            android:layout_below="@id/Singup_password"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="10dp"
+            android:textEditSidePasteWindowLayout="@id/Singup_password"
             />
-        <Button
-            android:id="@+id/fragment_signupActivity_input_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/Singup_name"
-            android:layout_alignParentRight="true"
-            android:text="입력완료"
-            />
-    </RelativeLayout>
-</RelativeLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+    <EditText
+        android:textSize="16sp"
+        android:id="@+id/Singup_name"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/Singup_password"
+        android:hint="닉네임"
+        android:inputType="text"
+        android:maxLines="1" />
+    <Button
+        android:id="@+id/fragment_signupActivity_input_btn"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Singup_name"
+        android:layout_alignParentRight="true"
+        android:text="회원가입 인증메일 발송"
+        />
+</LinearLayout>

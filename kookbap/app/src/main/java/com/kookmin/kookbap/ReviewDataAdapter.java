@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RatingBar;
@@ -26,6 +27,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.Retrofits.Result;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -39,10 +41,11 @@ import retrofit2.Response;
 
 public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.ReviewDataViewHolder>{
     ArrayList<ReviewData> reviewDataArray;
-    Context context;
+    String userID;
 
-    public ReviewDataAdapter(ArrayList<ReviewData> reviewDataArray) {
+    public ReviewDataAdapter(ArrayList<ReviewData> reviewDataArray, String userID) {
         this.reviewDataArray = reviewDataArray;
+        this.userID = userID;
         // reviewDataArray 에는 ReviewData 객체가 여러개 들어있음
     }
 
@@ -60,13 +63,18 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         holder.reviewContext.setText(reviewDataArray.get(position).getDescription());
         // TODO image는 임시로 heart
 //        holder.reviewImage.setImageResource(R.drawable.ic_filled_heart);
-        String url = "https://kookbap.run.goorm.io/images/" + reviewDataArray.get(position).getImage();
-//        String url = "http://10.0.2.2:3000/images/" + reviewDataArray.get(position).getImage();
+        String url = URLConnector.URL + "images/" + reviewDataArray.get(position).getImage();
         holder.webView.loadUrl(url);
         holder.webView.setFocusable(false);
         holder.webView.getSettings().setUseWideViewPort(true);
         holder.webView.getSettings().setLoadWithOverviewMode(true);
-        holder.reviewReviewerName.setText(reviewDataArray.get(position).getReview_user_id());
+        //사용자가 탈퇴하면 id 부분이 null값으로 날라옴. nick name이 null 일때 '탈퇴한 사용자' 띄워줌.
+        if (reviewDataArray.get(position).getNickname()==null){
+            holder.reviewReviewerName.setText("탈퇴한 사용자");
+        }else{
+            holder.reviewReviewerName.setText(reviewDataArray.get(position).getNickname());
+        }
+
         holder.reviewRating.setRating(reviewDataArray.get(position).getStar());
         holder.reviewDate.setText(reviewDataArray.get(position).getWrite_date().toString().substring(0, 10));
         holder.reviewLikes.setText(Integer.toString(reviewDataArray.get(position).getReview_like()));
@@ -74,20 +82,17 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
         if (reviewDataArray.get(position).getReviewLikeTrueFalse() == 1) {
             holder.reviewLikeImage.setSelected(true);
         }
-
-
+        
         holder.reviewLikeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                // TODO user_id 는 프리퍼런스에서 받아와야함
-                String user_id = "jihun";
                 // card_id는 리뷰넘버, 메뉴넘버 둘다 포함함. 일단 서버로 보내면 거기서 type을 조건으로 분류함.
                 int card_id = reviewDataArray.get(position).getReview_number();
                 String type = "review";
 
                 // 좋아요 레트로핏 통신
-                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(user_id, card_id, true, type, 0, 0);
+                Call<Result> call = RetrofitClient.getApiService().postLikeInfo(userID, card_id, true, type, 0, 0);
                 call.enqueue(new Callback<Result>() {
                     @Override
                     public void onResponse(@NotNull Call<Result> call, @NotNull Response<Result> response) {
@@ -108,13 +113,12 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                     }
                 });
 
-
-                if(holder.reviewLikeImage.isSelected())
-                {
+                if (holder.reviewLikeImage.isSelected()) {
+                    holder.reviewLikes.setText(Integer.toString(Integer.parseInt(holder.reviewLikes.getText().toString())-1));
                     holder.reviewLikeImage.setSelected(false);
                 }
-                else
-                {
+                else {
+                    holder.reviewLikes.setText(Integer.toString(Integer.parseInt(holder.reviewLikes.getText().toString())+1));
                     holder.reviewLikeImage.setSelected(true);
                 }
                 holder.reviewLikeImage.setClickable(false);
@@ -126,13 +130,17 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                 }, 1000);
             }
         });
-
-        // TODO 메뉴 버튼을 눌렀을 때, 본인이면 신고/수정/삭제하기<->아니면 신고하기만, 현재는 다 가능
         holder.editMenuImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.review_own_edit_menu, popupMenu.getMenu());
+
+                //사용자 본인의 리뷰가 아닐경우 삭제하기, 신고하기 비활성화.
+                if (!UserData.getUserData(view.getContext()).getUserId().equals(reviewDataArray.get(position).getReview_user_id())){
+                    popupMenu.getMenu().getItem(0).setVisible(false);
+                    popupMenu.getMenu().getItem(1).setVisible(false);
+                }
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -157,6 +165,9 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
+                                        // UI 에서 우선적으로 지우는 코드
+                                        notifyItemRemoved(position);
+
                                         // DB에서 reivew 테이블의 키로 쓰일 review_number를 인텐트로 받아옴
                                         int reviewNumber = reviewDataArray.get(position).getReview_number();
                                         int menuId = reviewDataArray.get(position).getReview_menu_id_reviewd();
@@ -176,7 +187,7 @@ public class ReviewDataAdapter extends RecyclerView.Adapter<ReviewDataAdapter.Re
                                                     // TODO 서버에서 상황에 따라 다른 결과를 전달해줘야함. 일단 GOOD만 보내도록 되어있음
                                                     if (success) {
                                                         Log.e("LOGLOG", "success1");
-                                                        Toast.makeText(view.getContext(),"정상적으로 삭제되었습니다.",Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(view.getContext(),"삭제되었습니다.",Toast.LENGTH_SHORT).show();
                                                         Log.e("서버에서 받아온내용", message);
                                                     } else {
                                                         Log.e("LOGLOG", "success2");

@@ -47,7 +47,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -109,7 +109,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/bestReviewerRecycler"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:background="#E89B9B">
 
                     </androidx.recyclerview.widget.RecyclerView>
@@ -163,7 +163,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -186,11 +186,20 @@
                             android:textSize="20sp" />
                     </LinearLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/starRankRecycler"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#EFE58F" />
+                        android:layout_height="390dp"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/starRankRecycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#EFE58F">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

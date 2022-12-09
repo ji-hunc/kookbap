@@ -19,10 +19,11 @@
 
 
     <TextView
+        android:id="@+id/loadingDialogText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="리뷰 전송 중 ..."
+        android:text=""
         android:textColor="#4A2DF1"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"

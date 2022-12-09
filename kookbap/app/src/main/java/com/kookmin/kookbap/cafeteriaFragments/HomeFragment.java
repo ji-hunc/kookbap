@@ -1,6 +1,9 @@
 package com.kookmin.kookbap.cafeteriaFragments;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,14 +18,12 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.gson.Gson;
-import com.kookmin.kookbap.MenuData2;
+import com.kookmin.kookbap.LoginAndSignup.UserData;
+import com.kookmin.kookbap.MenuData;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,13 +43,28 @@ public class HomeFragment extends Fragment {
 
     String date, nowYear, nowMonth, nowDate;
 
-    ArrayList<MenuData2> todayMenus;
-    JSONObject jsonObject;
+    ArrayList<MenuData> todayMenus;
+    String userID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View dialogView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.loading_dialog,
+                null);
+        builder.setView(dialogView);
+        LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
+        lottieAnimationView.setAnimation("loading.json");
+        AlertDialog alertDialog =  builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        lottieAnimationView.playAnimation();
+        ((TextView)dialogView.findViewById(R.id.loadingDialogText)).setText("불러오는 중...");
+        alertDialog.show();
+
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        userID = UserData.getUserData(getContext()).getUserId(); // 유저 id 가져오기
         // 날짜 변수에 오늘 날짜 초기화 및 날짜텍스트뷰에 날짜 초기화
         dateTextView = view.findViewById(R.id.dateTextView);
         Calendar calendar = Calendar.getInstance();
@@ -80,14 +96,13 @@ public class HomeFragment extends Fragment {
 
                         // 날짜를 선택하고 확인을 누르면, 어댑터가 그 날짜에 해당하는 것들로 다시 뿌려줌
                         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
-                        Call<ArrayList<MenuData2>> call;
-                        //todo : 'jongbin'부분 userid 받아오게 변경
-                        call = RetrofitClient.getApiService().getMenuDataEachDate(date,"jihun"); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
-                        call.enqueue(new Callback<ArrayList<MenuData2>>() {
+                        Call<ArrayList<MenuData>> call;
+                        call = RetrofitClient.getApiService().getMenuDataEachDate(date,userID); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
+                        call.enqueue(new Callback<ArrayList<MenuData>>() {
                             @Override
                             public void onResponse(@NonNull Call call, @NonNull Response response) {
                                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                                    todayMenus = (ArrayList<MenuData2>) response.body();
+                                    todayMenus = (ArrayList<MenuData>) response.body();
 
                                     // menu 띄워주는 adapter에 받아온 날짜별 ArrayList를 넘김
                                     cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), todayMenus, date);
@@ -138,25 +153,26 @@ public class HomeFragment extends Fragment {
 //        });
 
         // Retrofit 으로 서버와 통신히여 날짜별 menu 데이터를 받아오는 부분
-        Call<ArrayList<MenuData2>> call;
-        //todo : 'jongbin'부분 userid 받아오게 변경
-        call = RetrofitClient.getApiService().getMenuDataEachDate(date,"jihun"); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
-        call.enqueue(new Callback<ArrayList<MenuData2>>() {
+        Call<ArrayList<MenuData>> call;
+        call = RetrofitClient.getApiService().getMenuDataEachDate(date,userID); // 날짜 상수 말고 date가 들어가야함. 일단 오늘 메뉴가 없어서 상수로..
+        call.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
-                    todayMenus = (ArrayList<MenuData2>) response.body();
+                    todayMenus = (ArrayList<MenuData>) response.body();
 
                     // menu 띄워주는 adapter에 받아온 날짜별 ArrayList를 넘김
                     cafeteriaViewPagerAdapter = new CafeteriaViewPagerAdapter(requireActivity(), todayMenus, date);
                     viewPager2.setAdapter(cafeteriaViewPagerAdapter);
                 } else {
                 }
+                alertDialog.dismiss();
             }
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull Throwable t) {
                 Log.e("Error", t.getMessage());
+                alertDialog.dismiss();
             }
         });
 

@@ -99,7 +99,7 @@ router.post("/like", (req, res) => {
                     function (error, results) {
                         var updateTotal = results[0]["total"];
                         db.query(
-                            `update review set review_like = "${updateTotal}" where review_number ="${review_id}";`
+                            `update review set review_like = "${updateTotal}" where review_number = "${review_id}";`
                         );
                     }
                 );
@@ -111,6 +111,33 @@ router.post("/like", (req, res) => {
         success: true,
         message: "GOOD",
     });
+});
+
+router.post("/signUp", (req, res) => {
+    var user_id = req.body.userEmail.split("@")[0];
+    var user_Email = req.body.userEmail;
+    var user_NickName = req.body.userNickName;
+    console.log(user_id);
+    console.log(user_Email);
+    console.log(user_NickName);
+    db.query(
+        `INSERT INTO user (user_id, nickname, E_mail) VALUES ('${user_id}','${user_NickName}','${user_Email}');`
+    );
+    res.json({
+        success: true,
+        message: "good",
+    });
+});
+
+//유저정보 가져오는 함수
+router.get("/getUserInfo", (req, res) => {
+    var user_id = req.query.user_id;
+    db.query(
+        `select * from user where user_id = '${user_id}'`,
+        function (error, result) {
+            res.json(result);
+        }
+    );
 });
 
 module.exports = router;

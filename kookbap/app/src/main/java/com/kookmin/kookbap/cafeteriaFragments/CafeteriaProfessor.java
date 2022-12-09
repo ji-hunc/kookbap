@@ -10,18 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kookmin.kookbap.MenuData2;
-import com.kookmin.kookbap.MenuDataAdapter2;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
 import com.kookmin.kookbap.R;
 
 import java.util.ArrayList;
 
 public class CafeteriaProfessor extends Fragment {
-    MenuDataAdapter2 menuDataAdapter2;
-    private final ArrayList<MenuData2> todayMenus;
+    MenuDataAdapter menuDataAdapter;
+    private final ArrayList<MenuData> todayMenus;
     String date;
 
-    public CafeteriaProfessor(ArrayList<MenuData2> todayMenus, String date) {
+    public CafeteriaProfessor(ArrayList<MenuData> todayMenus, String date) {
         this.todayMenus = todayMenus;
         this.date = date;
     }
@@ -32,8 +32,8 @@ public class CafeteriaProfessor extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHanul);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        menuDataAdapter2 = new MenuDataAdapter2(todayMenus, requireActivity().getApplicationContext());
-        recyclerView.setAdapter(menuDataAdapter2);
+        menuDataAdapter = new MenuDataAdapter(todayMenus, requireActivity().getApplicationContext());
+        recyclerView.setAdapter(menuDataAdapter);
 
         return view;
     }

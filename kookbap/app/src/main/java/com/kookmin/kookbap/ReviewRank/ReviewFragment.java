@@ -1,6 +1,9 @@
 package com.kookmin.kookbap.ReviewRank;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,10 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.MainActivity;
-import com.kookmin.kookbap.MenuData2;
-import com.kookmin.kookbap.MenuDataAdapter2;
+import com.kookmin.kookbap.MenuData;
+import com.kookmin.kookbap.MenuDataAdapter;
 import com.kookmin.kookbap.R;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
@@ -38,25 +44,46 @@ public class ReviewFragment extends Fragment {
 
     //화면에 구성될 RecyclerView 용 메서드.
     RecyclerView bestReviewerRecycler; //베스트리뷰어
-    BestReviewerDataAdapter bestReviewerDataAdapter;
+    UserRankDataAdapter userRankDataAdapter;
 
     RecyclerView mostLikeMenuRecycler; //좋아요많은 메뉴 순
-    MenuDataAdapter2 mostLikeMenuCallAdapter;
+    MenuDataAdapter mostLikeMenuCallAdapter;
 
     RecyclerView startRankRecycler; //별점높은순
-    MenuDataAdapter2 menuStarRankAdapter;
+    MenuDataAdapter menuStarRankAdapter;
 
     RecyclerView lotOfReviewRecycler;
-    MenuDataAdapter2 lotOfReviewAdapter;
+    MenuDataAdapter lotOfReviewAdapter;
 
+    String userID;
 
+    boolean a , b, c, d;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View dialogView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.loading_dialog,
+                null);
+        builder.setView(dialogView);
+        LottieAnimationView lottieAnimationView = (LottieAnimationView)dialogView.findViewById(R.id.loadingAnimationView);
+        lottieAnimationView.setAnimation("loading.json");
+        AlertDialog alertDialog =  builder.create();
+        alertDialog.setCancelable(false);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        lottieAnimationView.playAnimation();
+        ((TextView)dialogView.findViewById(R.id.loadingDialogText)).setText("불러오는 중...");
+        alertDialog.show();
+
+
+        a = b = c = d = false;
+
         View view =inflater.inflate(R.layout.fragment_review, container, false);
 
         mainActivity = (MainActivity) getActivity();
+        userID = UserData.getUserData(mainActivity).getUserId();
 
         //search버튼 눌렀을때 searchFragment로 이동, 트랜잭션으로 관리.
         searchLayout = view.findViewById(R.id.searchLayout);
@@ -93,14 +120,15 @@ public class ReviewFragment extends Fragment {
 
         //베트스 리뷰어 항목
         Call<ArrayList<UserRankData>> rankDataCall;
-        rankDataCall = RetrofitClient.getApiService().getUserReviewRankData(3);
+        rankDataCall = RetrofitClient.getApiService().getUserReviewRankData(4);
         rankDataCall.enqueue(new Callback<ArrayList<UserRankData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                a = true;
                 if (response.code()==200){
                     ArrayList<UserRankData> bestReviewerData=(ArrayList<UserRankData>) response.body();
-                    bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, getActivity().getApplicationContext());
-                    bestReviewerRecycler.setAdapter(bestReviewerDataAdapter);
+                    userRankDataAdapter = new UserRankDataAdapter(bestReviewerData, getActivity().getApplicationContext());
+                    bestReviewerRecycler.setAdapter(userRankDataAdapter);
                     bestReviewerRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
                         public boolean canScrollVertically(){
@@ -108,23 +136,29 @@ public class ReviewFragment extends Fragment {
                         } //스크롤 방지
                     });
                 }else{}
-                    }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
+            }
 
             @Override
             public void onFailure(Call<ArrayList<UserRankData>> call, Throwable t) {
+                a = true;
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
                 Log.d("tag","fail");
             }
         });
 
         //좋아요 많은 순 항목
-        Call<ArrayList<MenuData2>> mostLikeMenuCall;
-        mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData("total_like",3);
-        mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+        Call<ArrayList<MenuData>> mostLikeMenuCall;
+        mostLikeMenuCall = RetrofitClient.getApiService().getMenuReviewRankData("total_like",3,userID);
+        mostLikeMenuCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                b = true;
                 if (response.code()==200){
-                    ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
-                    mostLikeMenuCallAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
+                    ArrayList<MenuData> mostLikeCallData=(ArrayList<MenuData>) response.body();
+                    mostLikeMenuCallAdapter = new MenuDataAdapter(mostLikeCallData, getActivity().getApplicationContext());
                     mostLikeMenuRecycler.setAdapter(mostLikeMenuCallAdapter);
                     mostLikeMenuRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
@@ -134,45 +168,58 @@ public class ReviewFragment extends Fragment {
                     });
                 }else{
                 }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
             @Override
-            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MenuData>> call, Throwable t) {
+                b = true;
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
         });
 
         //별점높은 순 항목
-        Call<ArrayList<MenuData2>> starRankCall;
-        starRankCall = RetrofitClient.getApiService().getMenuReviewRankData("star_avg",3);
-        starRankCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+        Call<ArrayList<MenuData>> starRankCall;
+        starRankCall = RetrofitClient.getApiService().getMenuReviewRankData("star_avg",3,userID);
+        starRankCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                c = true;
                 if (response.code()==200){
-                    ArrayList<MenuData2> starRankCallData=(ArrayList<MenuData2>) response.body();
-                    menuStarRankAdapter = new MenuDataAdapter2(starRankCallData, getActivity().getApplicationContext());
-                    startRankRecycler.setAdapter(menuStarRankAdapter);
+                    ArrayList<MenuData> starRankCallData=(ArrayList<MenuData>) response.body();
+                    menuStarRankAdapter = new MenuDataAdapter(starRankCallData, getActivity().getApplicationContext());
                     startRankRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
                         public boolean canScrollVertically(){
                             return false;
                         } //스크롤 방지
+
                     });
+
+                    startRankRecycler.setAdapter(menuStarRankAdapter);
+
                 }else{
                 }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
             @Override
-            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MenuData>> call, Throwable t) {
+                c = true;
             }
         });
 
         //리뷰 많은 순 항목 (항목 다른걸로 바까야될듯)
-        Call<ArrayList<MenuData2>> lotOfReviewCall;
-        lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("count_review",3);
-        lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData2>>() {
+        Call<ArrayList<MenuData>> lotOfReviewCall;
+        lotOfReviewCall = RetrofitClient.getApiService().getMenuReviewRankData("count_review",3,userID);
+        lotOfReviewCall.enqueue(new Callback<ArrayList<MenuData>>() {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) {
+                d = true;
                 if (response.code()==200){
-                    ArrayList<MenuData2> lotOfReviewCallData=(ArrayList<MenuData2>) response.body();
-                    lotOfReviewAdapter = new MenuDataAdapter2(lotOfReviewCallData, getActivity().getApplicationContext());
+                    ArrayList<MenuData> lotOfReviewCallData=(ArrayList<MenuData>) response.body();
+                    lotOfReviewAdapter = new MenuDataAdapter(lotOfReviewCallData, getActivity().getApplicationContext());
                     lotOfReviewRecycler.setAdapter(lotOfReviewAdapter);
                     lotOfReviewRecycler.setLayoutManager(new LinearLayoutManager(view.getContext()){
                         @Override
@@ -182,9 +229,12 @@ public class ReviewFragment extends Fragment {
                     });
                 }else{
                 }
+                if(a&&b&&c&&d)
+                    alertDialog.dismiss();
             }
             @Override
-            public void onFailure(Call<ArrayList<MenuData2>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<MenuData>> call, Throwable t) {
+                d = true;
             }
         });
 

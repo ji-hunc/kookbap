@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ReviewData {
+    @SerializedName("nickname")
+    @Expose
+    private String nickname;
 
     @SerializedName("review_number")
     @Expose
@@ -83,5 +86,9 @@ public class ReviewData {
 
     public String getImage() {
         return image;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }
