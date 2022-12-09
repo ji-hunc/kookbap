@@ -2,6 +2,8 @@ package com.kookmin.kookbap;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.kookmin.kookbap.SettingFragment.settingContext;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kookmin.kookbap.LoginAndSignup.UserData;
 import com.kookmin.kookbap.Retrofits.RetrofitClient;
 
 import org.json.JSONObject;
@@ -33,7 +36,7 @@ public class RecommendMenuFragment extends Fragment {
     ArrayList<MenuData> menuData;
     MenuDataAdapter menuDataAdapter;
     TextView testTextView;
-    String userName;
+    String userName, userNickName;
 
 
 
@@ -45,6 +48,7 @@ public class RecommendMenuFragment extends Fragment {
         
         SharedPreferences userPrf = getActivity().getSharedPreferences("userData", MODE_PRIVATE);
         userName = userPrf.getString("ID", "");
+        userNickName = UserData.getUserData(settingContext).getNickname();
 
         recommendMenuRecyclerView = view.findViewById(R.id.recommendMenuRecyclerView);
         testTextView = view.findViewById(R.id.testTextView);
@@ -58,7 +62,7 @@ public class RecommendMenuFragment extends Fragment {
                 if (response.code() == 200) { // 서버로부터 OK 사인을 받았을 때
                     testRecommendMenuData = (ArrayList<MenuData>) response.body();
 
-                    testTextView.setText(userName+" 님, 이 메뉴는 어떠세요?");
+                    testTextView.setText(userNickName+" 님, 이 메뉴는 어떠세요?");
 
                     menuDataAdapter = new MenuDataAdapter(testRecommendMenuData, view.getContext());
                     recommendMenuRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
