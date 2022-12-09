@@ -29,7 +29,6 @@ import retrofit2.Response;
 public class RecommendMenuFragment extends Fragment {
     JSONObject jsonObject;
     RecyclerView recommendMenuRecyclerView;
-    MenuDataFromServer data;
     ArrayList<MenuData> testRecommendMenuData;
     ArrayList<MenuData> menuData;
     MenuDataAdapter menuDataAdapter;

@@ -34,14 +34,14 @@ public class ShowMoreRankActivity extends AppCompatActivity {
 
     String targetData; // intent로 어떤것의 더보기인가 받아올 정보
 
-    BestReviewerDataAdapter bestReviewerDataAdapter;
+    UserRankDataAdapter userRankDataAdapter;
     Context context = this;
     String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review_tab);
+        setContentView(R.layout.activity_showmore_tab);
 
         userID = UserData.getUserData(this).getUserId();
         targetData=getIntent().getStringExtra("targetData"); //intent값 받아오기
@@ -112,8 +112,8 @@ public class ShowMoreRankActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code()==200){
                     ArrayList<UserRankData> bestReviewerData=(ArrayList<UserRankData>) response.body();
-                    BestReviewerDataAdapter bestReviewerDataAdapter = new BestReviewerDataAdapter(bestReviewerData, context);
-                    recyclerView.setAdapter(bestReviewerDataAdapter);
+                    UserRankDataAdapter userRankDataAdapter = new UserRankDataAdapter(bestReviewerData, context);
+                    recyclerView.setAdapter(userRankDataAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 }else{
                 }

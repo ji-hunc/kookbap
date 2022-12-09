@@ -13,11 +13,11 @@ import com.kookmin.kookbap.R;
 
 import java.util.ArrayList;
 
-public class BestReviewerDataAdapter extends RecyclerView.Adapter<BestReviewerDataAdapter.BestReviewerViewHolder>{
+public class UserRankDataAdapter extends RecyclerView.Adapter<UserRankDataAdapter.BestReviewerViewHolder>{
     private ArrayList<UserRankData> bestReviewerData;
     Context context;
 
-    public BestReviewerDataAdapter(ArrayList<UserRankData> bestReviewerData, Context context){
+    public UserRankDataAdapter(ArrayList<UserRankData> bestReviewerData, Context context){
         this.bestReviewerData = bestReviewerData;
         this.context = context;
     }
