@@ -26,10 +26,6 @@ router.get("/:menuName", function (request, response) {
             break;
     }
 
-    //
-    // `SELECT *, if (Rlike_user_id = "${userId}", true,false) as reviewLikeTrueFalse \
-    //     FROM Kookbob.review R left join (select * from review_like where Rlike_user_id = "${userId}") L on \
-    //     R.review_number = L.Rlike_review_no where menu_name = '${request.params.menuName}' order by ${orderBy};`
     db.query(
         //todo : 이거 menuName이 아니라 menu id 여야함.
         `SELECT *, if (Rlike_user_id = "${userId}", true,false) as reviewLikeTrueFalse , (select nickname from user where review_user_id = user_id) as nickname \
@@ -98,15 +94,14 @@ router.post("/post", parser, function (request, response) {
     const { image } = request.files;
     image.mv(__dirname + "/../public/images/" + image.name);
     var imageUrl = request.files.image.name;
+
     const menuId = request.body.menuId;
-    var restaurant_name = request.body.restaurantName; //식당까지 같이 검사해야됨.
     if (menuId == 0) {
-        console.log("test_rest", restaurant_name);
         // GENERAL_WRITE시에는 menu_id를 서버에서 찾아야함
         // TODO menuId 찾아오는 부분
         // insert 쿼리까지 코드 중복해서 써야할 듯, 동기 비동기 때문에
         db.query(
-            `SELECT menu_Id FROM menu WHERE menu_name = '${request.body.menuName}' and restaurant_name ='${restaurant_name}';`,
+            `SELECT menu_Id FROM menu WHERE menu_name = '${request.body.menuName}';`,
             function (error, result) {
                 const menuId2 = result[0]["menu_Id"];
 
